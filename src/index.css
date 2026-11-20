@@ -1,0 +1,503 @@
+@import "tailwindcss";
+@import "./icomoon.css";
+
+/* CollabCRM's size steps, READ FROM THE LIVE STYLESHEET (2026-09-29,
+   staging-app …/administration/assets/index-5098c748.css):
+     2xl:        @media (min-width: 1536px)
+     2xl-to-xl:  @media (min-width: 1500px) and (max-width: 1680px)  ← overrides 2xl
+     3xl:        @media (min-width: 1620px)
+   It was 1280–1535px here, so on 1500–1680px laptops (1536, 1600…) the
+   prototype drew the LARGE sizes where CollabCRM draws the compact ones —
+   every font, gap and margin one step too big. The triple is still
+   `2xl:<a> 2xl-to-xl:<b> <base>` — see _design-system/TOKENS.md. */
+@custom-variant 2xl-to-xl (@media (min-width: 1500px) and (max-width: 1680px));
+@custom-variant 3xl (@media (min-width: 1620px));
+
+/* 19 Nov 2026 (buttons hover fix): live CollabCRM is Tailwind v3, where `hover:` is a plain :hover.
+   Tailwind v4 wraps it in @media (hover: hover), so measured kit hover:opacity-90 stayed at 1 while live gave 0.9. */
+@custom-variant hover (&:hover);
+
+/* 19 Nov 2026: CollabCRM's own focus rings, rules copied verbatim from the live CSS
+   (_design-system/app-css/index-541540e9.css, same in admin / super-admin / people / recruitment CSS):
+     .focus\:shadow-outline-purple:focus{--tw-shadow: 0px 0px 0px 4px #F4EBFF; box-shadow:var(--tw-ring-offset-shadow, 0 0 #0000),var(--tw-ring-shadow, 0 0 #0000),var(--tw-shadow)}
+   `shadow-outline-indigo` is used in live markup (7 button groups) but NO live CSS file defines it, so it draws nothing
+   live — deliberately not defined here either. */
+@utility shadow-outline-purple {
+  box-shadow: var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000), 0px 0px 0px 4px #F4EBFF;
+}
+@utility shadow-outline-error {
+  box-shadow: var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000), 0px 0px 0px 4px #FEE4E2;
+}
+
+/* Tailwind v4 draws a colourless `border` in currentColor (near-black);
+   CollabCRM is on v3 and its live CSS sets every border to #e5e7eb:
+     *,:before,:after{…;border-color:#e5e7eb}
+   Without this, every plain `border`/`border-r` in the prototype drew dark
+   (the black line beside the sidebar). */
+@layer base {
+  /* 19 Nov 2026: the live CSS has this preflight rule TWICE; the second one wins: border-color:#eaecf0 (measured live 234,236,240). */
+  *, ::before, ::after, ::backdrop, ::file-selector-button { border-color: #eaecf0; }
+}
+
+@theme {
+  --font-sans: "Inter", ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+
+  /* The semantic scales. Tailwind has no `error`/`success`/`warning` family, so
+   * every error-* class in this prototype was silently rendering nothing —
+   * which is how the ticket's one hard requirement, "mandatory variables should
+   * be in red", ended up grey. Values copied from the live stylesheet at
+   * staging-admin.collabcrm.com (Untitled UI scales). */
+  /* 19 Nov 2026: live .bg-indigo-25 = rgb(245 248 255) in all 5 live CSS files (was #f8f8ff here). */
+  --color-indigo-25: #f5f8ff;
+  /* 19 Nov 2026: live gray (Untitled UI). The live CSS defines several gray classes twice; these are the LAST (winning)
+     values, read from _design-system/app-css/index-541540e9.css. Tailwind's default gray drew e.g. gray-700 as #374151
+     where live shows #344054. */
+  --color-gray-25: #fcfcfd;
+  --color-gray-50: #f9fafb;
+  --color-gray-100: #f2f4f7;
+  --color-gray-200: #eaecf0;
+  --color-gray-300: #d0d5dd;
+  --color-gray-400: #98a2b3;
+  --color-gray-500: #667085;
+  --color-gray-600: #475467;
+  --color-gray-700: #344054;
+  --color-gray-800: #1d2939;
+  --color-gray-900: #101828;
+  --color-gray-950: #0c111d;
+  /* 18 Nov 2026: live indigo (_design-system/LIVE-COLOR-SCALES.md). Before this the kit drew Tailwind's default indigo,
+     so every bg-indigo-700 sidebar was #432DD7 where the live app shows #3538CD. */
+  /* 18 Nov 2026: CollabCRM's own size below text-xs (live CSS: .text-xxs{font-size:10px}); missing here, so 30 kit uses fell back to the parent size */
+  --text-xxs: 10px;
+  --color-indigo-50: #eef4ff;
+  --color-indigo-100: #e0eaff;
+  --color-indigo-200: #c7d7fe;
+  --color-indigo-300: #a4bcfd;
+  --color-indigo-400: #8098f9;
+  --color-indigo-500: #6172f3;
+  --color-indigo-600: #444ce7;
+  --color-indigo-700: #3538cd;
+  --color-indigo-800: #2d31a6;
+  --color-indigo-900: #2d3282;
+
+  --color-error-25: #fffbfa;
+  --color-error-50: #fef3f2;
+  --color-error-100: #fee4e2;
+  --color-error-200: #fecdca;
+  --color-error-300: #fda29b;
+  --color-error-400: #f97066;
+  --color-error-500: #f04438;
+  --color-error-600: #d92d20;
+  --color-error-700: #b42318;
+
+  --color-warning-25: #fffcf5;
+  --color-warning-50: #fffaeb;
+  --color-warning-100: #fef0c7;
+  --color-warning-200: #fedf89;
+  --color-warning-300: #fec84b;
+  --color-warning-400: #fdb022;
+  --color-warning-500: #f79009;
+  --color-warning-600: #dc6803;
+  --color-warning-700: #b54708;
+  --color-warning-800: #93370d;
+
+  --color-success-25: #f6fef9;
+  --color-success-50: #ecfdf3;
+  --color-success-200: #abefc6;
+  --color-success-300: #75e0a7;
+  --color-success-500: #17b26a;
+  --color-success-600: #079455;
+  --color-success-700: #067647;
+
+  --color-grayModern-500: #697586;
+  --color-gray-450: #98a2b3;
+
+  --shadow-custom-popup-shadow: 0 8px 24px rgba(16, 24, 40, 0.18);
+}
+
+html, body, #root { height: 100%; }
+body { font-family: var(--font-sans); }
+
+/* app-shell utility classes that exist in CollabCRM's own stylesheet */
+.sidebar-container::-webkit-scrollbar { width: 4px; }
+.sidebar-container::-webkit-scrollbar-thumb { background: #e5e7eb; border-radius: 4px; }
+.scrollbar-hide::-webkit-scrollbar { display: none; }
+.scrollbar-hide { -ms-overflow-style: none; scrollbar-width: none; }
+.tableSticky thead th { position: sticky; top: 0; z-index: 2; }
+.line-clamp1 { display: -webkit-box; -webkit-line-clamp: 1; -webkit-box-orient: vertical; overflow: hidden; }
+.tab-transition { transition: color .2s, background-color .2s; }
+.transition-opacity-only { transition-property: opacity; }
+
+/* icon-* elements are glyphs from the IcoMoon font (see icomoon.css). */
+[class^="icon-"], [class*=" icon-"] { display: inline-flex; align-items: center; justify-content: center; }
+
+/* Variable chips inside the canvas.
+   Red = required, amber = recommended, grey = optional — the same
+   colour language as the variables panel. */
+.vchip {
+  white-space: nowrap;   /* a chip is one thing — never split across two lines */
+  user-select: none;
+  display: inline;
+  padding: 1px 5px;
+  margin: 0 1px;
+  border-radius: 4px;
+  border: 1px solid;
+  font-size: .92em;
+  font-weight: 500;
+  line-height: 1.45;
+  letter-spacing: .005em;
+  white-space: nowrap;
+  vertical-align: baseline;
+  cursor: default;
+}
+/* braces read as a merge token — no emoji, no icon font dependency */
+.vchip::before { content: ""; margin: 0; }
+.vchip::after  { content: ""; margin: 0; }
+/* MANDATORY = a red chip (BA, 2026-09-29: "mandatory variables in red"). The
+   colour IS the signal — no lock (it read as "frozen", and a mandatory field
+   can be moved) and no asterisk inside a blue chip. Red family as CollabCRM
+   uses it for mandatory fields in Import › Review Data Mapping. */
+
+/* ONE DISTINCTION, NOT THREE.
+   Three colours with no legend anywhere, in a palette where red means ERROR
+   everywhere else in the product — so a perfectly correct email looked broken
+   the moment it opened. And the distinction being drawn (required /
+   recommended / optional) is CollabCRM's vocabulary, not the question the
+   person is asking. They only ever ask one thing: can I delete this?
+
+   So: locked, or yours. "Recommended" still exists — the Super Admin still
+   sets it — but it is an OPINION, and it is delivered as a sentence at save
+   time rather than as a third colour somebody has to learn. Carried by a lock
+   rather than a hue, so it survives greyscale and colour blindness. */
+.vchip[data-req]               { border-color: #c7d2fe; background: #eef2ff; color: #3730a3; }
+.vchip:not([data-req])         { border-color: #c7d2fe; background: #eef2ff; color: #3730a3; }
+.vchip[data-req="required"]    { border-color: #fecdca; background: #fef3f2; color: #b42318; font-weight: 600; }
+
+/* selected as a node, e.g. after clicking it or arrowing onto it */
+.vchip.ProseMirror-selectednode { outline: 2px solid #6366f1; outline-offset: 1px; }
+
+[contenteditable]:focus { outline: none; }
+/* ...but the ProseMirror surface still has to show it has focus, and every
+   custom control needs a ring, or keyboard users have no cursor at all. */
+.tiptap:focus-visible { outline: 2px solid #6366f1; outline-offset: 2px; border-radius: 4px; }
+.ins-row:focus-visible, .ins-tile:focus-visible,
+button:focus-visible, [role="switch"]:focus-visible, a:focus-visible {
+  outline: 2px solid #6366f1; outline-offset: 2px; border-radius: 4px;
+}
+
+/* ghost text on a blank line — disappears the moment anything is typed */
+[contenteditable][data-placeholder]:empty::before,
+[contenteditable][data-placeholder]:has(> br:only-child)::before {
+  content: attr(data-placeholder);
+  color: #cbd5e1;
+  pointer-events: none;
+}
+.email-preview p { margin: 0 0 14px; }
+.email-preview table { width: 100%; table-layout: fixed; }
+.email-preview ul { list-style: disc outside; padding-left: 22px; margin: 0 0 14px; }
+.email-preview ol { list-style: decimal outside; padding-left: 22px; margin: 0 0 14px; }
+.email-preview li { margin: 0 0 6px; }
+.email-preview h2 { font-size: 1.15rem; font-weight: 700; margin: 0 0 12px; }
+.email-preview td, .email-preview th { overflow-wrap: anywhere; }
+.email-preview img { max-width: 100%; }
+
+/* ── the editor body ── */
+.tiptap-body { min-height: 220px; }
+.tiptap-body > * + * { margin-top: 0; }
+.tiptap-body p { margin: 0 0 14px; font-size: .8125rem; line-height: 1.7; color: #374151; }
+.tiptap-body h1 { font-size: 1.5rem; font-weight: 700; margin: 0 0 12px; color: #111827; }
+.tiptap-body h2 { font-size: 1.25rem; font-weight: 700; margin: 0 0 12px; color: #111827; }
+.tiptap-body h3 { font-size: 1.05rem; font-weight: 700; margin: 0 0 10px; color: #111827; }
+.tiptap-body ul, .tiptap-body ol { margin: 0 0 14px; padding-left: 22px; font-size: .8125rem; line-height: 1.7; color: #374151; }
+.tiptap-body ul { list-style: disc; }
+.tiptap-body ol { list-style: decimal; }
+.tiptap-body li { margin: 0 0 4px; }
+.tiptap-body li p { margin: 0; }
+.tiptap-body li > p + p { margin-top: 6px; }
+.tiptap-body blockquote { border-left: 3px solid #e5e7eb; padding-left: 12px; color: #6b7280; margin: 0 0 14px; }
+.tiptap-body hr { border: 0; border-top: 1px solid #e5e7eb; margin: 18px 0; }
+.tiptap-body img { max-width: 100%; border-radius: 6px; margin: 0 0 14px; }
+.tiptap-body img.ProseMirror-selectednode { outline: 2px solid #6366f1; }
+.tiptap-body a { color: #4f46e5; text-decoration: underline; }
+.tiptap-body table { border-collapse: collapse; width: 100%; margin: 0 0 16px; font-size: .8125rem; table-layout: fixed; }
+.tiptap-body td, .tiptap-body th { border: 1px solid #e5e7eb; padding: 7px 10px; vertical-align: top; position: relative; }
+.tiptap-body th { background: #f9fafb; font-weight: 600; text-align: left; color: #374151; }
+.tiptap-body td p, .tiptap-body th p { margin: 0; }
+.tiptap-body .selectedCell:after {
+  content: ""; position: absolute; inset: 0; background: rgba(99,102,241,.12); pointer-events: none;
+}
+.tiptap-body .column-resize-handle {
+  position: absolute; right: -2px; top: 0; bottom: 0; width: 4px; background: #6366f1; pointer-events: none;
+}
+.tiptap-body .condition-body p:last-child { margin-bottom: 0; }
+.tiptap-body .ProseMirror-gapcursor:after { border-top-color: #6366f1; }
+
+/* ghost text — Tiptap's Placeholder extension */
+.tiptap-body p.is-empty::before,
+.tiptap-body h1.is-empty::before,
+.tiptap-body h2.is-empty::before,
+.tiptap-body h3.is-empty::before {
+  content: attr(data-placeholder);
+  float: left; height: 0; pointer-events: none; color: #cbd5e1;
+}
+
+/* ── Notion-style gutter: the handle lives left of the text column ── */
+.tiptap-body { position: relative; }
+.tiptap-body .ProseMirror-selectednode { outline: 2px solid #a5b4fc; border-radius: 4px; }
+/* a selected button outlines itself (ButtonNode.jsx) — not its whole row */
+.tiptap-body .node-actionButton.ProseMirror-selectednode { outline: none; }
+[data-drag-handle],
+.drag-handle { cursor: grab; }
+.tiptap-drag-handle { z-index: 30; }
+/* the block being dragged */
+.tiptap-body .ProseMirror-hideselection *::selection { background: transparent; }
+.dragging .tiptap-body { cursor: grabbing; }
+
+/* ── the insert menu ──────────────────────────────────────────────────────
+   Designed for THIS problem, which is not the one Notion's menu solves.
+   Notion inserts blocks: ~15 items, all optional, all self-explanatory.
+   Here there are 45+ items, three of them mandatory, and every one of them
+   is a placeholder the writer cannot see the result of. So:
+
+     · what is still MISSING sits at the top — that is the writer's actual job
+     · every row shows the value it will produce, so nothing needs hovering
+     · the side panel shows the SENTENCE being written with the value in it,
+       because "what will this read like" is the real question
+   ------------------------------------------------------------------------ */
+/* 320px tall at most. Tabs, search and footer stay put; only the list scrolls. */
+.ins {
+  background: #fff; border: 1px solid #eaecf0; border-radius: 10px;
+  box-shadow: 0 8px 24px rgba(16,24,40,.18);
+  width: 300px; max-height: 320px; overflow: hidden;
+  display: flex; flex-direction: column;
+}
+.ins-scroll { flex: 1; min-height: 0; overflow-y: auto; padding: 4px; }
+.ins-tabs { display: flex; flex-shrink: 0; border-bottom: 1px solid #eaecf0; }
+.ins-tab {
+  flex: 1; padding: 7px 0; font-size: 12px; color: #667085; background: transparent;
+  border: 0; border-bottom: 2px solid transparent; margin-bottom: -1px; cursor: pointer; font-family: inherit;
+}
+.ins-tab--on { color: #444ce7; border-bottom-color: #444ce7; font-weight: 600; }
+.ins-search {
+  flex-shrink: 0; display: flex; align-items: center; gap: 6px; margin: 8px 8px 4px;
+  padding: 5px 8px; border: 1px solid #d0d5dd; border-radius: 6px; font-size: 12px; min-height: 28px;
+}
+.ins-search-ic { color: #98a2b3; font-size: 13px; }
+.ins-search-ph { color: #98a2b3; }
+.ins-search-q { color: #101828; font-weight: 500; }
+.ins-search-in { flex: 1; min-width: 0; border: 0; outline: none; background: transparent; font: inherit; font-size: 12px; color: #101828; }
+/* a chip just inserted from the "+ Add field" button — lit for a second */
+.vchip-flash { animation: vchip-flash 1s ease-out; }
+@keyframes vchip-flash { 0%, 45% { box-shadow: 0 0 0 3px #a5b4fc; background: #e0e7ff; } 100% { box-shadow: 0 0 0 0 transparent; } }
+.ins-foot {
+  flex-shrink: 0; padding: 6px 10px; border-top: 1px solid #eaecf0; background: #f9fafb;
+  font-size: 11px; color: #667085;
+}
+/* "Every email (recipient, company) · 28" — folded, at the very bottom */
+.ins-collapse {
+  display: flex; align-items: center; gap: 6px; width: 100%; margin-top: 4px;
+  padding: 7px 10px; border: 0; border-top: 1px solid #f2f4f7; border-radius: 6px;
+  background: transparent; font: inherit; font-size: 12px; color: #475467; cursor: pointer;
+}
+.ins-collapse:hover, .ins-collapse--sel { background: #eef2ff; color: #3538cd; }
+
+.ins-group {
+  display: flex; align-items: center; gap: 6px;
+  padding: 9px 10px 5px; font-size: 10px; font-weight: 700;
+  letter-spacing: .06em; text-transform: uppercase; color: #98a2b3;
+}
+.ins-group--todo { color: #b42318; }
+.ins-count {
+  font-size: 9px; font-weight: 700; padding: 1px 5px; border-radius: 999px;
+  background: #fef3f2; color: #b42318;
+}
+
+.ins-row {
+  display: flex; align-items: center; gap: 9px; width: 100%;
+  padding: 6px 10px; border: 0; background: transparent; border-radius: 6px;
+  cursor: pointer; text-align: left; font-family: inherit; outline: none;
+}
+.ins-row:hover { background: #f9fafb; }
+.ins-row--sel { background: #eef2ff; }
+
+.ins-tag {
+  flex-shrink: 0; width: 22px; height: 22px; border-radius: 5px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 10px; font-weight: 700; letter-spacing: -.03em;
+  background: #f2f4f7; color: #667085;
+}
+.ins-row--sel .ins-tag { background: #4f46e5; color: #fff; }
+.ins-tag--req { background: #fef3f2; color: #d92d20; }
+.ins-row--sel .ins-tag--req { background: #d92d20; color: #fff; }
+
+.ins-label { flex: 1; min-width: 0; font-size: 13px; color: #344054; line-height: 1.3; }
+.ins-row--sel .ins-label { color: #3538cd; font-weight: 500; }
+
+/* the value this row will produce — the thing the writer actually wants to
+   know, so it is on the row itself and not behind a hover */
+.ins-val {
+  flex-shrink: 0; max-width: 130px; overflow: hidden; text-overflow: ellipsis;
+  white-space: nowrap; font-size: 11px; color: #98a2b3;
+}
+.ins-row--sel .ins-val { color: #6366f1; }
+.ins-val--kbd { font-family: ui-monospace, monospace; font-size: 10px; }
+.ins-val--none { font-style: italic; color: #d0d5dd; }
+
+.ins-empty { padding: 22px 12px; text-align: center; font-size: 12px; color: #98a2b3; }
+
+/* the sentence the writer is in the middle of, with the value dropped in */
+.ins-say {
+  position: fixed; z-index: 210; width: 268px; pointer-events: none;
+  background: #fff; border: 1px solid #eaecf0; border-radius: 10px;
+  box-shadow: 0 8px 24px rgba(16,24,40,.18); overflow: hidden;
+}
+.ins-say-h {
+  padding: 8px 12px; font-size: 10px; font-weight: 700; letter-spacing: .06em;
+  text-transform: uppercase; color: #98a2b3; border-bottom: 1px solid #f2f4f7;
+  background: #fcfcfd;
+}
+.ins-say-b { padding: 11px 12px; font-size: 12.5px; line-height: 1.6; color: #475467; }
+.ins-say-b mark {
+  background: #eef2ff; color: #3538cd; font-weight: 600;
+  border-radius: 3px; padding: 0 3px;
+}
+.ins-say-eg {
+  padding: 8px 12px; border-top: 1px solid #f2f4f7;
+  display: flex; gap: 8px; align-items: baseline;
+}
+.ins-say-eg span { font-size: 10px; font-weight: 700; letter-spacing: .05em; text-transform: uppercase; color: #98a2b3; flex-shrink: 0; }
+.ins-say-eg b { font-size: 12px; font-weight: 500; color: #344054; overflow-wrap: anywhere; }
+.ins-say-f {
+  padding: 7px 12px; border-top: 1px solid #f2f4f7; background: #fcfcfd;
+  font-size: 10.5px; color: #98a2b3; display: flex; gap: 6px; align-items: baseline;
+}
+.ins-say-f code { font-family: ui-monospace, monospace; color: #667085; }
+.ins-say-warn { color: #b54708; }
+
+/* the row that reveals the fields shared by every email case */
+.ins-more {
+  width: 100%; text-align: left; padding: 8px 12px;
+  border-top: 1px solid #f2f4f7; background: #fcfcfd;
+  font-size: 11px; font-weight: 500; color: #6941c6; cursor: pointer;
+}
+.ins-more:hover { background: #f9f5ff; }
+
+/* A field that resolves to a picture reads differently from one that resolves
+   to words — it is not an upload, it is whatever the record already holds. */
+.vchip[data-kind="image"]::before { content: "\1f5bc\fe0f"; margin-right: 4px; opacity: 1; font-weight: 400; }
+.vchip[data-kind="image"]::after  { content: ""; margin: 0; }
+/* The tier colour still has to read through — an image can be required. */
+
+/* The insert menu mixes five structural blocks with sixty fields. A grid reads
+   at the first size and a list reads at the second, so each gets its own shape;
+   rows span the full width, tiles sit three across. */
+.ins-grid { display: flex; flex-wrap: wrap; gap: 3px; align-content: start; }
+.ins-row-cell, .ins-group--span { flex: 0 0 100%; width: 100%; }
+/* tiles flow at their own width — a group with one block sat alone in a
+   3-column grid with two empty cells, which read as something broken.
+   The cell is a flex column so every tile in a row is the same height
+   whether its label wraps to one line or two. */
+.ins-tile-cell { flex: 0 0 auto; width: 98px; display: flex; }
+.ins-tile { flex: 1; }
+.ins-tile {
+  display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 4px;
+  width: 100%; min-height: 72px; padding: 8px 4px;
+  border: 1px solid #eaecf0; border-radius: 8px; background: #fff;
+  font: inherit; color: #344054; cursor: pointer; text-align: center;
+}
+.ins-tile:hover { background: #f9fafb; }
+.ins-tile--sel { border-color: #a5b4fc; background: #eef2ff; }
+.ins-tile .ins-tag { margin: 0; }
+.ins-tile .ins-label { font-size: 11px; line-height: 1.25; white-space: normal; overflow-wrap: anywhere; }
+
+/* The typed query, echoed so the filtering reads as a search. */
+.ins-query {
+  display: flex; align-items: baseline; gap: 2px;
+  padding: 7px 10px 6px; border-bottom: 1px solid #eaecf0;
+  font-size: 12px; font-weight: 600; color: #101828;
+}
+.ins-query-slash { color: #98a2b3; font-weight: 400; }
+.ins-query-n { margin-left: auto; font-size: 10px; font-weight: 500; color: #98a2b3; }
+
+/* the asterisk that used to carry this is superseded by the lock above */
+
+/* The subject is the same document model as the body, one line high. It has to
+   read as the subject line it replaced, not as a second editor. */
+.subj-line {
+  outline: none; min-width: 0;
+  font-size: 18px; font-weight: 700; color: #101828; line-height: 1.4;
+  white-space: pre-wrap; overflow-wrap: anywhere;
+}
+.subj-line p { margin: 0; }
+.subj-line .vchip { font-size: 12px; font-weight: 600; vertical-align: 2px; }
+.subj-line:focus-visible { outline: none; }
+@media (max-width: 1535px) { .subj-line { font-size: 16px; } }
+
+/* react-select's own styles for the class names Select.jsx copies from the DOM.
+   In the live app emotion injects these at runtime (insertRule), so they are
+   never in a DOM capture — which left the prototype's dropdowns unstyled: the
+   value and the hidden input stacked on two lines inside a 34px box, pushing the
+   text to the top and clipping it. Emotion names a class by hashing its styles,
+   so these hashes ARE react-select v5's default styles for each part. */
+.css-b62m3t-container { position: relative; box-sizing: border-box; }
+.css-7pg0cj-a11yText {
+  z-index: 9999; border: 0; clip: rect(1px, 1px, 1px, 1px); height: 1px; width: 1px;
+  position: absolute; overflow: hidden; padding: 0; white-space: nowrap;
+}
+.css-hlgwow {
+  align-items: center; display: grid; flex: 1; flex-wrap: wrap; position: relative;
+  overflow: hidden; padding: 2px 8px; box-sizing: border-box;
+}
+.css-1dimb5e-singleValue {
+  grid-area: 1 / 1 / 2 / 3; max-width: 100%; overflow: hidden; text-overflow: ellipsis;
+  white-space: nowrap; color: hsl(0, 0%, 20%); margin-left: 2px; margin-right: 2px; box-sizing: border-box;
+}
+.css-19bb58m {
+  visibility: visible; flex: 1 1 auto; display: inline-grid; grid-area: 1 / 1 / 2 / 3;
+  grid-template-columns: 0 min-content; margin: 2px; padding-bottom: 2px; padding-top: 2px;
+  color: hsl(0, 0%, 20%); box-sizing: border-box;
+}
+.css-1jqq78o-placeholder {
+  grid-area: 1 / 1 / 2 / 3; color: hsl(0, 0%, 50%); margin-left: 2px; margin-right: 2px; box-sizing: border-box;
+}
+.css-1wy0on6 { align-items: center; align-self: stretch; display: flex; flex-shrink: 0; box-sizing: border-box; }
+.css-1xc3v61-indicatorContainer,
+/* the row selects' indicator — its exact CSS was not captured; same defaults */
+.css-1nrpa32-indicatorContainer { display: flex; padding: 8px; transition: color 150ms; color: hsl(0, 0%, 80%); box-sizing: border-box; }
+
+/* Hovering a row in the Fields panel rings that chip in the email, so "where is
+   Removed by?" is answered by pointing, not by reading. (Notion's backlink
+   hover does the same.) */
+.tiptap-body .vchip.vchip--hl {
+  outline: 2px solid var(--color-indigo-400);
+  outline-offset: 1px;
+  border-radius: 4px;
+}
+
+/* COPIED — _design-system/app-css/index-541540e9.css. Every form label in this
+   prototype carries CollabCRM's `label` class, but the class itself was never
+   defined here, so labels fell back to the browser's 16px and looked enormous
+   beside the 12px inputs. This is the app's own rule, verbatim. */
+.label { font-size: 12px; color: #98a2b3; font-weight: 500; line-height: 18px; }
+@media screen and (max-width: 1680px) { .label { font-size: 10px; } }
+
+/* FIX-LIST 11b: a select must be exactly as tall as the real input next to it (`2xl:h-10 2xl-to-xl:h-9 h-9`).
+   react-select's height comes from emotion CSS that is not in the DOM, so Select.jsx sets it inline from this variable. */
+:root { --hd-control-h: 36px; }
+@media (min-width: 1536px) { :root { --hd-control-h: 40px; } }
+@media (min-width: 1500px) and (max-width: 1680px) { :root { --hd-control-h: 36px; } }
+
+/* The real radio (crm-invoice/dom/contacts_add.html): <label class="radio-label …"><input type=radio class="mr-2 hidden"><span class="checkmark …">.
+   CollabCRM draws `.checkmark` in its own stylesheet, which is NOT CAPTURED — DIVERGES: drawn here with the indigo-600 / gray-300 tokens. */
+.radio-label .checkmark { position: absolute; left: 0; top: 50%; transform: translateY(-50%); border: 1px solid #d0d5dd; border-radius: 9999px; background: #fff; }
+.radio-label input:checked ~ .checkmark { border-color: #4f46e5; box-shadow: inset 0 0 0 3px #fff; background: #4f46e5; }
+
+/* COPIED: live computed style of each react-select (emotion) class on PM › Tasks › Board, yopmail staging, 18 Nov 2026.
+   Source: _graph/step5/board_select_styles_2026-11-18.json (board_select_styles.cjs). Emotion injects its CSS with insertRule,
+   so no DOM dump holds it; these values were read off the live screen. Heights/widths in px are left to the Tailwind classes. */
+.css-1oevfv3-control { display: flex; position: relative; box-sizing: border-box; align-items: center; justify-content: space-between; flex-wrap: wrap; min-height: 34px; border-radius: 6px; background-color: rgb(255, 255, 255); color: rgb(29, 41, 57); cursor: pointer; transition: 0.1s; }
+.css-1xz9i25 { display: grid; position: relative; box-sizing: border-box; align-items: center; flex-wrap: wrap; flex: 1 1 0%; min-height: 34px; padding: 2px 0px 2px 1px; color: rgb(29, 41, 57); overflow: hidden; cursor: pointer; }
+.css-1hac4vs-dummyInput { width: 1px; border: 0; padding: 0; background: 0; outline: 0; display: block; position: relative; box-sizing: border-box; grid-area: 1 / 1 / 2 / 3; min-height: auto; color: rgba(0, 0, 0, 0); overflow: clip; cursor: text; opacity: 0; }
+.css-eybemu { display: flex; box-sizing: border-box; align-items: center; flex: 0 0 auto; flex-shrink: 0; align-self: stretch; min-height: auto; color: rgb(29, 41, 57); cursor: pointer; }
+.css-1sy4fg6-control { display: flex; position: relative; box-sizing: border-box; align-items: center; justify-content: space-between; flex-wrap: wrap; min-height: 34px; border: 1px solid rgb(208, 213, 221); border-radius: 6px; color: rgb(0, 0, 0); cursor: pointer; transition: 0.1s; }
+.css-1cnd4z4 { display: grid; position: relative; box-sizing: border-box; align-items: center; flex-wrap: wrap; flex: 1 1 0%; min-height: 34px; padding: 2px 8px; color: rgb(0, 0, 0); overflow: hidden; cursor: pointer; }
+.css-cwlqvn-singleValue { display: block; box-sizing: border-box; grid-area: 1 / 1 / 2 / 3; min-height: auto; color: rgb(52, 64, 84); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; cursor: pointer; }

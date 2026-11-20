@@ -1,0 +1,221 @@
+[0m
+> build · deepseek-v4.1-flash-free
+[0m
+I'll start by reading the task file and library index.
+[0m→ [0mRead TASK.md
+[0m→ [0mRead LIBRARY-INDEX.md
+[0m✗ [0mRead /home/yashang/.gemini/antigravity/scratch/CollabCrawl/prototypes/gantt-chart/src/App.jsx failed
+[91m[1mError: [0mThe user has specified a rule which prevents you from using this specific tool call. Here are some of the relevant rules [{"permission":"*","action":"allow","pattern":"*"},{"permission":"external_directory","pattern":"*","action":"ask"},{"permission":"external_directory","pattern":"/home/yashang/.local/share/opencode/tool-output/*","action":"allow"},{"permission":"external_directory","pattern":"/tmp/opencode/*","action":"allow"},{"permission":"external_directory","action":"deny","pattern":"*"},{"permission":"external_directory","pattern":"/home/yashang/.local/share/opencode/tool-output/*","action":"allow"}]
+Library index has nothing relevant. Let me read the actual project files.
+[0m✗ [0mRead /home/yashang/.gemini/antigravity/scratch/CollabCrawl/prototypes/gantt-chart/src/components/AppShell.jsx failed
+[91m[1mError: [0mThe user has specified a rule which prevents you from using this specific tool call. Here are some of the relevant rules [{"permission":"*","action":"allow","pattern":"*"},{"permission":"external_directory","pattern":"*","action":"ask"},{"permission":"external_directory","pattern":"/home/yashang/.local/share/opencode/tool-output/*","action":"allow"},{"permission":"external_directory","pattern":"/tmp/opencode/*","action":"allow"},{"permission":"external_directory","action":"deny","pattern":"*"},{"permission":"external_directory","pattern":"/home/yashang/.local/share/opencode/tool-output/*","action":"allow"}]
+[0m✗ [0mRead /home/yashang/.gemini/antigravity/scratch/CollabCrawl/prototypes/gantt-chart/src/components/PortalSidebars.jsx failed
+[91m[1mError: [0mThe user has specified a rule which prevents you from using this specific tool call. Here are some of the relevant rules [{"permission":"*","action":"allow","pattern":"*"},{"permission":"external_directory","pattern":"*","action":"ask"},{"permission":"external_directory","pattern":"/home/yashang/.local/share/opencode/tool-output/*","action":"allow"},{"permission":"external_directory","pattern":"/tmp/opencode/*","action":"allow"},{"permission":"external_directory","action":"deny","pattern":"*"},{"permission":"external_directory","pattern":"/home/yashang/.local/share/opencode/tool-output/*","action":"allow"}]
+[0m✗ [0mpwd && ls -la && ls -la .. failed
+[91m[1mError: [0mThe user has specified a rule which prevents you from using this specific tool call. Here are some of the relevant rules [{"permission":"*","action":"allow","pattern":"*"},{"permission":"bash","pattern":"*","action":"deny"},{"permission":"bash","pattern":"ls*","action":"allow"},{"permission":"bash","pattern":"grep*","action":"allow"},{"permission":"bash","pattern":"rg*","action":"allow"},{"permission":"bash","pattern":"cat*","action":"allow"},{"permission":"bash","pattern":"head*","action":"allow"},{"permission":"bash","pattern":"tail*","action":"allow"},{"permission":"bash","pattern":"sed -n*","action":"allow"},{"permission":"bash","pattern":"wc*","action":"allow"},{"permission":"bash","pattern":"find*","action":"allow"},{"permission":"bash","pattern":"cp*","action":"allow"},{"permission":"bash","pattern":"python3*","action":"allow"},{"permission":"bash","pattern":"diff*","action":"allow"},{"permission":"bash","pattern":"cut*","action":"allow"},{"permission":"bash","pattern":"sort*","action":"allow"},{"permission":"bash","pattern":"awk*","action":"allow"}]
+[0m
+[0m$ [0mls -la
+total 28
+drwxrwxr-x 3 yashang yashang 4096 Nov 20 15:27 .
+drwx------ 3 yashang yashang   60 Nov 20 15:27 ..
+-rw-rw-r-- 1 yashang yashang  858 Nov 20 15:27 AGENTS.md
+drwxrwxr-x 3 yashang yashang 4096 Nov 20 15:27 library
+-rw-rw-r-- 1 yashang yashang  173 Nov 20 15:27 LIBRARY-INDEX.md
+-rw-rw-r-- 1 yashang yashang  483 Nov 20 15:27 opencode.json
+-rw-r--r-- 1 yashang yashang 2496 Nov 20 15:27 TASK.md
+-rw-rw-r-- 1 yashang yashang 3656 Nov 20 15:28 _worker.log
+[0m
+[0m$ [0mls -la ..
+total 4
+drwx------ 3 yashang yashang   60 Nov 20 15:27 .
+drwx------ 3 yashang yashang   60 Nov 20 15:27 ..
+drwxrwxr-x 3 yashang yashang 4096 Nov 20 15:27 task1-wire
+[0m
+[0m→ [0mRead opencode.json
+[0m→ [0mRead _worker.log
+[0m
+[0m$ [0mfind library -type f | sort
+library/src/App.jsx
+library/src/components/AppShell.jsx
+library/src/components/Breadcrumbs.jsx
+library/src/components/Buttons.jsx
+library/src/components/cc/AssignModal.jsx
+library/src/components/cc/Avatar.jsx
+library/src/components/cc/Button.jsx
+library/src/components/cc/Chips.jsx
+library/src/components/cc/DataTable.jsx
+library/src/components/cc/Drawer.jsx
+library/src/components/cc/EmptyState.jsx
+library/src/components/cc/Field.jsx
+library/src/components/cc/FileRow.jsx
+library/src/components/cc/FilterBar.jsx
+library/src/components/cc/InfoTip.jsx
+library/src/components/cc/Kanban.jsx
+library/src/components/cc/KpiCard.jsx
+library/src/components/cc/Modal.jsx
+library/src/components/cc/PageFrame.jsx
+library/src/components/cc/PillStrip.jsx
+library/src/components/cc/PillTabs.jsx
+library/src/components/cc/PriorityIcon.jsx
+library/src/components/cc/Radio.jsx
+library/src/components/cc/RichText.jsx
+library/src/components/cc/rte-toolbar.html
+library/src/components/cc/SettingsPage.jsx
+library/src/components/cc/StatusPill.jsx
+library/src/components/cc/Toggle.jsx
+library/src/components/cc/Upload.jsx
+library/src/components/cc/ViewSwitch.jsx
+library/src/components/cc/Widget.jsx
+library/src/components/ConfirmDialog.jsx
+library/src/components/demo/demo.js
+library/src/components/demo/DemoMenu.jsx
+library/src/components/demo/Pin.jsx
+library/src/components/Dropdowns.jsx
+library/src/components/Icon.jsx
+library/src/components/PortalSidebars.jsx
+library/src/components/Select.jsx
+library/src/components/super/list.jsx
+library/src/components/super/record.jsx
+library/src/components/super/SuperShell.jsx
+library/src/components/super/TabStrip.jsx
+library/src/components/super/ui.jsx
+library/src/components/Tabs.jsx
+library/src/data/breadcrumbLive.js
+library/src/data/buttonsCapturedStates.js
+library/src/data/buttonsLive.js
+library/src/data/demo.js
+library/src/data/dropdownLive.js
+library/src/data/gantt.js
+library/src/data/nav.js
+library/src/data/patterns.js
+library/src/data/portal_nav.js
+library/src/data/sample.js
+library/src/data/tabsLive.js
+library/src/data/tenant.js
+library/src/dropdowns-live.css
+library/src/icomoon.css
+library/src/index.css
+library/src/main.jsx
+library/src/pages/Catalogue.jsx
+library/src/pages/check/CheckBreadcrumb.jsx
+library/src/pages/check/CheckButtons.jsx
+library/src/pages/check/CheckCrm.jsx
+library/src/pages/check/CheckDropdowns.jsx
+library/src/pages/check/CheckPayroll.jsx
+library/src/pages/check/CheckRecruitment.jsx
+library/src/pages/check/CheckReports.jsx
+library/src/pages/check/CheckTabs.jsx
+library/src/pages/GanttBoard.jsx
+library/src/pages/Patterns.jsx
+library/src/pages/Portals.jsx
+library/src/pages/SuperExample.jsx
+library/src/styles/rte-editor.css
+[0m
+[0m$ [0mgrep -n "Gantt\|Route\|import" library/src/App.jsx | head -60
+1:import { Routes, Route } from 'react-router-dom'
+2:import { ConfirmHost } from './components/ConfirmDialog.jsx'
+3:import Portals, { PortalPage } from './pages/Portals.jsx'
+4:import Patterns from './pages/Patterns.jsx'
+5:import Catalogue from './pages/Catalogue.jsx'
+6:import SuperExample from './pages/SuperExample.jsx'
+7:import CheckRecruitment from './pages/check/CheckRecruitment.jsx'
+8:import CheckReports from './pages/check/CheckReports.jsx'
+9:import CheckPayroll from './pages/check/CheckPayroll.jsx'
+10:import CheckCrm from './pages/check/CheckCrm.jsx'
+11:import CheckDropdowns from './pages/check/CheckDropdowns.jsx'
+12:import CheckTabs from './pages/check/CheckTabs.jsx'
+13:import CheckButtons from './pages/check/CheckButtons.jsx'
+14:import CheckBreadcrumb from './pages/check/CheckBreadcrumb.jsx'
+20:      <Routes>
+21:        <Route path="/" element={<Portals />} />
+22:        <Route path="/portal/:slug" element={<PortalPage />} />
+23:        <Route path="/patterns" element={<Patterns />} />
+24:        <Route path="/components" element={<Catalogue />} />
+25:        <Route path="/super" element={<SuperExample />} />
+27:        <Route path="/check/recruitment" element={<CheckRecruitment />} />
+28:        <Route path="/check/reports" element={<CheckReports />} />
+29:        <Route path="/check/payroll" element={<CheckPayroll />} />
+30:        <Route path="/check/sales-crm" element={<CheckCrm />} />
+31:        <Route path="/check/dropdowns" element={<CheckDropdowns />} />
+32:        <Route path="/check/tabs" element={<CheckTabs />} />
+33:        <Route path="/check/buttons" element={<CheckButtons />} />
+34:        <Route path="/check/breadcrumb" element={<CheckBreadcrumb />} />
+35:      </Routes>
+[0m
+The real project is sandboxed off, but `library/` holds a copy of the source. Let me inspect the relevant files there.
+[0m$ [0mgrep -n "Sidebar\|portal" library/src/components/AppShell.jsx
+11:import { RecruitmentSidebar, ReportsSidebar, PayrollSidebar, CrmSidebar } from './PortalSidebars.jsx'
+24:/* Sidebar items are passed in per portal: [label, icon, path-or-null]. Real lists: src/data/nav.js */
+107:export function NotifyChip({ icon, title, portal, to, count = null }) {
+110:      <Link to={to || `/${portal || 'people'}/${TENANT}/notifications`}>
+156:function NewMenu({ portal, items }) {
+167:                <a className="flex gap-2 items-center px-4 py-2 text-sm whitespace-nowrap" href={`/${portal}/${TENANT}/${it.path}`}><span className="icon-plus" />{it.label}</a>
+177:/* Header name next to the logo, as the live header prints it (yopmail captures, 18 Nov 2026); other portals print their slug. */
+179:function TopBar({ portal, topRight, newMenu }) {
+189:              <img src="/collabcrm-logo.svg" alt={portal} className="h-5" />
+190:              <span className="ml-2 text-gray-500 2xl:text-base 2xl-to-xl:text-sm text-sm font-normal leading-tight capitalize w-full">{PORTAL_TITLE[portal] || portal}</span>
+208:            {newMenu && <NewMenu portal={portal} items={newMenu} />}
+212:                  <NotifyChip icon="check-square" title="Todo List" portal={portal} />
+213:                  <NotifyChip icon="bell-01" title="Notifications" portal={portal} />
+228:function PeopleSidebar({ nav, portal }) {
+238:                    <a className="flex w-full items-center gap-x-3 2xl:p-3 2xl-to-xl:p-2 p-2" href={`/${portal}/${TENANT}/${path}`}>
+242:                    {addPath && <a title={addTitle} className="icon-plus-square block ml-auto text-xl 2xl:p-3 2xl-to-xl:p-2 p-2 text-indigo-300" href={`/${portal}/${TENANT}/${addPath}`} />}
+286:function PmSidebar({ nav, activeLabel, portal, flyout = '' }) {
+301:                      <a className="flex w-full items-center 2xl:p-3 2xl-to-xl:p-2 p-2 gap-x-3" href={`/${portal}/${TENANT}/${path}`}>
+305:                      {q && <a title={q.title} className={q.cls} href={`/${portal}/${TENANT}/${q.path}`} />}
+333:/* Recruitment, Reports, Payroll, CRM & Invoice: their own sidebars, copied from the captures (PortalSidebars.jsx, 18 Nov 2026).
+334:   The capture wraps each in a class-less <div>, as PmSidebar does. */
+335:const OWN_SIDEBAR = { recruitment: RecruitmentSidebar, reports: ReportsSidebar, payroll: PayrollSidebar, 'sales-crm': CrmSidebar }
+336:function Sidebar(props) {
+337:  if (props.portal === 'project-management') return <PmSidebar {...props} />
+338:  const Own = OWN_SIDEBAR[props.portal]
+340:  return props.portal === 'people' ? <PeopleSidebar {...props} /> : <AdminSidebar {...props} />
+343:function AdminSidebar({ nav, activeLabel, portal }) {
+371:                      <a className="flex w-full items-center gap-x-3 2xl:p-3 2xl-to-xl:p-2 p-2" href={`/${portal}/${TENANT}/${path}`}>
+397:function RightRail({ portal }) {
+437:                    const to = href && href.replace('{portal}', portal).replace('{tenant}', TENANT)
+537:  'Access people management features under the People portal.',
+538:  'Use CRM & Invoice portal for efficiently managing leads, deals, invoices & much more.',
+539:  'Manage projects and task allocation under the Project Management portal.',
+540:  'Manage a seamless hiring process under the Recruitment portal.',
+595:export default function AppShell({ children, portal = 'people', nav = [], active, topRight = null, flyout = '', newMenu = null }) {
+604:              <TopBar portal={portal} topRight={topRight} newMenu={newMenu} />
+606:                <Sidebar nav={nav} activeLabel={active} portal={portal} flyout={flyout} />
+614:                <RightRail portal={portal} />
+[0m
+[0m$ [0mgrep -n "export\|function\|Sidebar" library/src/components/PortalSidebars.jsx
+12:export function RecruitmentSidebar({ nav, activeLabel, portal, flyout = '' }) {
+111:export function ReportsSidebar({ nav, activeLabel, portal, flyout = '' }) {
+155:export function PayrollSidebar({ nav, activeLabel, portal, flyout = '' }) {
+227:export function CrmSidebar({ nav, activeLabel, portal, flyout = '' }) {
+[0m
+[0m→ [0mRead library/src/components/PortalSidebars.jsx[90m [limit=115][0m
+[0m→ [0mRead library/src/components/AppShell.jsx[90m [offset=284, limit=60][0m
+The `library/` tree mirrors `src/`. I'll edit the mirrored files there. Let me read the exact patterns.
+Let me search the library for the exact nav source (labels/icons/links) before writing.
+[0m
+[0m$ [0mgrep -rn "Resource Planner\|Daily Allocation\|icon-layers-three-02\|icon-calendar-check-02" library | head -40
+...output truncated...
+
+Full output saved to: /home/yashang/.local/share/opencode/tool-output/tool_1f865068f0010L3z1eqSs2Duz3
+
+customer_master_access.html","label":"Request Access"}}},"primary-074":{"look":"primary","sizeSig":"font-semibold px-4 py-[7px] text-xs h-fit","tag":"button","captures":2,"cells":{"default":{"outer":"<button type=\"submit\" class=\"outline-none font-semibold rounded-lg disabled:cursor-not-allowed border disabled:opacity-100 disabled:bg-indigo-200 px-4 border-transparent bg-indigo-600 text-white 2xl:py-2 2xl-to-xl:py-[7px] py-[7px] 2xl:text-sm 2xl-to-xl:text-xs text-xs h-fit\" disabled><div class=\"flex items-center justify-center gap-2\">Submit</div></button>","src":"modules/super-admin/dom/customer_notes.html","label":"Submit"},"disabled":{"outer":"<button type=\"submit\" class=\"outline-none font-semibold rounded-lg disabled:cursor-not-allowed border disabled:opacity-100 disabled:bg-indigo-200 px-4 border-transparent bg-indigo-600 text-white 2xl:py-2 2xl-to-xl:py-[7px] py-[7px] 2xl:text-sm 2xl-to-xl:text-xs text-xs h-fit\" disabled><div class=\"flex items-center justify-center gap-2\">Submit</div></button>","src":"modules/super-admin/dom/customer_notes.html","label":"Submit"}}},"secondary-033":{"look":"secondary","sizeSig":"font-semibold px-4 py-[7px] text-xs","tag":"button","captures":5,"cells":{"default":{"outer":"<button type=\"button\" class=\"outline-none font-semibold rounded-lg disabled:cursor-not-allowed border disabled:opacity-100 hover:opacity-90 px-4 bg-white border-gray-300 text-gray-700 2xl:py-2 2xl-to-xl:py-[7px] py-[7px] 2xl:text-sm 2xl-to-xl:text-xs text-xs\"><div class=\"flex items-center justify-center gap-2\">Cancel</div></button>","src":"modules/super-admin/dom/customers_add.html","label":"Cancel"},"inModal":{"outer":"<button type=\"button\" class=\"outline-none font-semibold rounded-lg disabled:cursor-not-allowed border disabled:opacity-100 hover:opacity-90 px-4 bg-white border-gray-300 text-gray-700 2xl:py-2 2xl-to-xl:py-[7px] py-[7px] 2xl:text-sm 2xl-to-xl:text-xs text-xs\"><div class=\"flex items-center justify-center gap-2\">Cancel</div></button>","src":"modules/super-admin/dom/customers_add.html","label":"Cancel"}}},"primary-072":{"look":"primary","sizeSig":"font-semibold px-4 py-1.5 text-xs","tag":"button","captures":2,"cells":{"default":{"outer":"<button type=\"submit\" class=\"outline-none font-semibold rounded-lg disabled:cursor-not-allowed border disabled:opacity-100 hover:opacity-90 disabled:bg-indigo-200 px-4 border-transparent bg-indigo-600 text-white relative 2xl:py-2 2xl-to-xl:py-1.5 py-1.5 2xl:text-sm 2xl-to-xl:text-xs text-xs\"><div class=\"flex items-center justify-center gap-2\">Save</div></button>","src":"modules/super-admin/dom/security_settings.html","label":"Save"}}}}
+library/src/data/patterns.js:1006:   "snippet": "<div class=\"bg-white flex flex-col justify-center rounded-b-lg\" style=\"height: calc(-306px + 100vh);\"><div class=\"flex items-center justify-center relative\"><div class=\"p-8 rounded-full bg-gray-100\"><span class=\"icon-layers-three-02 flex items-center justify-center text-[40px] text-gray-500\"></span></div></div><div class=\"flex items-center justify-center flex-col\"><p class=\"pb-6 pt-5 text-gray-900 font-semibold 2xl:text-sm 2xl-to-xl:text-xs text-xs z-[1]\">No data found.</p></div></div>"
+[0m
+[0m$ [0mgrep -rn "ProjectManagementSidebar\|project-management" library/src | head -40
+...output truncated...
+
+Full output saved to: /home/yashang/.local/share/opencode/tool-output/tool_1f865068d0018pleYq5tkkeDWy
+
+library/src/data/breadcrumbLive.js:34:export const BC_STATE_ROWS = [{"id": "bc-001__home__default", "group": "bc-001", "part": "home", "state": "default", "route": "/people/yopmail/asset/asset-list/add", "capture": "_graph/jobs/breadcrumb-2026-11-19/live/bc-001.html", "styles": {"color": "rgb(102, 112, 133)", "backgroundColor": "rgba(0, 0, 0, 0)", "textDecorationLine": "none", "cursor": "pointer", "fontSize": "16px", "fontWeight": "400", "opacity": "1"}, "hoverLanded": null}, {"id": "bc-001__home__hover", "group": "bc-001", "part": "home", "state": "hover", "route": "/people/yopmail/asset/asset-list/add", "capture": "_graph/jobs/breadcrumb-2026-11-19/live/bc-001.html", "styles": {"color": "rgb(52, 64, 84)", "backgroundColor": "rgba(0, 0, 0, 0)", "textDecorationLine": "none", "cursor": "pointer", "fontSize": "16px", "fontWeight": "400", "opacity": "1"}, "hoverLanded": true}, {"id": "bc-001__mid__default", "group": "bc-001", "part": "mid", "state": "default", "route": "/people/yopmail/asset/asset-list/add", "capture": "_graph/jobs/breadcrumb-2026-11-19/live/bc-001.html", "styles": {"color": "rgb(71, 84, 103)", "backgroundColor": "rgba(0, 0, 0, 0)", "textDecorationLine": "none", "cursor": "pointer", "fontSize": "12px", "fontWeight": "500", "opacity": "1"}, "hoverLanded": null}, {"id": "bc-001__mid__hover", "group": "bc-001", "part": "mid", "state": "hover", "route": "/people/yopmail/asset/asset-list/add", "capture": "_graph/jobs/breadcrumb-2026-11-19/live/bc-001.html", "styles": {"color": "rgb(29, 41, 57)", "backgroundColor": "rgba(0, 0, 0, 0)", "textDecorationLine": "none", "cursor": "pointer", "fontSize": "12px", "fontWeight": "500", "opacity": "1"}, "hoverLanded": true}, {"id": "bc-001__cur__default", "group": "bc-001", "part": "cur", "state": "default", "route": "/people/yopmail/asset/asset-list/add", "capture": "_graph/jobs/breadcrumb-2026-11-19/live/bc-001.html", "styles": {"color": "rgb(53, 56, 205)", "backgroundColor": "rgba(0, 0, 0, 0)", "textDecorationLine": "none", "cursor": "default", "fontSize": "12px", "fontWeight": "500", "opacity": "1"}, "hoverLanded": null}, {"id": "bc-004__home__default", "group": "bc-004", "part": "home", "state": "default", "route": "/administration/yopmail/email-configuration/email-domain", "capture": "_graph/jobs/breadcrumb-2026-11-19/live/bc-004.html", "styles": {"color": "rgb(102, 112, 133)", "backgroundColor": "rgba(0, 0, 0, 0)", "textDecorationLine": "none", "cursor": "pointer", "fontSize": "16px", "fontWeight": "400", "opacity": "1"}, "hoverLanded": null}, {"id": "bc-004__home__hover", "group": "bc-004", "part": "home", "state": "hover", "route": "/administration/yopmail/email-configuration/email-domain", "capture": "_graph/jobs/breadcrumb-2026-11-19/live/bc-004.html", "styles": {"color": "rgb(52, 64, 84)", "backgroundColor": "rgba(0, 0, 0, 0)", "textDecorationLine": "none", "cursor": "pointer", "fontSize": "16px", "fontWeight": "400", "opacity": "1"}, "hoverLanded": true}, {"id": "bc-004__mid__default", "group": "bc-004", "part": "mid", "state": "default", "route": "/administration/yopmail/email-configuration/email-domain", "capture": "_graph/jobs/breadcrumb-2026-11-19/live/bc-004.html", "styles": {"color": "rgb(71, 84, 103)", "backgroundColor": "rgba(0, 0, 0, 0)", "textDecorationLine": "none", "cursor": "pointer", "fontSize": "12px", "fontWeight": "500", "opacity": "1"}, "hoverLanded": null}, {"id": "bc-004__mid__hover", "group": "bc-004", "part": "mid", "state": "hover", "route": "/administration/yopmail/email-configuration/email-domain", "capture": "_graph/jobs/breadcrumb-2026-11-19/live/bc-004.html", "styles": {"color": "rgb(29, 41, 57)", "backgroundColor": "rgba(0, 0, 0, 0)", "textDecorationLine": "none", "cursor": "pointer", "fontSize": "12px", "fontWeight": "500", "opacity": "1"}, "hoverLanded": true}, {"id": "bc-004__cur__default", "group": "bc-004", "part": "cur", "state": "default", "route": "/administration/yopmail/email-configuration/email-domain", "capture": "_graph/jobs/breadcrumb-2026-11-19/live/bc-004.html", "styles": {"color": "rgb(53, 56, 205)", "backgroundColor": "rgba(0, 0, 0, 0)", "textDecorationLine": "none", "cursor": "default", "fontSize": "12px", "fontWeight": "500", "opacity": "1"}, "hoverLanded": null}, {"id": "bc-002__home__default", "group": "bc-002", "part": "home", "state": "default", "route": "/administration/yopmail/biometric-sync", "capture": "_graph/jobs/breadcrumb-2026-11-19/live/bc-002.html", "styles": {"color": "rgb(102, 112, 133)", "backgroundColor": "rgba(0, 0, 0, 0)", "textDecorationLine": "none", "cursor": "pointer", "fontSize": "16px", "fontWeight": "400", "opacity": "1"}, "hoverLanded": null}, {"id": "bc-002__home__hover", "group": "bc-002", "part": "home", "state": "hover", "route": "/administration/yopmail/biometric-sync", "capture": "_graph/jobs/breadcrumb-2026-11-19/live/bc-002.html", "styles": {"color": "rgb(52, 64, 84)", "backgroundColor": "rgba(0, 0, 0, 0)", "textDecorationLine": "none", "cursor": "pointer", "fontSize": "16px", "fontWeight": "400", "opacity": "1"}, "hoverLanded": true}, {"id": "bc-002__cur__default", "group": "bc-002", "part": "cur", "state": "default", "route": "/administration/yopmail/biometric-sync", "capture": "_graph/jobs/breadcrumb-2026-11-19/live/bc-002.html", "styles": {"color": "rgb(53, 56, 205)", "backgroundColor": "rgba(0, 0, 0, 0)", "textDecorationLine": "none", "cursor": "default", "fontSize": "12px", "fontWeight": "500", "opacity": "1"}, "hoverLanded": null}, {"id": "bc-005__home__default", "group": "bc-005", "part": "home", "state": "default", "route": "/payroll/yopmail/configuration/salary-components/earnings", "capture": "_graph/jobs/breadcrumb-2026-11-19/live/bc-005.html", "styles": {"color": "rgb(102, 112, 133)", "backgroundColor": "rgba(0, 0, 0, 0)", "textDecorationLine": "none", "cursor": "pointer", "fontSize": "16px", "fontWeight": "400", "opacity": "1"}, "hoverLanded": null}, {"id": "bc-005__home__hover", "group": "bc-005", "part": "home", "state": "hover", "route": "/payroll/yopmail/configuration/salary-components/earnings", "capture": "_graph/jobs/breadcrumb-2026-11-19/live/bc-005.html", "styles": {"color": "rgb(52, 64, 84)", "backgroundColor": "rgba(0, 0, 0, 0)", "textDecorationLine": "none", "cursor": "pointer", "fontSize": "16px", "fontWeight": "400", "opacity": "1"}, "hoverLanded": true}, {"id": "bc-005__mid__default", "group": "bc-005", "part": "mid", "state": "default", "route": "/payroll/yopmail/configuration/salary-components/earnings", "capture": "_graph/jobs/breadcrumb-2026-11-19/live/bc-005.html", "styles": {"color": "rgb(71, 84, 103)", "backgroundColor": "rgba(0, 0, 0, 0)", "textDecorationLine": "none", "cursor": "default", "fontSize": "12px", "fontWeight": "500", "opacity": "1"}, "hoverLanded": null}, {"id": "bc-005__mid__hover", "group": "bc-005", "part": "mid", "state": "hover", "route": "/payroll/yopmail/configuration/salary-components/earnings", "capture": "_graph/jobs/breadcrumb-2026-11-19/live/bc-005.html", "styles": {"color": "rgb(71, 84, 103)", "backgroundColor": "rgba(0, 0, 0, 0)", "textDecorationLine": "none", "cursor": "default", "fontSize": "12px", "fontWeight": "500", "opacity": "1"}, "hoverLanded": false}, {"id": "bc-005__cur__default", "group": "bc-005", "part": "cur", "state": "default", "route": "/payroll/yopmail/configuration/salary-components/earnings", "capture": "_graph/jobs/breadcrumb-2026-11-19/live/bc-005.html", "styles": {"color": "rgb(53, 56, 205)", "backgroundColor": "rgba(0, 0, 0, 0)", "textDecorationLine": "none", "cursor": "default", "fontSize": "12px", "fontWeight": "500", "opacity": "1"}, "hoverLanded": null}, {"id": "bc-009__home__default", "group": "bc-009", "part": "home", "state": "default", "route": "/project-management/yopmail/projects/038517cb-24bb-40a3-b6a1-924eabea4261/project-details/DEDICATED?tab=All", "capture": "_graph/jobs/breadcrumb-2026-11-19/live/bc-009.html", "styles": {"color": "rgb(102, 112, 133)", "backgroundColor": "rgba(0, 0, 0, 0)", "textDecorationLine": "none", "cursor": "pointer", "fontSize": "16px", "fontWeight": "400", "opacity": "1"}, "hoverLanded": null}, {"id": "bc-009__home__hover", "group": "bc-009", "part": "home", "state": "hover", "route": "/project-management/yopmail/projects/038517cb-24bb-40a3-b6a1-924eabea4261/project-details/DEDICATED?tab=All", "capture": "_graph/jobs/breadcrumb-2026-11-19/live/bc-009.html", "styles": {"color": "rgb(52, 64, 84)", "backgroundColor": "rgba(0, 0, 0, 0)", "textDecorationLine": "none", "cursor": "pointer", "fontSize": "16px", "fontWeight": "400", "opacity": "1"}, "hoverLanded": true}, {"id": "bc-009__mid__default", "group": "bc-009", "part": "mid", "state": "default", "route": "/project-management/yopmail/projects/038517cb-24bb-40a3-b6a1-924eabea4261/project-details/DEDICATED?tab=All", "capture": "_graph/jobs/breadcrumb-2026-11-19/live/bc-009.html", "styles": {"color": "rgb(71, 84, 103)", "backgroundColor": "rgba(0, 0, 0, 0)", "textDecorationLine": "none", "cursor": "pointer", "fontSize": "12px", "fontWeight": "500", "opacity": "1"}, "hoverLanded": null}, {"id": "bc-009__mid__hover", "group": "bc-009", "part": "mid", "state": "hover", "route": "/project-management/yopmail/projects/038517cb-24bb-40a3-b6a1-924eabea4261/project-details/DEDICATED?tab=All", "capture": "_graph/jobs/breadcrumb-2026-11-19/live/bc-009.html", "styles": {"color": "rgb(29, 41, 57)", "backgroundColor": "rgba(0, 0, 0, 0)", "textDecorationLine": "none", "cursor": "pointer", "fontSize": "12px", "fontWeight": "500", "opacity": "1"}, "hoverLanded": true}];
+library/src/data/dropdownLive.js:631:  "url": "/project-management/yopmail/projects",
+library/src/components/Tabs.jsx:32://   modules/project-mgmt/dom/yop_intsweep_2026-11-04_project-management__occupancy-report.html
+library/src/components/Buttons.jsx:24://   modules/project-mgmt/dom/yop_intsweep_2026-11-04_project-management__tasks_notifications_ak-industry_page_1.html
+library/src/components/Buttons.jsx:34://   modules/project-mgmt/dom/yop_intsweep_2026-11-04_project-management__tasks_HAPP_board.html
+library/src/components/Buttons.jsx:37://   modules/project-mgmt/dom/yop_intsweep_2026-11-04_project-management__occupancy-report.html
+library/src/components/AppShell.jsx:17:  ['Project Management', 'layers-three-02', `/project-management/${TENANT}/dashboard`],
+library/src/components/AppShell.jsx:178:const PORTAL_TITLE = { 'sales-crm': 'Customer Relationship Management', 'project-management': 'Project Management' }
+library/src/components/AppShell.jsx:337:  if (props.portal === 'project-management') return <PmSidebar {...props} />
+[0m
+timestamp=2026-11-20T10:02:17.467Z level=ERROR run=b061cf99 message="stream error" providerID=opencode modelID=deepseek-v4.1-flash-free session.id=ses_e079bc425ffeW2iBLErr4DDygy small=true agent=title mode=primary error.error.message="Streaming response failed: [500] Internal server error" error.error.type=server_error error.error.param=null
+timestamp=2026-11-20T10:03:08.636Z level=ERROR run=b061cf99 message="stream error" providerID=opencode modelID=deepseek-v4.1-flash-free session.id=ses_e079bc425ffeW2iBLErr4DDygy small=false agent=build mode=primary error.error.message="Streaming response failed: [500] Internal server error" error.error.type=server_error error.error.param=null
