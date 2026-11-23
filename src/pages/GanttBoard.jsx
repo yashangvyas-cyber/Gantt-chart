@@ -648,8 +648,12 @@ function IssueDetailPanel({ issue, onClose, onUpdateDates }) {
 
 // ─── Unscheduled Issues Drawer (Story 4) ───────────────────────────────────────
 
-function UnscheduledDrawer({ open, onClose, issues, onSchedule }) {
+function UnscheduledDrawer({ open, onClose, issues, onSchedule, onOpenDetail }) {
   const [search, setSearch] = useState('')
+  const [schedulingId, setSchedulingId] = useState(null)
+  const [inputStart, setInputStart] = useState('')
+  const [inputDue, setInputDue] = useState('')
+  const [dateErr, setDateErr] = useState('')
 
   if (!open) return null
 
@@ -696,27 +700,100 @@ function UnscheduledDrawer({ open, onClose, issues, onSchedule }) {
               className="p-3 border border-gray-200 rounded-lg hover:border-indigo-300 hover:shadow-sm bg-white transition-all space-y-2"
             >
               <div className="flex items-center justify-between">
-                <div className="flex items-center gap-1.5">
+                <div
+                  className="flex items-center gap-1.5 cursor-pointer hover:underline"
+                  onClick={() => onOpenDetail?.(item)}
+                >
                   <TypeIcon type={item.issue_type} />
                   <span className="text-xs font-semibold text-indigo-700">{item.key}</span>
                 </div>
                 <StatusPill status={item.status} />
               </div>
-              <p className="text-xs text-gray-800 font-medium">{item.title}</p>
+              <p
+                className="text-xs text-gray-800 font-medium cursor-pointer hover:text-indigo-600"
+                onClick={() => onOpenDetail?.(item)}
+              >
+                {item.title}
+              </p>
               <div className="flex items-center justify-between text-[11px] text-gray-500 pt-1 border-t border-gray-100">
                 <span>{item.assignee_name}</span>
                 <span>{item.estimated_hours}h estimated</span>
               </div>
 
-              <div className="pt-2 flex items-center justify-between gap-2">
-                <span className="text-[10px] text-gray-400">Default: 15-Nov to 22-Nov</span>
-                <button
-                  onClick={() => onSchedule(item.id, '15-Nov-2026', '22-Nov-2026')}
-                  className="px-2.5 py-1 text-xs font-semibold bg-indigo-50 text-indigo-700 hover:bg-indigo-600 hover:text-white rounded-md transition-colors"
-                >
-                  Schedule
-                </button>
-              </div>
+              {schedulingId === item.id ? (
+                <div className="pt-2 border-t border-gray-100 space-y-2">
+                  <div className="grid grid-cols-2 gap-2 text-xs">
+                    <div>
+                      <label className="text-[10px] text-gray-500 font-medium block">Start Date</label>
+                      <input
+                        type="text"
+                        value={inputStart}
+                        onChange={e => setInputStart(e.target.value)}
+                        placeholder="DD-MMM-YYYY"
+                        className="w-full px-2 py-1 border border-gray-300 rounded text-xs bg-white focus:outline-none focus:border-indigo-600"
+                      />
+                    </div>
+                    <div>
+                      <label className="text-[10px] text-gray-500 font-medium block">Due Date</label>
+                      <input
+                        type="text"
+                        value={inputDue}
+                        onChange={e => setInputDue(e.target.value)}
+                        placeholder="DD-MMM-YYYY"
+                        className="w-full px-2 py-1 border border-gray-300 rounded text-xs bg-white focus:outline-none focus:border-indigo-600"
+                      />
+                    </div>
+                  </div>
+                  {dateErr && <p className="text-[10px] text-red-600">{dateErr}</p>}
+                  <div className="flex justify-end gap-1.5 pt-1">
+                    <button
+                      onClick={() => setSchedulingId(null)}
+                      className="px-2 py-1 text-[11px] text-gray-600 hover:bg-gray-100 rounded"
+                    >
+                      Cancel
+                    </button>
+                    <button
+                      onClick={() => {
+                        const s = parseDate(inputStart)
+                        const d = parseDate(inputDue)
+                        if (!s || !d) {
+                          setDateErr('Invalid format. Use DD-MMM-YYYY')
+                          return
+                        }
+                        if (s > d) {
+                          setDateErr('Start Date must be on or before Due Date')
+                          return
+                        }
+                        onSchedule(item.id, inputStart, inputDue)
+                        setSchedulingId(null)
+                      }}
+                      className="px-2.5 py-1 text-[11px] font-semibold bg-indigo-600 hover:bg-indigo-700 text-white rounded shadow-2xs"
+                    >
+                      Save Dates
+                    </button>
+                  </div>
+                </div>
+              ) : (
+                <div className="pt-2 flex items-center justify-between border-t border-gray-100">
+                  <button
+                    onClick={() => onOpenDetail?.(item)}
+                    className="text-[11px] text-indigo-600 hover:underline"
+                  >
+                    Open Details
+                  </button>
+                  <button
+                    onClick={() => {
+                      setSchedulingId(item.id)
+                      setInputStart(fmtDate(new Date()))
+                      setInputDue(fmtDate(addDays(new Date(), 5)))
+                      setDateErr('')
+                    }}
+                    className="px-2.5 py-1 text-xs font-semibold bg-indigo-50 text-indigo-700 hover:bg-indigo-600 hover:text-white rounded-md transition-colors"
+                  >
+                    Set Dates
+                  </button>
+                </div>
+              )}
             </div>
           ))
         )}
@@ -2559,6 +2636,10 @@ export default function GanttBoard() {
         onClose={() => setUnscheduledOpen(false)}
         issues={issues}
         onSchedule={handleScheduleFromUnscheduled}
+        onOpenDetail={(item) => {
+          setUnscheduledOpen(false)
+          setPanel(item)
+        }}
       />
 
       {/* Create Issue Modal (Story 1 & Real CollabCRM popup modal) */}
