@@ -1,4 +1,4 @@
-import { Routes, Route } from 'react-router-dom'
+import { Routes, Route, Navigate } from 'react-router-dom'
 import { ConfirmHost } from './components/ConfirmDialog.jsx'
 import Portals, { PortalPage } from './pages/Portals.jsx'
 import Patterns from './pages/Patterns.jsx'
@@ -20,8 +20,10 @@ export default function App() {
   return (
     <>
       <Routes>
-        <Route path="/" element={<Portals />} />
+        <Route path="/" element={<Navigate to="/gantt" replace />} />
+        <Route path="/portals" element={<Portals />} />
         <Route path="/dashboard" element={<ProjectDashboard />} />
+        <Route path="/project-management" element={<Navigate to="/gantt" replace />} />
         <Route path="/project-management/:tenant/dashboard" element={<ProjectDashboard />} />
         <Route path="/project-management/:tenant/tasks" element={<GanttBoard />} />
         <Route path="/project-management/:tenant/tasks/:board" element={<GanttBoard />} />

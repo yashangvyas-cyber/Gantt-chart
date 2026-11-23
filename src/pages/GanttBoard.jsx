@@ -2610,6 +2610,19 @@ export default function GanttBoard() {
                   {unscheduledCount}
                 </span>
               </button>
+
+              {/* User Stories Link */}
+              <a
+                href="/stories.html"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="px-2.5 py-1 rounded-lg text-xs font-semibold border border-gray-300 bg-white text-gray-700 hover:bg-gray-50 hover:text-indigo-600 shadow-2xs flex items-center gap-1.5 transition-all"
+                title="Open Gantt Chart User Stories"
+              >
+                <span className="icon-file-06 text-xs text-indigo-600" />
+                <span>User Stories</span>
+                <span className="icon-external-link text-[10px] text-gray-400" />
+              </a>
             </div>
           </div>
 

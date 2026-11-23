@@ -99,6 +99,17 @@ export default function ProjectDashboard() {
             <span className="text-indigo-600 font-bold">Dashboard</span>
           </div>
           <div className="flex items-center gap-2">
+            <a
+              href="/stories.html"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="flex items-center gap-1.5 px-3 py-1.5 bg-white hover:bg-gray-50 text-indigo-700 border border-indigo-200 rounded-lg text-xs font-semibold shadow-xs transition-colors"
+              title="Open Gantt Chart User Stories"
+            >
+              <span className="icon-file-06 text-xs text-indigo-600" />
+              <span>User Stories</span>
+              <span className="icon-external-link text-[10px] text-indigo-400" />
+            </a>
             <Link
               to="/gantt"
               className="flex items-center gap-1.5 px-3 py-1.5 bg-indigo-600 hover:bg-indigo-700 text-white rounded-lg text-xs font-semibold shadow-xs transition-colors"

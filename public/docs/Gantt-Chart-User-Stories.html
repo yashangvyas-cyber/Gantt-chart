@@ -1,0 +1,406 @@
+<!DOCTYPE html>
+
+<html lang="en"><head><meta charset="utf-8"/><meta content="width=device-width,initial-scale=1,viewport-fit=cover" name="viewport"/><title>Gantt Chart — User Stories</title><style>
+:root{--bg:#f6f7fb;--card:#fff;--c2:#f9fafb;--tx:#101828;--mut:#475467;--bd:#e4e7ec;--pri:#3730a3;--ps:#eef2ff;--pb:#c7d2fe;--ng:#dcfce7;--nt:#067647;--nb:#abefc6;--ok:#ecfdf3;--red:#b42318;--hdr:#3730a3;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media(prefers-color-scheme:dark){:root{--bg:#0c111d;--card:#151a27;--c2:#1b2130;--tx:#f2f4f7;--mut:#a4adbd;--bd:#2c3446;--pri:#a5b4fc;--ps:#1f2347;--pb:#3b4280;--ng:#0b3a25;--nt:#6ce9a6;--nb:#14532d;--ok:#0e2a1d;--red:#fda29b;--hdr:#1e1b4b}}
+html{scroll-padding-top:calc(env(safe-area-inset-top,0px) + 72px)}
+*{box-sizing:border-box}body{margin:0;font:15px/1.6 system-ui,-apple-system,"Segoe UI",Roboto,Arial,sans-serif;color:var(--tx);background:var(--bg)}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);background:var(--hdr);z-index:31}
+header{position:sticky;top:env(safe-area-inset-top,0px);z-index:30;background:var(--hdr);color:#fff;display:flex;align-items:center;gap:14px;padding:12px 20px}
+header h1{margin:0;font-size:19px}header p{margin:0;font-size:12.5px;opacity:.8}.hint{margin-left:auto;font-size:12px;opacity:.7}
+#mb{display:none;background:rgba(255,255,255,.15);color:#fff;border:0;border-radius:8px;font-size:18px;padding:6px 12px;cursor:pointer}
+.wrap{display:flex;max-width:1380px;margin:0 auto}
+nav{width:320px;flex:none;padding:14px;position:sticky;top:calc(env(safe-area-inset-top,0px) + 62px);align-self:flex-start;max-height:calc(100vh - 70px);overflow:auto}
+#q{width:100%;padding:9px 12px;border:1px solid var(--bd);border-radius:8px;background:var(--card);color:var(--tx);font:inherit;font-size:14px;margin-bottom:2px}#q:focus{outline:2px solid var(--pri);border-color:transparent}
+#cnt{display:block;font-size:12px;color:var(--mut);min-height:18px;padding:2px 4px}
+.ni{display:flex;gap:10px;align-items:flex-start;padding:8px 10px;border-radius:8px;color:var(--mut);text-decoration:none;font-size:13.5px;line-height:1.35}.ni[hidden]{display:none}
+.ni:hover{background:var(--c2)}.ni.on{background:var(--ps);color:var(--pri);font-weight:600}
+.no{flex:none;min-width:24px;height:24px;border-radius:7px;background:var(--c2);border:1px solid var(--bd);font-size:12px;font-weight:700;display:grid;place-items:center}.ni.on .no{background:var(--pri);color:var(--card);border-color:var(--pri)}
+main{flex:1;min-width:0;padding:18px 24px 60px}.pane{max-width:960px}.pane[hidden]{display:none}
+.eye{font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:var(--mut)}
+h2{margin:2px 0 14px;font-size:26px;line-height:1.25}p{margin:6px 0}.lead{font-size:16px}
+.story{margin:0 0 14px;display:grid;gap:10px;background:var(--ps);border:1px solid var(--pb);border-radius:12px;padding:16px 20px}
+.story div{display:grid;grid-template-columns:70px 1fr;gap:12px}.story dt{font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:.05em;color:var(--pri);padding-top:3px}.story dd{margin:0;font-size:16px}
+.meta{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:12px}.box,.co{background:var(--card);border:1px solid var(--bd);border-radius:10px;padding:12px 16px}
+.lbl{font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:.05em;color:var(--mut);margin-bottom:6px}
+.chip{display:inline-block;margin:0 6px 6px 0;padding:2px 11px;border:1px solid var(--pb);background:var(--ps);color:var(--pri);border-radius:999px;font-size:13px}.chip.mut{background:var(--c2);border-color:var(--bd);color:var(--mut)}
+.co{border-left:4px solid var(--pri);margin-bottom:12px}.co.ok{border-left-color:var(--nt);background:var(--ok);margin:22px 0 0}
+.new{display:inline-block;background:var(--ng);color:var(--nt);border:1px solid var(--nb);border-radius:4px;font:700 10.5px/1.6 system-ui,Arial;padding:0 6px;margin:0 4px 0 0;vertical-align:1px;letter-spacing:.03em}
+.pic{margin:16px 0 4px}.pic img{width:100%;border:1px solid var(--bd);border-radius:10px;cursor:zoom-in;background:#fff}.pic figcaption{font-size:12.5px;color:var(--mut);margin-top:6px}.pic figcaption span{opacity:.7}
+.sec{margin-top:24px}.sec>summary{cursor:pointer;display:flex;align-items:center;gap:8px;list-style:none;padding:6px 0;border-bottom:2px solid var(--bd)}.sec>summary::-webkit-details-marker{display:none}
+.sec>summary::before{content:"▸";color:var(--pri);transition:transform .15s}.sec[open]>summary::before{transform:rotate(90deg)}.sec h3{margin:0;font-size:17px;color:var(--pri)}
+.n{margin-left:auto;font-size:12px;font-weight:600;background:var(--c2);border:1px solid var(--bd);border-radius:999px;padding:0 9px;color:var(--mut)}.sec>div{padding-top:16px}
+.steps{list-style:none;margin:0;padding:0;counter-reset:s}.steps>li{counter-increment:s;position:relative;padding:0 0 18px 44px}
+.steps>li::before{content:counter(s);position:absolute;left:0;top:0;width:28px;height:28px;border-radius:50%;background:var(--ps);color:var(--pri);border:1px solid var(--pb);font:700 13px/26px system-ui;text-align:center}
+.steps>li::after{content:"";position:absolute;left:13px;top:32px;bottom:4px;width:2px;background:var(--bd)}.steps>li:last-child::after{display:none}.steps>li>div:first-child{padding-top:2px}
+.steps ul{margin:8px 0 0;padding-left:20px;color:var(--tx)}.steps .alt{list-style:none;padding:0}.steps .alt li{background:var(--c2);border:1px solid var(--bd);border-radius:8px;padding:6px 12px;margin-bottom:6px}.chips{margin-top:8px}
+.tw{border:1px solid var(--bd);border-radius:10px;overflow:hidden;background:var(--card)}table{width:100%;border-collapse:collapse;font-size:14px}
+th{text-align:left;font-size:12px;text-transform:uppercase;letter-spacing:.05em;color:var(--mut);padding:9px 12px;background:var(--c2);border-bottom:1px solid var(--bd)}td{padding:10px 12px;border-bottom:1px solid var(--bd);vertical-align:top}tr:last-child td{border-bottom:0}
+.rq{font-size:12px;font-weight:600;padding:1px 9px;border-radius:999px;background:var(--c2);border:1px solid var(--bd);color:var(--mut);white-space:nowrap}.rq.Man{background:#fef3f2;border-color:#fecdca;color:#b42318}
+.vl,.vl ul{list-style:none;margin:0;padding:0}.vl>li{position:relative;padding:9px 0 9px 32px;border-bottom:1px solid var(--bd)}
+.vl>li::before{content:"✓";position:absolute;left:0;top:10px;width:20px;height:20px;border-radius:50%;background:var(--ng);color:var(--nt);font:700 12px/20px system-ui;text-align:center}.vl ul{margin-top:6px}.vl ul li{padding:2px 0 2px 14px;color:var(--mut);border-left:2px solid var(--bd)}
+.pn{display:flex;gap:12px;margin-top:30px}.pn a{flex:1;border:1px solid var(--bd);background:var(--card);border-radius:10px;padding:12px 16px;color:var(--tx);text-decoration:none;font-weight:600;font-size:14px}.pn a:hover{border-color:var(--pri)}.pn a.r{text-align:right}.pn small{display:block;font-weight:600;font-size:11px;text-transform:uppercase;letter-spacing:.05em;color:var(--mut)}
+#lb{position:fixed;inset:0;z-index:50;background:rgba(0,0,0,.85);display:none;align-items:center;justify-content:center;padding:20px;cursor:zoom-out}#lb.on{display:flex}#lb img{max-width:100%;max-height:100%;border-radius:8px;background:#fff}
+@media(max-width:900px){#mb{display:block}.hint{display:none}nav{position:fixed;z-index:25;left:0;top:calc(env(safe-area-inset-top,0px) + 62px);bottom:0;max-height:none;width:min(88vw,340px);background:var(--card);border-right:1px solid var(--bd);transform:translateX(-102%);transition:transform .2s}body.open nav{transform:none}main{padding:14px 14px 50px}h2{font-size:22px}}
+@media(max-width:700px){.meta{grid-template-columns:1fr}.story div{grid-template-columns:1fr;gap:2px}.pn{flex-direction:column}.pn a.r{text-align:left}thead{display:none}tr,td{display:block}tr{padding:10px 14px;border-bottom:1px solid var(--bd)}tr:last-child{border:0}td{border:0;padding:2px 0}td[data-l]::before{content:attr(data-l) ": ";color:var(--mut);font-size:12px;font-weight:600}}
+@media print{header,nav,.pn,#mb,body::before{display:none}.pane,.pane[hidden]{display:block!important;max-width:none;break-after:page}body{background:#fff}}
+
+.std-card{margin:0 0 16px;background:var(--card);border:1px solid var(--bd);border-radius:12px;padding:14px 18px}
+.std-head{font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:.05em;color:var(--pri);margin-bottom:8px;display:flex;align-items:center;gap:6px}
+.std-tag{width:18px;height:18px;border-radius:50%;background:var(--pri);color:#fff;font-size:10px;font-weight:700;display:inline-grid;place-items:center}
+.story-box{font-size:15.5px;line-height:1.5;color:var(--tx);padding:4px 0}
+.story-box strong{color:var(--pri);font-weight:700}
+.co.ok{border-left-color:var(--nt);background:var(--ok);margin:0}
+
+.biz-card{margin:0 0 16px;background:#f8fafc;border:1px solid #e2e8f0;border-left:4px solid #4f46e5;border-radius:10px;padding:14px 18px}
+.biz-body{font-size:13.5px;line-height:1.6;color:#334155}
+.biz-body p{margin:6px 0}
+@media(prefers-color-scheme:dark){
+.biz-card{background:#111827;border-color:#1f2937;border-left-color:#6366f1}
+.biz-body{color:#cbd5e1}
+}
+</style></head><body>
+<header><button aria-label="Story list" id="mb">☰</button><div><h1>Gantt Chart — User Stories</h1><p>Project Management · 7 stories</p></div><span class="hint">← → to move · / to search</span></header>
+<div class="wrap"><nav aria-label="Stories"><input aria-label="Search" id="q" placeholder="Search stories, fields, rules…" type="search"/><span id="cnt"></span><a class="ni" href="#intro"><span class="no">i</span><span>Read first</span></a><a class="ni" href="#common"><span class="no">★</span><span>Common rules</span></a><a class="ni" href="#S1"><span class="no">1</span><span>Add a Start Date to an issue</span></a><a class="ni" href="#S2"><span class="no">2</span><span>Read the plan on the Gantt</span></a><a class="ni" href="#S3"><span class="no">3</span><span>See project hours and sprints on top</span></a><a class="ni" href="#S4"><span class="no">4</span><span>Change dates from the Gantt</span></a><a class="ni" href="#S5"><span class="no">5</span><span>Link issues and compare with a baseline</span></a><a class="ni" href="#S7"><span class="no">6</span><span>Plan people on a Hire Base project</span></a><a class="ni" href="#S8"><span class="no">7</span><span>Projects Timeline on Dashboard</span></a></nav><main><section class="pane" hidden="" id="intro"><div class="eye">Start here</div><h2>Read first</h2><p class="lead">A Gantt is a calendar view of the board.</p><p class="lead">Each issue is a coloured bar from its Start Date to its Due Date. The team sees what happens when.</p><p class="lead"><span class="new">NEW</span> = this part is to be built. Text without the tag already works in CollabCRM today.</p><details class="sec" open=""><summary><h3>Words used in these stories</h3><span class="n">14</span></summary><div><div class="tw"><table><thead><tr><th>Term<th>Meaning</th></th></tr></thead><tbody><tr><td><b>bar</b></td><td>one coloured strip per issue, from Start Date to Due Date.</td></tr><tr><td><b>today line</b></td><td>a line that marks the viewer’s local date.</td></tr><tr><td><b>past due</b></td><td>an open issue past its Due Date, shown with a red outline.</td></tr><tr><td><b>Epic summary bar</b></td><td>one bar that spans all the children of an Epic.</td></tr><tr><td><b>Sub-Task row</b></td><td>a child issue shown under its parent.</td></tr><tr><td><b>dependency line</b></td><td>a line that joins two linked issues.</td></tr><tr><td><b>baseline</b></td><td>the saved first plan shown under today’s bars.</td></tr><tr><td><b>Unscheduled list</b></td><td>issues that have no Start Date or sprint.</td></tr><tr><td><b>Group by</b></td><td>a filter that gathers rows under a chosen heading.</td></tr><tr><td><b>Quarter view</b></td><td>a zoom that shows three months at once.</td></tr><tr><td><b>Hire Base</b></td><td>a project billed by developers and contract dates.</td></tr></tbody></table></div></div></details><div class="pn"><a class="r" href="#common"><small>Next</small>Common rules →</a></div></section><section class="pane" hidden="" id="common"><div class="eye">Applies to every story</div><h2>Common rules</h2><p class="lead">Read these once. The stories do not repeat them.</p><div class="tw"><table><thead><tr><th>Rule<th>What it means</th></th></tr></thead><tbody><tr><td data-l="Rule"><b>Access</b></td><td>To read the Gantt: Task management → View. To change dates, link issues, save a baseline: Task management → Edit (Project Management → Config → Access Levels).</td></tr><tr><td data-l="Rule"><b>Where it lives</b></td><td>Side Navigation bar → Tasks → &lt;project&gt; → Board → Gantt. Or Projects → &lt;project&gt; → Task Boards → View Task Board → Gantt. Every story starts here unless it says otherwise. The user is logged in with a registered Email ID and Password.</td></tr><tr><td data-l="Rule"><b><span class="new">NEW</span> One toolbar</b></td><td>All Gantt controls sit in one toolbar, left to right: Sprint, Group by, Type | Week, Month, Quarter, Today | Baseline, Unscheduled. Active filters show as chips with one “Clear all”.</td></tr><tr><td data-l="Rule"><b>Bar colour</b></td><td>The bar takes the colour of its status column on the board: To Do #2B83DE, In Progress #F7A23A, In Review #E23333, Ready For QA #7EC451, Closed #696969.</td></tr><tr><td data-l="Rule"><b><span class="new">NEW</span> One hover card</b></td><td>Point at any bar to see: status, Start Date, Due Date, Logged Time against Estimated Time, and the saved baseline dates when the baseline is on.</td></tr><tr><td data-l="Rule"><b>Date changes</b></td><td>Every Start Date or Due Date change (form, panel, drag, drop) adds a History entry: “&lt;user name&gt; updated Start Date to &lt;date&gt;”. Watchers are told through “Other changes (title, description, priority, etc.)” in Notification Settings.</td></tr><tr><td data-l="Rule"><b><span class="new">NEW</span> Undo</b></td><td>After a drag or drop, a toast says “Dates updated” with an Undo link for 10 seconds.</td></tr><tr><td data-l="Rule"><b>Dates</b></td><td>Calendar days, DD-MMM-YYYY. “Today” is the viewer’s local date. Start Date must be on or before Due Date, or nothing is saved. Messages: “Start Date should be on or before Due Date.” and “Due Date should be on or after Start Date.”</td></tr><tr><td data-l="Rule"><b>Large boards</b></td><td>Epics start collapsed. Rows load as the user scrolls.</td></tr></tbody></table></div><div class="pn"><a href="#intro">← <small>Previous</small>Read first</a><a class="r" href="#S1"><small>Next</small>Add a Start Date to an issue →</a></div></section><section class="pane" hidden="" id="S1">
+<div class="eye">Story 1 of 7</div>
+<h2>Add a Start Date to an issue</h2>
+<!-- 1. USER STORY -->
+<div class="std-card">
+<div class="std-head"><span class="std-tag">1</span>User Story</div>
+<div class="story-box">
+<strong>As a</strong> Project Manager, <strong>I want</strong> to set a Start Date on an issue, <strong>so that</strong> every issue has a clear place on the schedule.
+      </div>
+</div><!-- REAL-WORLD EXAMPLE: WHY IT'S NEEDED -->
+<div class="biz-card">
+<div class="std-head" style="color: #4338ca;"><span class="std-tag" style="background: #4f46e5; color: white;">💡</span>Business Context</div>
+<div class="biz-body">
+<p><strong>Business Scenario:</strong> A client requests a major deliverable — "Payment Gateway Integration" — targeted for release on 20-Nov, requiring an estimated 4 working days of development effort.</p>
+<p style="margin-top: 8px;">Current Limitation: In current CollabCRM, issues only have a Due Date (20-Nov). Without an explicit start date, developers frequently begin work on the 19th or 20th, inevitably causing delivery deadline slips.</p>
+<p style="margin-top: 8px;"><strong>Solution &amp; Workflow:</strong> When creating the issue in the Create Issue modal, the Project Manager selects both <strong>Start Date (17-Nov)</strong> and <strong>Due Date (20-Nov)</strong>. Both the developer and PM have an unambiguous schedule commitment that development must commence on the 17th.</p>
+<p style="margin-top: 8px;"><strong>Business Value:</strong> Establishes clear delivery accountability, prevents last-minute project crunches, and enables precise bar placement on the Gantt timeline.</p>
+</div>
+</div>
+<!-- 2. USER TYPE & 3. IMPACT -->
+<div class="meta">
+<div class="box">
+<div class="lbl">User Type</div>
+<span class="chip">Project Manager</span><span class="chip">Team Member</span><span class="chip">Delivery Head</span>
+</div>
+<div class="box">
+<div class="lbl">Impact</div>
+<span class="chip">Issue form and panel</span><span class="chip">Issue History</span><span class="chip">Notification Settings</span><span class="chip">Roles and Access Levels</span>
+</div>
+</div>
+<!-- 4. PRE-CONDITION -->
+<div class="std-card">
+<div class="std-head"><span class="std-tag">2</span>Pre-Condition</div>
+<div class="co">
+        The user has Edit access (Task management → Edit in Project Management → Config → Access Levels). The user is logged into CollabCRM with a registered Email ID and Password. A project and a task board with at least one issue are set up. Common rules apply.
+      </div>
+</div>
+<figure class="pic"><img alt="CollabCRM Create Issue modal: Sprint, Start Date, and Due Date configured side-by-side." loading="lazy" src="images/story-1-create-issue-modal.png"/><figcaption>CollabCRM Create Issue modal: Sprint, Start Date, and Due Date configured side-by-side. <span>Click to enlarge</span></figcaption></figure><details class="sec" open=""><summary><h3>Acceptance Criteria</h3><span class="n">6</span></summary><div><ol class="steps"><li><div>Go to Side Navigation bar → Tasks → &lt;project&gt; → Issue List. Click “Create Issue”.</div></li><li><div><span class="new">NEW</span> The pop-up screen shows Start Date and Due Date side by side, under Sprint. The other fields stay as today:</div><div class="chips"><span class="chip">Title</span><span class="chip">Description</span><span class="chip">Assignee</span><span class="chip">Reporter</span><span class="chip">Issue Type</span><span class="chip">Priority</span><span class="chip">Sprint</span><span class="chip">Estimated Time</span></div></li><li><div>Enter the Title. Pick the Issue Type:</div><div class="chips"><span class="chip">Epic</span><span class="chip">Story</span><span class="chip">Task</span><span class="chip">Bug</span></div></li><li><div>Pick a Start Date and a Due Date. Click “Create”.</div></li><li><div><span class="new">NEW</span> Open the issue. The right-side panel shows Start Date next to Due Date.</div></li><li><div><span class="new">NEW</span> Click Start Date in the panel and pick a new day. It saves at once and the History tab logs it.</div></li></ol></div></details><details class="sec" open=""><summary><h3>Field Values</h3><span class="n">2</span></summary><div><div class="tw"><table><thead><tr><th>Field<th>Type<th>Required<th>Format<th>Error message</th></th></th></th></th></tr></thead><tbody><tr><td data-l="Field"><b>Start Date</b></td><td data-l="Type">Date</td><td data-l="Required"><span class="rq Opt">Optional</span></td><td data-l="Format">Date picker, placeholder “Select Date”, DD-MMM-YYYY, for example 30-Nov-2026.</td><td data-l="Error message"><span class="new">NEW</span> “Start Date should be on or before Due Date.”</td></tr><tr><td data-l="Field"><b>Due Date</b></td><td data-l="Type">Date</td><td data-l="Required"><span class="rq Opt">Optional</span></td><td data-l="Format">Same picker and format.</td><td data-l="Error message"><span class="new">NEW</span> “Due Date should be on or after Start Date.”</td></tr></tbody></table></div></div></details><details class="sec" open=""><summary><h3>Validations</h3><span class="n">3</span></summary><div><ul class="vl"><li>Start Date must be on or before Due Date. If not, the issue is not saved.</li><li>Start Date can stay blank. With no Start Date and no sprint, the issue goes to the Unscheduled list.</li><li>Every change is logged and watchers are told (see Common rules).</li></ul></div></details>
+<!-- 5. POST-CONDITION -->
+<div class="std-card">
+<div class="std-head"><span class="std-tag">3</span>Post-Condition</div>
+<div class="co ok">
+        The issue is created or updated with a Start Date on or before its Due Date, and the saved value is visible in the issue detail panel, the Issue List and the Gantt chart.
+      </div>
+</div>
+<div class="pn"><a href="#common">← <small>Previous</small>Common rules</a><a class="r" href="#S2"><small>Next</small>Read the plan on the Gantt →</a></div></section><section class="pane" hidden="" id="S2">
+<div class="eye">Story 2 of 7</div>
+<h2>Read the plan on the Gantt</h2>
+<!-- 1. USER STORY -->
+<div class="std-card">
+<div class="std-head"><span class="std-tag">1</span>User Story</div>
+<div class="story-box">
+<strong>As a</strong> Project Manager, <strong>I want</strong> a Gantt tab on the task board, <strong>so that</strong> I can read the plan on a calendar, narrow it to the work I review and zoom to the scale I need.
+      </div>
+</div><!-- REAL-WORLD EXAMPLE: WHY IT'S NEEDED -->
+<div class="biz-card">
+<div class="std-head" style="color: #4338ca;"><span class="std-tag" style="background: #4f46e5; color: white;">💡</span>Business Context</div>
+<div class="biz-body">
+<p><strong>Business Scenario:</strong> An active sprint contains 40 concurrent issues, and client stakeholders inquire: <em>"What is our progress today, and what specific deliverables will complete next week?"</em></p>
+<p style="margin-top: 8px;"><strong>Current Limitation:</strong> Kanban boards show cards segregated into vertical status columns. Mentally synthesizing chronological progress, delivery sequences, and upcoming handoffs requires tedious manual inspection.</p>
+<p style="margin-top: 8px;"><strong>Solution &amp; Workflow:</strong> The PM navigates to the <strong>Gantt</strong> tab. Each task renders as a continuous horizontal bar spanning its Start and Due dates. A vertical blue <strong>Today Line</strong> indicates expected completion progress against the current calendar day. Hovering over any task displays real-time logged vs estimated hours, assignee, and dates.</p>
+<p style="margin-top: 8px;"><strong>Business Value:</strong> Delivers instant operational transparency during daily standups and eliminates manual progress inquiries.</p>
+</div>
+</div>
+<!-- 2. USER TYPE & 3. IMPACT -->
+<div class="meta">
+<div class="box">
+<div class="lbl">User Type</div>
+<span class="chip">Project Manager</span><span class="chip">Team Member</span><span class="chip">Delivery Head</span>
+</div>
+<div class="box">
+<div class="lbl">Impact</div>
+<span class="chip">Link Issue</span><span class="chip">Issue History</span><span class="chip">Roles and Access Levels</span>
+</div>
+</div>
+<!-- 4. PRE-CONDITION -->
+<div class="std-card">
+2Pre-Condition
+
+        The user has View access (Task management → View in Project Management → Config → Access Levels). The user is logged into CollabCRM. A board with issues and sprints is set up. Common rules apply.
+      
+</div>
+<figure class="pic"><img alt="The Gantt tab view: task list on the left and timeline with status-coloured bars on the right." loading="lazy" src="images/story-2-gantt-board-view.png"/><figcaption>The Gantt tab view: Task list on left, schedule grid with status-coloured bars on right. <span>Click to enlarge</span></figcaption></figure><details class="sec" open=""><summary><h3>Acceptance Criteria</h3><span class="n">9</span></summary><div><ol class="steps"><li><div>Open the task board. It has these tabs:</div><div class="chips"><span class="chip">Board</span><span class="chip">Issue List</span><span class="chip">Backlog</span><span class="chip">Completed Sprints</span><span class="chip"><span class="new">NEW</span> Gantt</span><span class="chip">Notification Settings</span></div></li><li><div><span class="new">NEW</span> Click “Gantt”. To maximize horizontal timeline canvas space, the left grid shows:</div><div class="chips"><span class="chip">Type icon</span><span class="chip">Key</span><span class="chip">Title</span><span class="chip">Status</span></div><div style="font-size: 11px; color: #6b7280; margin-top: 4px;">Assignee, Start Date, and Due Date are visualized directly on the schedule canvas and available on issue bar hover/modal.</div></li><li><div><span class="new">NEW</span> Each issue is one bar from Start Date to Due Date. The today line marks the viewer’s local date.</div></li><li><div><span class="new">NEW</span> An open issue past its Due Date gets a red outline. A dashed part reaches the today line.</div></li><li><div><span class="new">NEW</span> Use “Add Child” on a parent. Sub-Task rows sit under it with a collapse arrow. An Epic gets one summary bar over its children.</div></li><li><div>Click any row to open that issue’s panel.</div></li><li><div><span class="new">NEW</span> Narrow the chart from the toolbar. Filters combine:</div><div class="chips"><span class="chip">Sprint</span><span class="chip">Group by: None, Epic, Story, Task</span><span class="chip">Type: Epic, Story, Task, Bug</span></div></li><li><div><span class="new">NEW</span> Pick Week, Month or Quarter. Click “Today” to jump back to the today line.</div></li><li><div><span class="new">NEW</span> Weekends are shaded grey. Company holidays are shaded too (People → Config → Master Data → Holidays).</div></li></ol></div></details><details class="sec" open=""><summary><h3>Field Values</h3><span class="n">5</span></summary><div><div class="tw"><table><thead><tr><th>Field<th>Type<th>Required<th>Format<th>Error message</th></th></th></th></th></tr></thead><tbody><tr><td data-l="Field"><b>Sprint</b></td><td data-l="Type">Dropdown</td><td data-l="Required"><span class="rq Opt">Optional</span></td><td data-l="Format">None, Backlog, and every sprint including completed ones.</td><td data-l="Error message">—</td></tr><tr><td data-l="Field"><b>Group by</b></td><td data-l="Type">Dropdown</td><td data-l="Required"><span class="rq Opt">Optional</span></td><td data-l="Format">None, Epic, Story, Task.</td><td data-l="Error message">—</td></tr><tr><td data-l="Field"><b>Type</b></td><td data-l="Type">Dropdown</td><td data-l="Required"><span class="rq Opt">Optional</span></td><td data-l="Format">Epic, Story, Task, Bug.</td><td data-l="Error message">—</td></tr><tr><td data-l="Field"><b>Time zoom</b></td><td data-l="Type">Button group</td><td data-l="Required"><span class="rq Opt">Optional</span></td><td data-l="Format">Week, Month, Quarter. Reuses the control on Daily Allocation.</td><td data-l="Error message">—</td></tr><tr><td data-l="Field"><b>Today</b></td><td data-l="Type">Action</td><td data-l="Required"><span class="rq Opt">Optional</span></td><td data-l="Format">Jumps to the viewer’s local date.</td><td data-l="Error message">—</td></tr></tbody></table></div></div></details><details class="sec" open=""><summary><h3>Validations</h3><span class="n">6</span></summary><div><ul class="vl"><li>Bar colour follows the status column (see Common rules).</li><li>An empty board shows the project dates and sprints. The existing “Create” button adds the first issue.</li><li>Filters change what is shown. Issue data stays the same.</li><li>The today line and past-due outline stay visible in every zoom.</li><li>Each bar date change is saved in the issue History tab.</li><li>Large boards: epics start collapsed and rows load on scroll.</li></ul></div></details>
+<!-- 5. POST-CONDITION -->
+<div class="std-card">
+<div class="std-head"><span class="std-tag">3</span>Post-Condition</div>
+<div class="co ok">
+        The Gantt view opens in one click on the task board, rendering all issue bars by status colour, today line, and sprint rows.
+      </div>
+</div>
+<div class="pn"><a href="#S1">← <small>Previous</small>Add a Start Date to an issue</a><a class="r" href="#S3">NextSee hours, sprints on top →</a></div></section><section class="pane" hidden="" id="S3">
+<div class="eye">Story 3 of 7</div>
+<h2>View project hours and sprints on top</h2>
+<!-- 1. USER STORY -->
+<div class="std-card">
+<div class="std-head"><span class="std-tag">1</span>User Story</div>
+<div class="story-box">
+<strong>As a</strong> Delivery Head, <strong>I want</strong> project hours and sprints above the issue rows, <strong>so that</strong> I can judge plan and spend while I read the schedule.
+      </div>
+</div><!-- REAL-WORLD EXAMPLE: WHY IT'S NEEDED -->
+<div class="biz-card">
+<div class="std-head" style="color: #4338ca;"><span class="std-tag" style="background: #4f46e5; color: white;">💡</span>Business Context</div>
+<div class="biz-body">
+<p><strong>Business Scenario:</strong> The organization manages projects across distinct commercial engagement models — Fixed Cost, Hourly Bucket, and Hire Base.</p>
+<p style="margin-top: 8px;"><strong>Current Limitation:</strong> Project managers must navigate away to separate financial reports to check budget status while planning sprint activities.</p>
+<p style="margin-top: 8px;"><strong>Solution &amp; Workflow:</strong> The toolbar KPI section dynamically adapts to the project's commercial model via compact dropdown pills:
+    <br/>• <strong>Hourly:</strong> Displays a compact <code>[ Balance: 280h ▾ ]</code> pill in the toolbar. Clicking or hovering reveals the full financial breakdown: Purchased (500h), Billed (250h), Spent (220h), Balance (280h), and Contract Expiry Date (26-Nov-2026).
+    <br/>• <strong>Fixed Cost:</strong> Displays a compact <code>[ Spent: 210h / 500h ▾ ]</code> pill revealing Estimated (500h), Top-Up (50h), and Spent (210h).
+    <br/>• <strong>Hire Base:</strong> Displays contract overview in the toolbar with individual contracted developer spans tracked on respective timeline rows.
+  </p>
+<p style="margin-top: 8px;"><strong>Business Value:</strong> Keeps commercial budget health directly visible alongside sprint scheduling, preventing unbilled team overruns.</p>
+</div>
+</div>
+<!-- 2. USER TYPE & 3. IMPACT -->
+<div class="meta">
+<div class="box">
+<div class="lbl">User Type</div>
+<span class="chip">Delivery Head</span><span class="chip">Project Manager</span><span class="chip">Client</span><span class="chip">Team Member</span>
+</div>
+<div class="box">
+<div class="lbl">Impact</div>
+<span class="chip">Fixed Cost Report</span><span class="chip">Hourly Report</span><span class="chip">Hirebase Report</span><span class="chip">Work Log and Billing</span><span class="chip">Backlog and sprints</span>
+</div>
+</div>
+<!-- 4. PRE-CONDITION -->
+<div class="std-card">The user has View access. Sprint dates are configured in Tasks → &lt;project&gt; → Backlog. Project hours and contract terms are configured in Project Details. Common rules apply.</div>
+<figure class="pic"><img alt="Project hours KPI summary strip and active sprint header row above the timeline." loading="lazy" src="images/story-3-project-hours-sprint.png"/><figcaption>Project hours KPI summary strip and active sprint header row above the timeline. <span>Click to enlarge</span></figcaption></figure><details class="sec" open=""><summary><h3>Acceptance Criteria</h3><span class="n">5</span></summary><div><ol class="steps"><li><div>Open the Gantt tab on any project board.</div></li><li><div><span class="new">NEW</span> Directly on the Row 2 toolbar, compact financial KPI dropdown pills adapt dynamically to the project's Engagement Model without overcrowding view controls: <b>Hourly:</b> Balance pill revealing Purchased, Billed, Spent, Balance, and Contract Expiry Date; <b>Fixed Cost:</b> Spent/Estimated pill revealing Top-Up and spend progress; <b>Hire Base:</b> Active contract overview pill. All hour values use standardized "h" notation without timer colons.</div></li><li><div><span class="new">NEW</span> Pinned below the hours strip, the Sprint Header Row displays the active sprint name, date boundaries, and remaining time span.</div></li><li><div>Both the Hours strip and the Sprint header row remain permanently pinned at the top while issue rows scroll vertically underneath.</div></li><li><div>If an Hourly project's balance falls below 10% or contract expiry approaches within 7 days, an amber alert badge is displayed.</div></li></ol></div></details><details class="sec" open=""><summary><h3>Field Values</h3><span class="n">2</span></summary><div><div class="tw"><table><thead><tr><th>Field<th>Type<th>Required<th>Format<th>Error message</th></th></th></th></th></tr></thead><tbody>
+<tr><td data-l="Field"><b>Project Hours Strip</b></td><td data-l="Type">KPI Bar</td><td data-l="Required"><span class="rq Opt">Read-only</span></td><td data-l="Format">Purchased, Billed, Spent, Balance, Expiry (Hourly) or Estimated/Spent (Fixed Cost) or Contract Dates (Hire Base).</td><td data-l="Error message">—</td></tr>
+<tr><td data-l="Field"><b>Sprint Header Row</b></td><td data-l="Type">Timeline Row</td><td data-l="Required"><span class="rq Opt">Read-only</span></td><td data-l="Format">Active sprint name, start date, end date, and duration span.</td><td data-l="Error message">—</td></tr>
+</tbody></table></div></div></details><details class="sec" open=""><summary><h3>Validations</h3><span class="n">4</span></summary><div><ul class="vl"><li>The KPI header changes automatically based on the project's Engagement Model (Hourly, Fixed Cost, Hire Base).</li><li>The Expiry Date line and warning alerts show for Hourly projects based on project contract details.</li><li>Sprint header row reads dates and duration directly from the project's Backlog records.</li><li>The header KPI strip and sprint bar stay pinned at the top during vertical scrolling of the task grid.</li></ul></div></details>
+<!-- 5. POST-CONDITION -->
+<div class="std-card">
+<div class="std-head"><span class="std-tag">3</span>Post-Condition</div>
+<div class="co ok">
+        The project hours summary strip, and sprint header rows render accurately above the issue schedule.
+      </div>
+</div>
+<div class="pn"><a href="#S2">← <small>Previous</small>Read the plan on the Gantt</a><a class="r" href="#S4"><small>Next</small>Change dates from the Gantt →</a></div></section><section class="pane" hidden="" id="S4">
+<div class="eye">Story 4 of 7</div>
+<h2>Change dates from the Gantt</h2>
+<!-- 1. USER STORY -->
+<div class="std-card">
+<div class="std-head"><span class="std-tag">1</span>User Story</div>
+<div class="story-box">
+<strong>As a</strong> Project Manager, <strong>I want</strong> to drag bars to reschedule work and click or drag on the dedicated "+ Add Task" row to create new tasks, <strong>so that</strong> I can manage sprint schedules and add deliverables directly on the Gantt canvas without opening separate forms.
+      </div>
+</div><!-- REAL-WORLD EXAMPLE: WHY IT'S NEEDED -->
+<div class="biz-card">
+<div class="std-head" style="color: #4338ca;"><span class="std-tag" style="background: #4f46e5; color: white;">💡</span>Business Context</div>
+<div class="biz-body">
+<p><strong>Business Scenario:</strong> A client requests a schedule shift: <em>"Postpone campaign deliverables by 3 days and shift the final completion deadline accordingly."</em></p>
+<p style="margin-top: 8px;"><strong>Current Limitation:</strong> The PM must open 10 individual task details, manually edit both Start and Due dates in forms, and save each one — requiring dozens of repetitive interactions.</p>
+<p style="margin-top: 8px;"><strong>Solution &amp; Workflow:</strong> On the Gantt chart, the PM drags an existing task bar to reschedule both dates in a single motion. Dragging a bar edge expands or contracts duration. Releasing does not open the details panel, and a 10s Undo toast allows instant reversion.
+<br/>• <strong>Dedicated "+ Add Task" Line:</strong> Each scheduled task occupies its own dedicated horizontal line. To prevent clutter, a subtle greyed-out "+ Add Task" line sits below the task rows (and under each developer group). Hovering over any date cell displays a circular handle with a "Click or drag to Create Task" tooltip. Clicking or dragging across dates opens the Create Issue modal with Start Date and Due Date pre-filled to that range (and Assignee pre-filled if under a developer).
+<br/>• <strong>Unscheduled Drawer:</strong> Undated backlog tasks can be scheduled by setting dates or dragging directly onto the calendar.</p>
+<p style="margin-top: 8px;"><strong>Business Value:</strong> Reduces sprint rescheduling time from 20 minutes to seconds while preserving an exact audit history.</p>
+</div>
+</div>
+<!-- 2. USER TYPE & 3. IMPACT -->
+<div class="meta">
+<div class="box">
+<div class="lbl">User Type</div>
+<span class="chip">Project Manager</span><span class="chip">Team Member</span>
+</div>
+<div class="box">
+<div class="lbl">Impact</div>
+<span class="chip">Issue form and panel</span><span class="chip">Issue History</span><span class="chip">Notification Settings</span><span class="chip">Backlog and sprints</span><span class="chip">Roles and Access Levels</span>
+</div>
+</div>
+<!-- 4. PRE-CONDITION -->
+<div class="std-card">
+<div class="std-head"><span class="std-tag">2</span>Pre-Condition</div>
+<div class="co">
+        The user has Edit access (Task management → Edit). The Gantt view is open with scheduled and unscheduled issues. Common rules apply.
+      </div>
+</div>
+<figure class="pic"><img alt="Unscheduled Issues drawer: select Start Date and Due Date, then click Schedule to place on calendar." loading="lazy" src="images/story-4-unscheduled-drawer.png"/><figcaption>Unscheduled Issues drawer: select Start Date and Due Date, then click Schedule to place on calendar. <span>Click to enlarge</span></figcaption></figure><details class="sec" open=""><summary><h3>Acceptance Criteria</h3><span class="n">10</span></summary><div><ol class="steps"><li><div><span class="new">NEW</span> Drag the body of a task bar. Start Date and Due Date move by the same number of days.</div></li><li><div><span class="new">NEW</span> Drag the left edge to change Start Date. Drag the right edge to change Due Date.</div></li><li><div>Release the bar. Both dates save immediately and an Undo toast appears for 10 seconds. Releasing does not open the details panel.</div></li><li><div><span class="new">NEW</span> Each scheduled task occupies its own dedicated horizontal line. Existing task lines do not allow overlapping task creation.</div></li><li><div><span class="new">NEW</span> A subtle, greyed-out "+ Add Task" row is displayed below tasks and developer groups.</div></li><li><div><span class="new">NEW</span> Hovering over any date cell of the "+ Add Task" row reveals a circular handle with a "Click or drag to Create Task" tooltip.</div></li><li><div><span class="new">NEW</span> Clicking a date on the "+ Add Task" row opens Create Issue modal with that date pre-filled as Start Date and Due Date.</div></li><li><div><span class="new">NEW</span> Dragging across dates on the "+ Add Task" row shows a dashed preview bar and opens Create Issue modal with Start Date and Due Date pre-filled to that range.</div></li><li><div><span class="new">NEW</span> Click “Unscheduled” in the toolbar to open the drawer; drag an undated issue onto the calendar or set dates directly.</div></li><li><div>A teammate with View access opens the same Gantt and sees the updated dates. Drag handles stay hidden for View access.</div></li></ol></div></details><details class="sec" open=""><summary><h3>Field Values</h3><span class="n">3</span></summary><div><div class="tw"><table><thead><tr><th>Field<th>Type<th>Required<th>Format<th>Error message</th></th></th></th></th></tr></thead><tbody><tr><td data-l="Field"><b>Start Date</b></td><td data-l="Type">Date</td><td data-l="Required"><span class="rq Opt">Optional</span></td><td data-l="Format">Calendar days, DD-MMM-YYYY. Set by the drop position.</td><td data-l="Error message"><span class="new">NEW</span> “Start Date should be on or before Due Date.”</td></tr><tr><td data-l="Field"><b>Due Date</b></td><td data-l="Type">Date</td><td data-l="Required"><span class="rq Opt">Optional</span></td><td data-l="Format">Calendar days, DD-MMM-YYYY. Set by the drop position.</td><td data-l="Error message"><span class="new">NEW</span> “Due Date should be on or after Start Date.”</td></tr><tr><td data-l="Field"><b>Search</b></td><td data-l="Type">Alphanumeric</td><td data-l="Required"><span class="rq Opt">Optional</span></td><td data-l="Format">Matches Key or Title in the Unscheduled list.</td><td data-l="Error message">—</td></tr></tbody></table></div></div></details><details class="sec" open=""><summary><h3>Validations</h3><span class="n">6</span></summary><div><ul class="vl"><li>Edit access can drag. View access reads the chart.</li><li>Two people editing the same bar: both entries stay in History. The latest save shows on refresh.</li><li>No dates and no sprint: the issue stays in the Unscheduled list.</li><li>No dates but a sprint: a light bar spans the sprint.</li><li>Due Date and Estimate but no Start Date: a dashed bar ends on the Due Date. Its length is 8 hours to 1 working day.</li><li>The Unscheduled list stays searchable on large boards (for example 765 Backlog and 724 To Do issues).</li></ul></div></details>
+<!-- 5. POST-CONDITION -->
+<div class="std-card">
+<div class="std-head"><span class="std-tag">3</span>Post-Condition</div>
+<div class="co ok">
+        Dragged dates are saved immediately to the issue record, history is logged, undo toast is available for 10s, and newly created tasks appear on their own dedicated row on the chart.
+      </div>
+</div>
+<div class="pn"><a href="#S3">← <small>Previous</small>See project hours and sprints on top</a><a class="r" href="#S5"><small>Next</small>Link issues and compare with a baseline →</a></div></section><section class="pane" hidden="" id="S5">
+<div class="eye">Story 5 of 7</div>
+<h2>Link issues and compare with a baseline</h2>
+<!-- 1. USER STORY -->
+<div class="std-card">
+<div class="std-head"><span class="std-tag">1</span>User Story</div>
+<div class="story-box">
+<strong>As a</strong> Delivery Head, <strong>I want</strong> dependency lines and a saved baseline on the Gantt, <strong>so that</strong> I can spot blockers and compare actual progress against the original plan.
+      </div>
+</div><!-- REAL-WORLD EXAMPLE: WHY IT'S NEEDED -->
+<div class="biz-card">
+<div class="std-head" style="color: #4338ca;"><span class="std-tag" style="background: #4f46e5; color: white;">💡</span>Business Context</div>
+<div class="biz-body">
+<p>Business Scenario: A client agreement establishes a committed committed delivery deadline of 30-Nov.</p>
+<p style="margin-top: 8px;"><strong>Current Limitation:</strong> When task delays occur mid-sprint, dates are overwritten directly. At project sign-off, management lacks verifiable evidence comparing the initial contractual baseline against subsequent revisions.</p>
+<p style="margin-top: 8px;"><strong>Solution &amp; Workflow:</strong>
+<br/>• <strong>Freeze Plan (Day 1):</strong> After planning, the PM clicks <strong>"Save Baseline"</strong> (e.g. "Agreed Plan") to freeze original commitment dates.
+    <br/>• <strong>Dependency Links:</strong> Dependent issues are visually linked (Finish-to-Start). If a blocker task slips past the start date of a successor, the connector line highlights in red to flag a scheduling conflict.
+    <br/>• <strong>Track Variance (Day 15):</strong> When tasks slip to 05-Dec, a faint grey baseline bar remains anchored at 30-Nov beneath the colored bar. Hovering clearly displays: <code>Planned: 30-Nov | Actual: 05-Dec (Delay: 5 days)</code>.
+  </p>
+<p style="margin-top: 8px;"><strong>Business Value:</strong> Delivers incontrovertible audit documentation for client governance and protects agency contractual scope.</p>
+</div>
+</div>
+<!-- 2. USER TYPE & 3. IMPACT -->
+<div class="meta">
+<div class="box">
+<div class="lbl">User Type</div>
+<span class="chip">Delivery Head</span><span class="chip">Project Manager</span><span class="chip">Team Member</span>
+</div>
+<div class="box">
+<div class="lbl">Impact</div>
+<span class="chip">Link Issue</span><span class="chip">Issue History</span><span class="chip">Notification Settings</span>
+</div>
+</div>
+<!-- 4. PRE-CONDITION -->
+<div class="std-card">
+<div class="std-head"><span class="std-tag">2</span>Pre-Condition</div>
+<div class="co">
+        The user has View access to inspect dependencies; Edit access to create dependency links or save a baseline. Common rules apply.
+      </div>
+</div>
+<figure class="pic"><img alt="Finish-to-start dependency connectors between linked issues with visual conflict indicator." loading="lazy" src="images/story-5-dependencies.png"/><figcaption>Finish-to-start dependency connectors between linked issues with visual conflict indicator. <span>Click to enlarge</span></figcaption></figure><details class="sec" open=""><summary><h3>Acceptance Criteria</h3><span class="n">6</span></summary><div><ol class="steps"><li><div>Go to Tasks → &lt;project&gt; → Issue List → &lt;issue key&gt; → Link Issue. Pick “Blocks” or “Is Blocked By”, pick the target issue, click “Link”. <span class="new">NEW</span> History logs user name, link type and linked issue key.</div></li><li><div><span class="new">NEW</span> Open the Gantt. A dependency line joins linked issues:</div><ul><li>Finish-to-start: ends at the blocked issue’s Start Date</li><li>Start-to-start: joins two Start Dates</li><li>Finish-to-finish: joins two Due Dates</li></ul></li><li><div><span class="new">NEW</span> If a blocked issue starts before its blocker ends, the line turns red and the bar flags the scheduling conflict.</div></li><li><div><span class="new">NEW</span> Click “Baseline” on the toolbar, enter a name (e.g. “Agreed plan”), and click “Save baseline”. The original commitment dates of every dated issue are frozen.</div></li><li><div><span class="new">NEW</span> When a task delays or moves forward to a later date, a faint grey baseline bar stays stuck at the original dates underneath the current colored bar.</div></li><li><div><span class="new">NEW</span> Point at the moved bar: the hover card clearly shows planned vs actual dates and slip: “Planned: 30-Nov-2026 | Actual: 05-Dec-2026 (Delay: 5 days)”. Toggle “Show baseline” to show or hide the saved grey bars.</div></li></ol></div></details><details class="sec" open=""><summary><h3>Field Values</h3><span class="n">2</span></summary><div><div class="tw"><table><thead><tr><th>Field<th>Type<th>Required<th>Format<th>Error message</th></th></th></th></th></tr></thead><tbody><tr><td data-l="Field"><b>Link relationship</b></td><td data-l="Type">Dropdown</td><td data-l="Required"><span class="rq Opt">Optional</span></td><td data-l="Format">Is Blocked By, Blocks, Is Cloned By, Is Duplicated By, Duplicates, Related To. <span class="new">NEW</span> On the Gantt: start-to-start and finish-to-finish.</td><td data-l="Error message">—</td></tr><tr><td data-l="Field"><b>Baseline name</b></td><td data-l="Type">Alphanumeric</td><td data-l="Required"><span class="rq Man">Mandatory</span></td><td data-l="Format">Free text, for example Agreed plan.</td><td data-l="Error message"><span class="new">NEW</span> “Baseline name is required.”</td></tr></tbody></table></div></div></details><details class="sec" open=""><summary><h3>Validations</h3><span class="n">4</span></summary><div><ul class="vl"><li>Existing link types are kept. Linked issues still show under Linked Issues on the panel.</li><li>Deleting an issue removes it and its lines from the chart.</li><li>The baseline keeps the first saved dates even after bars move: a faint grey bar stays stuck at the original dates under the moved bar and the hover card shows planned vs actual dates with delay in days.</li><li>Saving a baseline adds no History entry and leaves work logs untouched.</li></ul></div></details>
+<!-- 5. POST-CONDITION -->
+<div class="std-card">
+<div class="std-head"><span class="std-tag">3</span>Post-Condition</div>
+<div class="co ok">
+        Dependency lines render between connected issues (highlighting conflicts in red), and the saved baseline allows direct timeline comparison.
+      </div>
+</div>
+<div class="pn"><a href="#S4">← <small>Previous</small>Change dates from the Gantt</a><a class="r" href="#S7"><small>Next</small>Plan people on a Hire Base project →</a></div></section><section class="pane" hidden="" id="S7">
+<div class="eye">Story 6 of 7</div>
+<h2>Plan people on a Hire Base project</h2>
+<!-- 1. USER STORY -->
+<div class="std-card">
+<div class="std-head"><span class="std-tag">1</span>User Story</div>
+<div class="story-box">
+<strong>As a</strong> Delivery Head, <strong>I want</strong> developer rows and contract duration bands on a Hire Base Gantt, <strong>so that</strong> I can track dedicated engineer contracts and schedule their deliverables within committed dates.
+      </div>
+</div><!-- REAL-WORLD EXAMPLE: WHY IT'S NEEDED -->
+<div class="biz-card">
+<div class="std-head" style="color: #4338ca;"><span class="std-tag" style="background: #4f46e5; color: white;">💡</span>Business Context</div>
+<div class="biz-body">
+<p><strong>Business Scenario:</strong> A client retains dedicated developers (e.g., Liam Brooks and Sofia Reyes) on a monthly Hire Base contract ending on 28-Nov.</p>
+<p style="margin-top: 8px;"><strong>Current Limitation:</strong> Delivery heads must check separate contract documents to verify individual developer engagement spans while reviewing task progress.</p>
+<p style="margin-top: 8px;"><strong>Solution &amp; Workflow:</strong>
+<br/>• <strong>Toolbar Team Contracts Pill:</strong> A compact <code>[ 👥 Team Contracts (4) ▾ ]</code> dropdown pill in the toolbar lets managers inspect all active contracted engineers, dates, and days left in 1-click — regardless of whether the Gantt is grouped by Epic, Story, Task, Developer, or None.
+<br/>• <strong>Developer Contract Bands:</strong> Grouping by developer displays horizontal contract duration bands directly on each developer's header row (e.g. <code>Contract: 01-Nov – 28-Nov · 8 days left</code>) without overlapping task bars. Left table developer rows include subtle <code>ⓘ</code> tooltip icons for full contract spans.
+<br/>• <strong>Dedicated Child Task Rows:</strong> Tasks assigned to each developer appear as dedicated child rows beneath their header row.
+<br/>• <strong>Task Bar Hover Card Contract Tracking:</strong> Hovering over any task bar displays the assigned engineer's contract span (e.g. <code>Contract till 28-Nov</code>); if a task's Due Date exceeds the contract end date, an amber indicator flags <code>⚠️ Due date exceeds contract</code>.
+<br/>• <strong>Dedicated "+ Add Task" Line:</strong> Each developer group includes a subtle, greyed-out "+ Add Task" line to schedule new tasks pre-assigned to that engineer.
+</p>
+<p style="margin-top: 8px;"><strong>Business Value:</strong> Enforces dedicated developer contractual commitments and prevents client billing disputes.</p>
+</div>
+</div>
+<!-- 2. USER TYPE & 3. IMPACT -->
+<div class="meta">
+<div class="box">
+<div class="lbl">User Type</div>
+<span class="chip">Delivery Head</span><span class="chip">Project Manager</span>
+</div>
+<div class="box">
+<div class="lbl">Impact</div>
+<span class="chip">Resource Planner</span><span class="chip">Work Log and Billing</span><span class="chip">Fixed Cost Report</span><span class="chip">Hourly Report</span><span class="chip">Hirebase Report</span>
+</div>
+</div>
+<!-- 4. PRE-CONDITION -->
+<div class="std-card">
+<div class="std-head"><span class="std-tag">2</span>Pre-Condition</div>
+<div class="co">
+        The user has View access. A Hire Base project with contracted developers and defined billing periods exists. Common rules apply.
+      </div>
+</div>
+<figure class="pic"><img alt="Hire Base developer resource planning: developer rows, contract pills, anchored clash warnings, and clean timeline." loading="lazy" src="images/story-6-hirebase-planning.png"/><figcaption>Hire Base developer resource planning: developer rows, contract pills, anchored clash warnings, and clean timeline. <span>Click to enlarge</span></figcaption></figure><details class="sec" open=""><summary><h3>Acceptance Criteria</h3><span class="n">5</span></summary><div><ol class="steps"><li><div>Go to Projects → &lt;project&gt; → Resources. Read each developer’s contract Start Date and End Date.</div></li><li><div><span class="new">NEW</span> Open the Gantt. It opens grouped by developer (Assignee), one header row per person.</div></li><li><div><span class="new">NEW</span> Contract bands span each developer’s contract dates directly on the header row, showing contract dates and remaining days.</div></li><li><div><span class="new">NEW</span> Tasks assigned to each developer appear on individual child rows beneath the developer header.</div></li><li><div><span class="new">NEW</span> Click or drag on the developer's "+ Add Task" row to create and schedule a new task pre-assigned to that developer.</div></li></ol></div></details><details class="sec" open=""><summary><h3>Field Values</h3><span class="n">4</span></summary><div><div class="tw"><table><thead><tr><th>Field<th>Type<th>Required<th>Format<th>Error message</th></th></th></th></th></tr></thead><tbody><tr><td data-l="Field"><b>Assignee</b></td><td data-l="Type">Dropdown</td><td data-l="Required"><span class="rq Man">Mandatory</span></td><td data-l="Format">Project resources: Developer, Designer, Quality Analyst (QA).</td><td data-l="Error message">—</td></tr><tr><td data-l="Field"><b>Contract Start Date</b></td><td data-l="Type">Date</td><td data-l="Required"><span class="rq Opt">Optional</span></td><td data-l="Format">DD-MMM-YYYY, for example 01-Sep-2026.</td><td data-l="Error message">—</td></tr><tr><td data-l="Field"><b>Contract End Date</b></td><td data-l="Type">Date</td><td data-l="Required"><span class="rq Opt">Optional</span></td><td data-l="Format">DD-MMM-YYYY, for example 04-Dec-2026.</td><td data-l="Error message">—</td></tr><tr><td data-l="Field"><b>Remaining Days</b></td><td data-l="Type">Number (calculated)</td><td data-l="Required"><span class="rq Dis">Display field</span></td><td data-l="Format">Whole days left on the contract, for example 15.</td><td data-l="Error message">—</td></tr></tbody></table></div></div></details><details class="sec" open=""><summary><h3>Validations</h3><span class="n">4</span></summary><div><ul class="vl"><li>Contract duration bands render directly on developer header rows without overlapping task bars.</li><li>Remaining Days comes from the hire contract record.</li><li>Grouping by developer uses the Assignee field on the board.</li><li>Tasks outside contract dates highlight with contract boundary indicators.</li></ul></div></details>
+<!-- 5. POST-CONDITION -->
+<div class="std-card">
+<div class="std-head"><span class="std-tag">3</span>Post-Condition</div>
+<div class="co ok">
+        Developer header rows and contract duration bands render cleanly on the chart, with dedicated child task rows and contract duration pills.
+      </div>
+</div>
+<div class="pn"><a href="#S5">← <small>Previous</small>Link issues and compare with a baseline</a><a class="r" href="#S8"><small>Next</small>Projects Timeline on Dashboard →</a></div></section><section class="pane" hidden="" id="S8">
+<div class="eye">Story 7 of 7</div>
+<h2>Projects Timeline on Dashboard</h2>
+<!-- 1. USER STORY -->
+<div class="std-card">
+<div class="std-head"><span class="std-tag">1</span>User Story</div>
+<div class="story-box">
+<strong>As a</strong> Delivery Head / Executive, <strong>I want</strong> a consolidated Projects Timeline on the Dashboard, <strong>so that</strong> I can review active project timelines across all engagement models (Fixed Cost, Hourly, Hire Base) in one central portfolio view.
+      </div>
+</div><!-- REAL-WORLD EXAMPLE: WHY IT'S NEEDED -->
+<div class="biz-card">
+<div class="std-head" style="color: #4338ca;"><span class="std-tag" style="background: #4f46e5; color: white;">💡</span>Business Context</div>
+<div class="biz-body">
+<p><strong>Business Scenario:</strong> Delivery Heads and Executive Management need an overall status overview across 15 concurrent company projects during portfolio review meetings.</p>
+<p style="margin-top: 8px;"><strong>Current Limitation:</strong> Reviewing multiple projects requires navigating into individual project boards separately, consuming hours without generating a unified executive roadmap.</p>
+<p style="margin-top: 8px;"><strong>Solution &amp; Workflow:</strong>
+    <br/>• <strong>Projects Timeline (Dashboard):</strong> Navigating to Dashboard opens the consolidated <strong>Projects Timeline</strong>, displaying all active company engagements (Fixed Cost, Hourly, Hire Base) on a single portfolio calendar with 1-click drill-down into individual project boards.
+  </p>
+<p style="margin-top: 8px;"><strong>Business Value:</strong> Gives leadership an instant strategic overview of company-wide project delivery status and organizational capacity.</p>
+</div>
+</div>
+<!-- 2. USER TYPE & 3. IMPACT -->
+<div class="meta">
+<div class="box">
+<div class="lbl">User Type</div>
+<span class="chip">Delivery Head</span><span class="chip">Project Manager</span>
+</div>
+<div class="box">
+<div class="lbl">Impact</div>
+<span class="chip mut">No Impact</span>
+</div>
+</div>
+<!-- 4. PRE-CONDITION -->
+<div class="std-card">
+<div class="std-head"><span class="std-tag">2</span>Pre-Condition</div>
+<div class="co">
+        The user has View access to the relevant projects and the Project Management Dashboard. Common rules apply.
+      </div>
+</div>
+<figure class="pic"><img alt="Portfolio Projects Timeline: Company-wide overview across Fixed Cost, Hourly, and Hire Base projects." loading="lazy" src="images/story-8-projects-timeline.png"/><figcaption>Portfolio Projects Timeline: Company-wide overview across Fixed Cost, Hourly, and Hire Base projects. <span>Click to enlarge</span></figcaption></figure><details class="sec" open=""><summary><h3>Acceptance Criteria</h3><span class="n">4</span></summary><div><ol class="steps"><li><div><span class="new">NEW</span> Go to Side Navigation bar → Dashboard. Read “Total Projects” and “Projects by Engagement Model &amp; Status”. Open the Projects Timeline:</div><div class="chips"><span class="chip">Fixed Cost</span><span class="chip">Hourly</span><span class="chip">Hire Base</span></div></li><li><div><span class="new">NEW</span> Each project appears as a row with its active duration marked across commercial models. Start Date and End Date form calendar duration bands.</div></li><li><div><span class="new">NEW</span> Time zoom controls (Week, Month, Quarter, and Today) navigate and zoom across all company projects simultaneously.</div></li><li><div>Click any project row to navigate directly to that project’s dedicated Gantt board.</div></li></ol></div></details><details class="sec" open=""><summary><h3>Field Values</h3><span class="n">2</span></summary><div><div class="tw"><table><thead><tr><th>Field<th>Type<th>Required<th>Format<th>Error message</th></th></th></th></th></tr></thead><tbody><tr><td data-l="Field"><b>Project</b></td><td data-l="Type">Dropdown / Row</td><td data-l="Required"><span class="rq Opt">Optional</span></td><td data-l="Format">Active company projects (name, Engagement Model, and date range).</td><td data-l="Error message">—</td></tr><tr><td data-l="Field"><b>Time zoom</b></td><td data-l="Type">Button group</td><td data-l="Required"><span class="rq Opt">Optional</span></td><td data-l="Format">Week, Month, Quarter, Today.</td><td data-l="Error message">—</td></tr></tbody></table></div></div></details><details class="sec" open=""><summary><h3>Validations</h3><span class="n">3</span></summary><div><ul class="vl"><li>The Projects Timeline reads dates directly from project records across all engagement models (Fixed Cost, Hourly, Hire Base).</li><li>Each project bar reflects the active project start and target end dates.</li><li>Clicking a project opens that project’s primary task board Gantt view.</li></ul></div></details>
+<!-- 5. POST-CONDITION -->
+<div class="std-card">
+<div class="std-head"><span class="std-tag">3</span>Post-Condition</div>
+<div class="co ok">
+        Dashboard Projects Timeline widget displays company-wide multi-project schedules across all commercial engagement models with 1-click drill-down into individual project boards.
+      </div>
+</div>
+<div class="pn"><a href="#S7">← <small>Previous</small>Plan people on a Hire Base project</a></div></section></main></div>
+<div id="lb"><img alt=""/></div>
+<script>
+const P=[...document.querySelectorAll('.pane')],N=[...document.querySelectorAll('.ni')],$=s=>document.querySelector(s),T=P.map(p=>p.textContent.toLowerCase());
+function go(){const i=Math.max(0,P.findIndex(p=>p.id===location.hash.slice(1)));P.forEach((p,j)=>p.hidden=j!==i);N.forEach((n,j)=>{n.classList.toggle('on',j===i);if(j===i)n.scrollIntoView({block:'nearest'})});document.body.classList.remove('open');scrollTo(0,0)}
+addEventListener('hashchange',go);go();
+$('#q').oninput=e=>{const q=e.target.value.trim().toLowerCase();let c=0;N.forEach((n,i)=>{const m=!q||T[i].includes(q);n.hidden=!m;c+=m});$('#cnt').textContent=q?c+(c==1?' match':' matches'):''};
+$('#mb').onclick=()=>document.body.classList.toggle('open');
+addEventListener('keydown',e=>{if(e.target.matches('input')||e.ctrlKey||e.metaKey||e.altKey)return;const i=P.findIndex(p=>!p.hidden);if(e.key==='ArrowRight'&&i<P.length-1)location.hash=P[i+1].id;if(e.key==='ArrowLeft'&&i>0)location.hash=P[i-1].id;if(e.key==='/'){e.preventDefault();$('#q').focus()}});
+document.addEventListener('click',e=>{if(e.target.matches('.pic img')){$('#lb img').src=e.target.src;$('#lb').classList.add('on')}else if(e.target.closest('#lb'))$('#lb').classList.remove('on')});
+addEventListener('beforeprint',()=>document.querySelectorAll('details').forEach(d=>d.open=true));
+</script></body></html>
