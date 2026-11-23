@@ -1968,47 +1968,73 @@ export default function GanttBoard() {
         {/* Right: Group by + Create Issue + Fullscreen + Settings */}
         <div className="flex items-center gap-2">
           {/* Group by */}
-          <div className="relative">
-            <button
-              onClick={() => setGroupMenuOpen(prev => !prev)}
-              className="flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg border border-gray-300 bg-white text-xs font-medium text-gray-700 hover:bg-gray-50 cursor-pointer"
-            >
-              <span className="icon-layers-three text-xs text-gray-500" />
-              <span>Group by: <strong>{groupBy === 'Assignee' ? 'Developer' : groupBy}</strong></span>
-              <span className="icon-chevron-down text-xs text-gray-400" />
-            </button>
-            {groupMenuOpen && (
-              <div className="absolute right-0 mt-1 w-48 bg-white rounded-lg shadow-lg border border-gray-200 py-1 z-40">
-                {['None', 'Epic', 'Assignee'].map(opt => (
-                  <button
-                    key={opt}
-                    onClick={() => { setGroupBy(opt); setGroupMenuOpen(false) }}
-                    className={`w-full text-left px-3 py-1.5 text-xs hover:bg-gray-100 flex items-center justify-between ${
-                      groupBy === opt ? 'font-semibold text-indigo-600 bg-indigo-50/50' : 'text-gray-700'
-                    }`}
-                  >
-                    <span>{opt === 'Assignee' ? 'Developer' : opt}</span>
-                    {groupBy === opt && <span className="icon-check text-indigo-600 text-xs" />}
-                  </button>
-                ))}
-              </div>
-            )}
+          <div className="flex items-center gap-1.5">
+            <span className="text-xs text-gray-500 font-medium">Group by:</span>
+            <div className="relative">
+              <button
+                onClick={() => setGroupMenuOpen(prev => !prev)}
+                className={`flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg border bg-white text-xs font-medium cursor-pointer ${
+                  groupMenuOpen ? 'border-indigo-600 ring-2 ring-indigo-100 text-indigo-700' : 'border-gray-300 text-gray-700 hover:bg-gray-50'
+                }`}
+              >
+                {groupBy === 'None' && <span className="icon-layers-three text-xs text-gray-500" />}
+                {groupBy === 'Epic' && <TypeIcon type="Epic" />}
+                {groupBy === 'Assignee' && <span className="icon-user-01 text-xs text-indigo-600" />}
+                <span>{groupBy === 'Assignee' ? 'Developer' : groupBy}</span>
+                <span className={`icon-chevron-${groupMenuOpen ? 'up' : 'down'} text-xs text-gray-400`} />
+              </button>
+              {groupMenuOpen && (
+                <div className="absolute right-0 mt-1 w-44 bg-white rounded-lg shadow-lg border border-gray-200 py-1 z-40">
+                  {[
+                    { id: 'None', label: 'None', icon: <span className="icon-layers-three text-xs text-gray-500" /> },
+                    { id: 'Epic', label: 'Epic', icon: <TypeIcon type="Epic" /> },
+                    { id: 'Assignee', label: 'Developer', icon: <span className="icon-user-01 text-xs text-indigo-600" /> },
+                  ].map(item => (
+                    <button
+                      key={item.id}
+                      onClick={() => { setGroupBy(item.id); setGroupMenuOpen(false) }}
+                      className={`w-full text-left px-3 py-1.5 text-xs hover:bg-gray-100 flex items-center gap-2 ${
+                        groupBy === item.id ? 'font-semibold text-indigo-600 bg-indigo-50/50' : 'text-gray-700'
+                      }`}
+                    >
+                      {item.icon}
+                      <span className="flex-1">{item.label}</span>
+                      {groupBy === item.id && <span className="icon-check text-indigo-600 text-xs" />}
+                    </button>
+                  ))}
+                </div>
+              )}
+            </div>
           </div>
 
-          {/* Create Issue */}
-          <button
-            onClick={() => {
-              setUnscheduledOpen(false)
-              setPanel(null)
-              setCompanyGanttOpen(false)
-              setResourcePlannerOpen(false)
-              setCreateModalOpen(true)
-            }}
-            className="flex items-center gap-1 px-3 py-1.5 bg-indigo-600 hover:bg-indigo-700 text-white rounded-lg text-xs font-semibold shadow-xs transition-colors"
-          >
-            <span className="icon-plus text-xs" />
-            <span>Create Issue</span>
-          </button>
+          {/* Create Button (CollabCRM Split Button) */}
+          <div className="inline-flex rounded-lg shadow-xs overflow-hidden">
+            <button
+              onClick={() => {
+                setUnscheduledOpen(false)
+                setPanel(null)
+                setCompanyGanttOpen(false)
+                setResourcePlannerOpen(false)
+                setCreateModalOpen(true)
+              }}
+              className="px-3 py-1.5 bg-indigo-600 hover:bg-indigo-700 text-white text-xs font-semibold transition-colors"
+            >
+              Create
+            </button>
+            <button
+              onClick={() => {
+                setUnscheduledOpen(false)
+                setPanel(null)
+                setCompanyGanttOpen(false)
+                setResourcePlannerOpen(false)
+                setCreateModalOpen(true)
+              }}
+              className="px-1.5 py-1.5 bg-indigo-600 hover:bg-indigo-700 text-white text-xs border-l border-indigo-500 transition-colors"
+              title="Create options"
+            >
+              <span className="icon-chevron-down text-xs" />
+            </button>
+          </div>
 
           {/* Fullscreen icon */}
           <button
