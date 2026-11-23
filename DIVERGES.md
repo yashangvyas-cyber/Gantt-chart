@@ -74,8 +74,7 @@
 - NEW: Resource Planner Occupancy slide-over drawer with %, Hours, Graph display toggles and overload alerts (S7)
 
 # Gantt prototype new parts (Task 4 / Story 8)
-- NEW: Multi-board switcher dropdown in breadcrumbs (Default Board, Test Board, Project Gantt (All Boards)) (S8)
-- NEW: Board badges in grid rows when viewing Project Gantt across all boards (S8)
+- NEW: Board switcher dropdown in breadcrumbs (Default Board, Test Board) (S8)
 - NEW: Dashboard Company Projects Gantt modal showcasing cross-project timeline for Fixed Cost, Hourly, and Hire Base (S8)
 - NEW: Interactive timeline bars with milestones and quick jump to project Gantt (S8)
 

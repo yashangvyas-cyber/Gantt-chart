@@ -12,7 +12,7 @@ GitHub link → Vercel; the build chat runs in this folder, all facts come from 
 5. Story 5 Link issues, find the critical path, compare with a baseline
 6. Story 6 Export as PDF and share a client link
 7. Story 7 Plan people on a Hire Base project
-8. Story 8 See all boards and all projects (Project Gantt + Dashboard)
+8. Story 8 Projects Timeline on Dashboard (Dashboard Portfolio Gantt)
 9. Story 9 Use the Gantt on mobile
 Count: 9 of 9, checked story by story against the stories file (each step clicked).
 
@@ -41,7 +41,7 @@ Time: A ≈ half a day; all 17 ≈ 2–3 days of Antigravity work.
 
 ## STATUS
 20 Nov 16:40 — S9 DONE: Mobile responsive layout with preserved Key, Title, Assignee, Start, Due columns, swipe navigation between weeks, touch-friendly zoom controls, and date picker scheduling for unscheduled issues. Proof in docs/proof/S9.png.
-20 Nov 16:38 — S8 DONE: Multi-board selector (Default Board, Test Board, Project Gantt (All Boards)) with board badges in grid, and Dashboard Company Projects Gantt modal covering Fixed Cost, Hourly, and Hire Base timelines. Proof in docs/proof/S8.png.
+20 Nov 16:38 — S8 DONE: Board selector (Default Board, Test Board), and Dashboard Company Projects Timeline modal covering Fixed Cost, Hourly, and Hire Base timelines. Proof in docs/proof/S8.png.
 20 Nov 16:35 — S7 DONE: Hire Base developer grouping (groupBy === 'Assignee'), contract duration bands (01-Nov to 28-Nov, 8 days left), double-booking warning banner and highlight on overlapping dates for Liam Brooks, and Resource Planner Occupancy drawer with overload resolve action. Proof in docs/proof/S7.png.
 20 Nov 16:30 — S6 DONE: Share dropdown with Export PDF and Client view link modal, public link toggle, and read-only Client view mode (/gantt?client=1). Proof in docs/proof/S6.png.
 20 Nov 16:28 — S5 DONE: SVG dependency connector lines, conflict detection (red line), Critical path chain highlight with End Date badge, Baseline save modal and faint baseline comparison bars. Proof in docs/proof/S5.png.

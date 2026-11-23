@@ -11,7 +11,7 @@
 
 // NEW: Story 6 — Export as PDF and share a client link (reading mode, public link toggle)
 // NEW: Story 7 — Plan people on a Hire Base project (developer grouping, contract bands, double-booking warning, Resource Planner occupancy)
-// NEW: Story 8 — See all boards & all projects (Project Gantt across Default/Test boards, Dashboard company-wide timeline)
+// NEW: Story 8 — Projects Timeline on Dashboard (Dashboard company-wide portfolio timeline across engagement models)
 // NEW: Story 9 — Use Gantt on mobile (responsive layout, touch-friendly rows, zoom pinch/swipe)
 
 import { useState, useRef, useEffect, useMemo } from 'react'
@@ -1427,13 +1427,10 @@ export default function GanttBoard() {
     scrollToToday()
   }
 
-  // Multi-board active issues (Story 7)
+  // Active issues for the selected board
   const activeIssues = useMemo(() => {
     if (selectedBoard === 'Test') {
       return TEST_BOARD_ISSUES
-    }
-    if (selectedBoard === 'Project Gantt (All Boards)') {
-      return [...issues.map(i => ({ ...i, board: 'Default' })), ...TEST_BOARD_ISSUES]
     }
     return issues.map(i => ({ ...i, board: 'Default' }))
   }, [issues, selectedBoard])
@@ -1589,17 +1586,8 @@ export default function GanttBoard() {
         { key: 'title', label: 'Title', w: 160 },
       ]
     }
-    if (selectedBoard === 'Project Gantt (All Boards)') {
-      return [
-        { key: 'type',   label: 'Type',   w: 50 },
-        { key: 'board',  label: 'Board',  w: 65 },
-        { key: 'key',    label: 'Key',    w: 75 },
-        { key: 'title',  label: 'Title',  w: 200 },
-        { key: 'status', label: 'Status', w: 95 },
-      ]
-    }
     return COLS
-  }, [isMobileView, selectedBoard])
+  }, [isMobileView])
 
   const dynamicGridW = dynamicCols.reduce((sum, c) => sum + c.w, 0)
 
@@ -2042,7 +2030,7 @@ export default function GanttBoard() {
                   onClick={() => setBoardMenuOpen(prev => !prev)}
                   className="flex items-center gap-1.5 2xl:text-sm 2xl-to-xl:text-xs text-xs text-gray-800 font-semibold hover:text-indigo-600 px-1.5 py-0.5 rounded hover:bg-gray-100 transition-colors"
                 >
-                  <span>{selectedBoard === 'Project Gantt (All Boards)' ? 'Project Gantt (All Boards)' : `${selectedBoard} Board`}</span>
+                  <span>{selectedBoard} Board</span>
                   <span className="icon-chevron-down text-xs text-gray-500" />
                 </button>
 
@@ -2056,7 +2044,7 @@ export default function GanttBoard() {
                           selectedBoard === b ? 'font-semibold text-indigo-600 bg-indigo-50/50' : 'text-gray-700'
                         }`}
                       >
-                        <span>{b === 'Project Gantt (All Boards)' ? b : `${b} Board`}</span>
+                        <span>{b} Board</span>
                         {selectedBoard === b && <span className="icon-check text-indigo-600 text-xs" />}
                       </button>
                     ))}

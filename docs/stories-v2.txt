@@ -3,7 +3,7 @@
 # Gantt Chart — User Stories
  Project Management · 9 stories
  ← → to move · / to search 
- i Read first ★ Common rules 1 Add a Start Date to an issue 2 Read the plan on the Gantt 3 See project hours and sprints on top 4 Change dates from the Gantt 5 Link issues and compare with a baseline 6 Export as PDF and share a client link 7 Plan people on a Hire Base project 8 See all boards and all projects 9 Use the Gantt on mobile Start here
+ i Read first ★ Common rules 1 Add a Start Date to an issue 2 Read the plan on the Gantt 3 See project hours and sprints on top 4 Change dates from the Gantt 5 Link issues and compare with a baseline 6 Export as PDF and share a client link 7 Plan people on a Hire Base project 8 Projects Timeline on Dashboard 9 Use the Gantt on mobile Start here
 ## Read first
  A Gantt is a calendar view of the board.
  Each issue is a coloured bar from its Start Date to its Due Date. The team sees what happens when.
@@ -18,7 +18,7 @@
  5. Link issues and compare with a baseline S6, S7, S8 
  6. Export as PDF and share a client link S12, S16 
  7. Plan people on a Hire Base project S13 
- 8. See all boards and all projects S14, S15 
+ 8. Projects Timeline on Dashboard S14, S15 
  9. Use the Gantt on mobile S17 
 ### Words used in these stories
  14 Term Meaning
@@ -353,47 +353,42 @@ View access. A Hire Base project with contract developers. Common rules apply.
  Tasks outside contract dates highlight with contract boundary indicators.
  When it is done
 The Hire Base Gantt shows developer header rows with contract duration bands, remaining days, and child task rows beneath each developer.
- ← Previous Export as PDF and share a client link Next See all boards and all projects → 
+ ← Previous Export as PDF and share a client link Next Projects Timeline on Dashboard → 
  Story 8 of 9 · replaces S14 + S15
 
-## See all boards and all projects
- Role Project Manager 
- Goal one Gantt across every board of a project and Projects Timeline on the Dashboard 
- Benefit I can plan across boards and review all projects in one place 
+## Projects Timeline on Dashboard
+ Role Delivery Head Project Manager 
+ Goal consolidated Projects Timeline on the Dashboard 
+ Benefit I can review active project timelines across all engagement models (Fixed Cost, Hourly, Hire Base) in one central portfolio view 
 ### Business Context
  Business Scenario: Delivery Heads and Executive Management need an overall status overview across 15 concurrent company projects during portfolio review meetings.
  Current Limitation: Reviewing multiple projects requires navigating into individual project boards separately, consuming hours without generating a unified executive roadmap.
  Solution & Workflow:
- • Multi-Board Project View: Within a project, tasks across multiple boards (e.g. Default and Test) consolidate into one continuous Gantt view.
- • Projects Timeline (Dashboard): Navigating to Dashboard opens the consolidated Projects Timeline, displaying all active company engagements (Fixed Cost, Hourly, Hire Base) on a single portfolio calendar with 1-click drill-down.
+ • Projects Timeline (Dashboard): Navigating to Dashboard opens the consolidated Projects Timeline, displaying all active company engagements (Fixed Cost, Hourly, Hire Base) on a single portfolio calendar with 1-click drill-down into individual project boards.
  Business Value: Gives leadership an instant strategic overview of company-wide project delivery status and organizational capacity.
  Who uses it
- Project Manager Delivery Head 
+ Delivery Head Project Manager 
  What it touches
  No impact 
  Needs
 View access to the projects and the Dashboard. Common rules apply. 
- [IMG] The project selector: one Gantt for the whole project. Click to enlarge 
+ [IMG] Portfolio Projects Timeline: Company-wide overview across Fixed Cost, Hourly, and Hire Base projects. Click to enlarge 
 ### Steps
- 6 Go to Projects → <project> → Task Boards. Note the boards, for example Default and Test. NEW Click “Project Gantt”.
- NEW One grid and one calendar show issues and sprints from all boards. A board column or grouping shows each row’s board. Each board keeps its own bars and status colours.
- Open one board’s Gantt tab to go back. Both views read the same issue records.
- NEW Go to Side Navigation bar → Dashboard. Read “Total Projects” and “Projects by Engagement Model & Status”. Open the Projects Timeline:
+ 4 NEW Go to Side Navigation bar → Dashboard. Read “Total Projects” and “Projects by Engagement Model & Status”. Open the Projects Timeline:
  Fixed Cost Hourly Hire Base 
- NEW Each project is a row with its active duration marked. Start Date and End Date are bands. Week, Month, Quarter and Today work as on a board.
- Click a project row to open that project’s Gantt.
+ NEW Each project appears as a row with its active duration marked across commercial models. Start Date and End Date form calendar duration bands.
+ NEW Time zoom controls (Week, Month, Quarter, and Today) navigate and zoom across all company projects simultaneously.
+ Click any project row to navigate directly to that project’s dedicated Gantt board.
 ### Fields
- 3 Field Type Required Format Error message
- Project Dropdown Optional Projects the user can see (name and Engagement Model). — 
- Board Dropdown Optional Boards of the chosen project, such as Default and Test. — 
+ 2 Field Type Required Format Error message
+ Project Dropdown / Row Optional Active company projects (name, Engagement Model, and date range). — 
  Time zoom Button group Optional Week, Month, Quarter, Today. — 
 ### Rules to check
- 4 Each board keeps its own Gantt. The project view reads them all together.
- An issue moved between boards keeps its dates and shows under its new board.
- The project view uses the same Backlog dates as the boards.
- The Projects Timeline reads dates from project records. All Engagement Models show together.
+ 3 The Projects Timeline reads dates directly from project records across all engagement models (Fixed Cost, Hourly, Hire Base).
+ Each project bar reflects the active project start and target end dates.
+ Clicking a project opens that project’s primary task board Gantt view.
  When it is done
-The user can compare every board of a project on one Gantt and open any project from the Dashboard timeline.
+Dashboard Projects Timeline widget displays company-wide multi-project schedules across all commercial engagement models with 1-click drill-down into individual project boards.
  ← Previous Plan people on a Hire Base project Next Use the Gantt on mobile → 
  Story 9 of 9 · replaces S17
 ## Use the Gantt on mobile
@@ -425,5 +420,5 @@ View access. Logged in on a mobile device. Common rules apply.
  A past-due open issue keeps its red outline.
  When it is done
 The user can read, zoom and move around the Gantt on a phone. They can edit dates there with the right permission.
- ← Previous See all boards and all projects 
+ ← Previous Projects Timeline on Dashboard 
  [IMG]

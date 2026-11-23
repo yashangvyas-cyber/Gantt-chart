@@ -286,7 +286,7 @@ export const HIRE_BASE_DEVELOPERS = [
 ]
 
 // ─── Story 8: Multi-board & Company Projects ──────────────────────────────────
-export const BOARDS_LIST = ['Default', 'Test', 'Project Gantt (All Boards)']
+export const BOARDS_LIST = ['Default', 'Test']
 
 export const TEST_BOARD_ISSUES = [
   {
