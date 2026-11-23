@@ -511,151 +511,303 @@ function CreateIssueModal({ open, onClose, onCreate }) {
 
 // ─── Issue Detail Panel ───────────────────────────────────────────────────────
 
-function IssueDetailPanel({ issue, onClose, onUpdateDates }) {
+// ─── Issue Detail Modal (Story 1 & Real CollabCRM popup structure) ───────────
+
+function IssueDetailModal({ issue, onClose, onUpdateIssue }) {
   const [tab, setTab]             = useState('Details')
-  const [editStart, setEditStart] = useState(issue?.start_date || '')
-  const [editDue, setEditDue]     = useState(issue?.due_date || '')
+  const [title, setTitle]         = useState(issue?.title || '')
+  const [desc, setDesc]           = useState(issue?.description || '')
+  const [status, setStatus]       = useState(issue?.status || 'To Do')
+  const [issueType, setIssueType] = useState(issue?.issue_type || 'Task')
+  const [priority, setPriority]   = useState(issue?.priority || 'Medium')
+  const [assignee, setAssignee]   = useState(issue?.assignee_name || 'Emma Clark')
+  const [sprint, setSprint]       = useState(issue?.sprint_name || 'Sprint 8')
+  const [startDate, setStartDate] = useState(issue?.start_date || '')
+  const [dueDate, setDueDate]     = useState(issue?.due_date || '')
+  const [estimate, setEstimate]   = useState(issue?.estimated_hours || 0)
   const [errorMsg, setErrorMsg]   = useState('')
 
   useEffect(() => {
-    setEditStart(issue?.start_date || '')
-    setEditDue(issue?.due_date || '')
-    setErrorMsg('')
+    if (issue) {
+      setTitle(issue.title || '')
+      setDesc(issue.description || '')
+      setStatus(issue.status || 'To Do')
+      setIssueType(issue.issue_type || 'Task')
+      setPriority(issue.priority || 'Medium')
+      setAssignee(issue.assignee_name || 'Emma Clark')
+      setSprint(issue.sprint_name || 'Sprint 8')
+      setStartDate(issue.start_date || '')
+      setDueDate(issue.due_date || '')
+      setEstimate(issue.estimated_hours || 0)
+      setErrorMsg('')
+    }
   }, [issue])
 
   if (!issue) return null
 
-  function handleSaveDates() {
-    const s = parseDate(editStart)
-    const d = parseDate(editDue)
+  function handleSave(e) {
+    e?.preventDefault()
+    if (!title.trim()) {
+      setErrorMsg('Title is required.')
+      return
+    }
+    const s = parseDate(startDate)
+    const d = parseDate(dueDate)
     if (s && d && s > d) {
       setErrorMsg('Start Date should be on or before Due Date.')
       return
     }
     setErrorMsg('')
-    onUpdateDates(issue.id, editStart, editDue)
+    onUpdateIssue(issue.id, {
+      title,
+      description: desc,
+      status,
+      issue_type: issueType,
+      priority,
+      assignee_name: assignee,
+      sprint_name: sprint,
+      start_date: startDate,
+      due_date: dueDate,
+      estimated_hours: Number(estimate) || 0,
+    })
+    onClose()
   }
 
   return (
-    <Drawer
-      title={
-        <div className="flex items-center gap-2">
-          <TypeIcon type={issue.issue_type} />
-          <span className="text-sm font-semibold text-indigo-700">{issue.key}</span>
-          <span className="text-gray-400">·</span>
-          <span className="text-sm font-semibold text-gray-800 truncate max-w-[340px]">{issue.title}</span>
-        </div>
-      }
-      onClose={onClose}
-      width="w-[520px]"
-      bodyCls=""
-    >
-      <div className="flex items-center gap-2 px-5 border-b border-gray-200 bg-gray-50">
-        {['Details', 'History'].map(t => (
-          <button
-            key={t}
-            onClick={() => setTab(t)}
-            className={`py-2 px-3 text-xs font-semibold border-b-2 transition-colors ${
-              tab === t
-                ? 'border-indigo-600 text-indigo-700 bg-white rounded-t-md'
-                : 'border-transparent text-gray-500 hover:text-gray-700'
-            }`}
-          >
-            {t}
-          </button>
-        ))}
-      </div>
-
-      <div className="flex-1 overflow-y-auto px-5 py-4">
-        {tab === 'Details' ? (
-          <div className="space-y-4 text-xs">
-            <div className="flex items-center justify-between py-1 border-b border-gray-100">
-              <span className="text-gray-500 w-[120px]">Status</span>
-              <StatusPill status={issue.status} />
-            </div>
-            <div className="flex items-center justify-between py-1 border-b border-gray-100">
-              <span className="text-gray-500 w-[120px]">Assignee</span>
-              <span className="font-medium text-gray-800">{issue.assignee_name}</span>
-            </div>
-            <div className="flex items-center justify-between py-1 border-b border-gray-100">
-              <span className="text-gray-500 w-[120px]">Sprint</span>
-              <span className="font-medium text-gray-800">{issue.sprint_name || 'None'}</span>
-            </div>
-            <div className="flex items-center justify-between py-1 border-b border-gray-100">
-              <span className="text-gray-500 w-[120px]">Estimated Hours</span>
-              <span className="font-medium text-gray-800">{issue.estimated_hours}h</span>
-            </div>
-
-            {/* Editable Schedule Dates */}
-            <div className="p-3 bg-gray-50 rounded-lg border border-gray-200 space-y-2">
-              <span className="font-semibold text-gray-700 block">Schedule Dates</span>
-              {errorMsg && (
-                <div className="text-[11px] text-red-600 font-medium">{errorMsg}</div>
-              )}
-              <div className="grid grid-cols-2 gap-3">
-                <div>
-                  <label className="text-[11px] text-gray-500 block mb-0.5">Start Date</label>
-                  <input
-                    type="text"
-                    value={editStart}
-                    onChange={e => setEditStart(e.target.value)}
-                    placeholder="DD-MMM-YYYY"
-                    className="w-full px-2.5 py-1.5 border border-gray-300 rounded text-xs bg-white"
-                  />
-                </div>
-                <div>
-                  <label className="text-[11px] text-gray-500 block mb-0.5">Due Date</label>
-                  <input
-                    type="text"
-                    value={editDue}
-                    onChange={e => setEditDue(e.target.value)}
-                    placeholder="DD-MMM-YYYY"
-                    className="w-full px-2.5 py-1.5 border border-gray-300 rounded text-xs bg-white"
-                  />
-                </div>
-              </div>
-              <button
-                type="button"
-                onClick={handleSaveDates}
-                className="mt-2 px-3 py-1 bg-indigo-600 hover:bg-indigo-700 text-white rounded text-xs font-semibold"
-              >
-                Save Dates
-              </button>
-            </div>
-
-            {/* Description */}
-            <div className="py-2 border-b border-gray-100">
-              <span className="text-gray-500 block mb-1">Description</span>
-              <p className="text-gray-800 bg-gray-50 p-2.5 rounded border border-gray-100">
-                {issue.description || 'No description provided.'}
-              </p>
-            </div>
-
-            {/* Logged hours */}
-            <div className="flex items-center justify-between py-1">
-              <span className="text-gray-500">Logged Hours</span>
-              <span className="font-semibold text-gray-800">{issue.logged_hours}h</span>
-            </div>
-          </div>
-        ) : (
-          <div className="space-y-3">
-            {(!issue.history || issue.history.length === 0) ? (
-              <p className="text-xs text-gray-400 italic">No history entries logged yet.</p>
-            ) : (
-              issue.history.map((h, i) => (
-                <div key={i} className="p-2.5 rounded-lg border border-gray-100 bg-gray-50 text-xs">
-                  <div className="flex items-center justify-between text-gray-500 mb-1">
-                    <span className="font-semibold text-indigo-700">{h.user}</span>
-                    <span className="text-[11px] text-gray-400">{h.date}</span>
+    <div className="relative z-[999]" role="dialog" aria-modal="true" data-html2canvas-ignore="true">
+      <div className="fixed inset-0 bg-gray-900 opacity-70" onClick={onClose} />
+      <div className="fixed inset-0 overflow-y-auto">
+        <div className="flex min-h-full items-center justify-center p-4">
+          <div className="w-full max-w-[1172px] relative">
+            <div className="p-0 overflow-hidden border-0 rounded-lg shadow-lg relative flex flex-col w-full bg-white outline-none focus:outline-none">
+              {/* Header */}
+              <div className="flex justify-between items-center border-b 2xl:py-4 2xl-to-xl:py-3 py-3 px-4">
+                <div className="flex items-center gap-x-2">
+                  <TypeIcon type={issueType} />
+                  <span className="text-indigo-600 font-bold text-base">{issue.key}</span>
+                  <span className="text-gray-300">·</span>
+                  <span className="text-gray-900 font-semibold text-lg inline-block align-middle truncate max-w-[600px]">{title}</span>
+                  <div className="has-custom-mini-multi-select flex items-center border border-gray-300 rounded-lg overflow-hidden bg-white ml-2">
+                    <span className="px-2.5 h-[30px] flex items-center bg-gray-50 border-r border-gray-300 text-gray-500 font-medium whitespace-nowrap text-xs">Board</span>
+                    <span className="px-2.5 h-[30px] flex items-center font-medium text-xs text-gray-800">{issue.board || 'Default'}</span>
                   </div>
-                  <p className="text-gray-800">{h.text}</p>
                 </div>
-              ))
-            )}
+                <span onClick={onClose} className="icon-x-close cursor-pointer text-2xl text-gray-500 hover:text-gray-800" />
+              </div>
+
+              {/* Body */}
+              <form onSubmit={handleSave}>
+                <div className="flex lg:flex-row flex-col flex-wrap">
+                  {/* Left Column (65%) */}
+                  <div className="lg:max-h-[600px] lg:max-w-[65%] flex-1 bg-white lg:border-r border-gray-200 px-4 pt-3 overflow-auto overflow-x-hidden scrollbar-hide space-y-4">
+                    {/* Tabs: Details / History */}
+                    <div className="flex items-center gap-2 border-b border-gray-200">
+                      {['Details', 'History'].map(t => (
+                        <button
+                          key={t}
+                          type="button"
+                          onClick={() => setTab(t)}
+                          className={`py-2 px-3 text-xs font-semibold border-b-2 transition-colors ${
+                            tab === t
+                              ? 'border-indigo-600 text-indigo-700 bg-white'
+                              : 'border-transparent text-gray-500 hover:text-gray-700'
+                          }`}
+                        >
+                          {t}
+                        </button>
+                      ))}
+                    </div>
+
+                    {tab === 'Details' ? (
+                      <div className="space-y-4">
+                        {/* Title */}
+                        <div className="field-group">
+                          <label className="text-sm text-gray-700 font-medium mb-1.5 block">Title <span className="text-red-500">*</span></label>
+                          <input
+                            type="text"
+                            value={title}
+                            onChange={e => setTitle(e.target.value)}
+                            className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-indigo-600 text-xs 2xl:text-sm font-medium"
+                            required
+                          />
+                        </div>
+                        {/* Description */}
+                        <div className="field-group">
+                          <label className="text-gray-700 text-sm font-medium mb-1.5 block">Description</label>
+                          <textarea
+                            rows={8}
+                            value={desc}
+                            onChange={e => setDesc(e.target.value)}
+                            placeholder="Add description..."
+                            className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-indigo-600 text-xs 2xl:text-sm"
+                          />
+                        </div>
+                      </div>
+                    ) : (
+                      <div className="space-y-3 py-2">
+                        {(!issue.history || issue.history.length === 0) ? (
+                          <p className="text-xs text-gray-400 italic">No history entries logged yet.</p>
+                        ) : (
+                          issue.history.map((h, i) => (
+                            <div key={i} className="p-2.5 rounded-lg border border-gray-100 bg-gray-50 text-xs">
+                              <div className="flex items-center justify-between text-gray-500 mb-1">
+                                <span className="font-semibold text-indigo-700">{h.user}</span>
+                                <span className="text-[11px] text-gray-400">{h.date}</span>
+                              </div>
+                              <p className="text-gray-800">{h.text}</p>
+                            </div>
+                          ))
+                        )}
+                      </div>
+                    )}
+                  </div>
+
+                  {/* Right Column (35%) */}
+                  <div className="lg:max-w-[35%] flex-1 py-4 px-4 md:max-h-[516px] overflow-y-auto scrollbar-hide overflow-x-hidden 2xl:space-y-4 2xl-to-xl:space-y-3 space-y-3">
+                    {/* Status */}
+                    <div className="flex items-center gap-3 justify-between">
+                      <label className="text-gray-700 2xl:text-sm 2xl-to-xl:text-xs text-xs font-medium w-1/3">Status</label>
+                      <select
+                        value={status}
+                        onChange={e => setStatus(e.target.value)}
+                        className="w-2/3 px-3 py-1.5 border border-gray-300 rounded-lg text-xs 2xl:text-sm bg-white font-medium"
+                      >
+                        <option value="To Do">To Do</option>
+                        <option value="In Progress">In Progress</option>
+                        <option value="In Review">In Review</option>
+                        <option value="Ready For QA">Ready For QA</option>
+                        <option value="Closed">Closed</option>
+                      </select>
+                    </div>
+
+                    {/* Issue Type */}
+                    <div className="flex items-center gap-3 justify-between">
+                      <label className="text-gray-700 2xl:text-sm 2xl-to-xl:text-xs text-xs font-medium w-1/3">Issue Type</label>
+                      <select
+                        value={issueType}
+                        onChange={e => setIssueType(e.target.value)}
+                        className="w-2/3 px-3 py-1.5 border border-gray-300 rounded-lg text-xs 2xl:text-sm bg-white"
+                      >
+                        <option value="Task">Task</option>
+                        <option value="Story">Story</option>
+                        <option value="Epic">Epic</option>
+                        <option value="Bug">Bug</option>
+                      </select>
+                    </div>
+
+                    {/* Priority */}
+                    <div className="flex items-center gap-3 justify-between">
+                      <label className="text-gray-700 2xl:text-sm 2xl-to-xl:text-xs text-xs font-medium w-1/3">Priority</label>
+                      <select
+                        value={priority}
+                        onChange={e => setPriority(e.target.value)}
+                        className="w-2/3 px-3 py-1.5 border border-gray-300 rounded-lg text-xs 2xl:text-sm bg-white"
+                      >
+                        <option value="Highest">Highest</option>
+                        <option value="High">High</option>
+                        <option value="Medium">Medium</option>
+                        <option value="Low">Low</option>
+                      </select>
+                    </div>
+
+                    {/* Assignee */}
+                    <div className="flex items-center gap-3 justify-between">
+                      <label className="text-gray-700 2xl:text-sm 2xl-to-xl:text-xs text-xs font-medium w-1/3">Assignee</label>
+                      <select
+                        value={assignee}
+                        onChange={e => setAssignee(e.target.value)}
+                        className="w-2/3 px-3 py-1.5 border border-gray-300 rounded-lg text-xs 2xl:text-sm bg-white"
+                      >
+                        <option value="Emma Clark">Emma Clark</option>
+                        <option value="Liam Brooks">Liam Brooks</option>
+                        <option value="Sofia Reyes">Sofia Reyes</option>
+                        <option value="Noah Fischer">Noah Fischer</option>
+                        <option value="Mia Laurent">Mia Laurent</option>
+                        <option value="Oliver Watts">Oliver Watts</option>
+                      </select>
+                    </div>
+
+                    {/* Sprint */}
+                    <div className="flex items-center gap-3 justify-between">
+                      <label className="text-gray-700 2xl:text-sm 2xl-to-xl:text-xs text-xs font-medium w-1/3">Sprint</label>
+                      <select
+                        value={sprint}
+                        onChange={e => setSprint(e.target.value)}
+                        className="w-2/3 px-3 py-1.5 border border-gray-300 rounded-lg text-xs 2xl:text-sm bg-white"
+                      >
+                        <option value="Sprint 7">Sprint 7</option>
+                        <option value="Sprint 8">Sprint 8</option>
+                        <option value="None">None (Backlog)</option>
+                      </select>
+                    </div>
+
+                    {/* Start Date & Due Date side-by-side */}
+                    <div className="flex items-center gap-3 justify-between">
+                      <label className="text-gray-700 2xl:text-sm 2xl-to-xl:text-xs text-xs font-medium w-1/3">Start Date</label>
+                      <input
+                        type="text"
+                        value={startDate}
+                        onChange={e => setStartDate(e.target.value)}
+                        placeholder="DD-MMM-YYYY"
+                        className="w-2/3 px-3 py-1.5 border border-gray-300 rounded-lg text-xs 2xl:text-sm bg-white font-medium"
+                      />
+                    </div>
+
+                    <div className="flex items-center gap-3 justify-between">
+                      <label className="text-gray-700 2xl:text-sm 2xl-to-xl:text-xs text-xs font-medium w-1/3">Due Date</label>
+                      <input
+                        type="text"
+                        value={dueDate}
+                        onChange={e => setDueDate(e.target.value)}
+                        placeholder="DD-MMM-YYYY"
+                        className="w-2/3 px-3 py-1.5 border border-gray-300 rounded-lg text-xs 2xl:text-sm bg-white font-medium"
+                      />
+                    </div>
+
+                    {/* Estimated Hours & Logged Hours */}
+                    <div className="flex items-center gap-3 justify-between">
+                      <label className="text-gray-700 2xl:text-sm 2xl-to-xl:text-xs text-xs font-medium w-1/3">Estimated (h)</label>
+                      <input
+                        type="number"
+                        value={estimate}
+                        onChange={e => setEstimate(e.target.value)}
+                        className="w-2/3 px-3 py-1.5 border border-gray-300 rounded-lg text-xs 2xl:text-sm bg-white"
+                      />
+                    </div>
+                    <div className="flex items-center gap-3 justify-between text-xs text-gray-500 pt-1 border-t border-gray-100">
+                      <span>Logged Hours:</span>
+                      <strong className="text-gray-800 font-semibold">{issue.logged_hours || 0}h</strong>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Footer */}
+                {errorMsg && (
+                  <div className="px-4 py-2 bg-red-50 border-t border-red-200 text-xs text-red-600 font-medium">
+                    {errorMsg}
+                  </div>
+                )}
+                <div className="flex justify-end gap-x-2 border-t 2xl:py-4 2xl-to-xl:py-3 py-3 px-4 bg-gray-50">
+                  <button
+                    type="button"
+                    onClick={onClose}
+                    className="px-4 py-2 rounded-lg border border-gray-300 text-xs 2xl:text-sm text-gray-700 font-semibold hover:bg-gray-100"
+                  >
+                    Cancel
+                  </button>
+                  <button
+                    type="submit"
+                    className="px-5 py-2 rounded-lg bg-indigo-600 hover:bg-indigo-700 text-white text-xs 2xl:text-sm font-semibold shadow-xs"
+                  >
+                    Save Changes
+                  </button>
+                </div>
+              </form>
+            </div>
           </div>
-        )}
+        </div>
       </div>
-    </Drawer>
+    </div>
   )
 }
 
@@ -1534,22 +1686,30 @@ export default function GanttBoard() {
     setUnscheduledOpen(false)
   }
 
-  function handlePanelUpdateDates(issueId, newStart, newDue) {
+  function handlePanelUpdateIssue(issueId, updatedFields) {
     setIssues(prev =>
       prev.map(i => {
         if (i.id !== issueId) return i
         const newHist = [...(i.history || [])]
         const ts = nowTimestamp()
-        if (newStart !== i.start_date) {
-          newHist.push({ id: Date.now(), user: 'Emma Clark', date: ts, text: `updated Start Date to ${newStart}` })
+        if (updatedFields.start_date !== i.start_date) {
+          newHist.push({ id: Date.now(), user: 'Emma Clark', date: ts, text: `updated Start Date to ${updatedFields.start_date}` })
         }
-        if (newDue !== i.due_date) {
-          newHist.push({ id: Date.now()+1, user: 'Emma Clark', date: ts, text: `updated Due Date to ${newDue}` })
+        if (updatedFields.due_date !== i.due_date) {
+          newHist.push({ id: Date.now() + 1, user: 'Emma Clark', date: ts, text: `updated Due Date to ${updatedFields.due_date}` })
         }
-        return { ...i, start_date: newStart, due_date: newDue, history: newHist }
+        if (updatedFields.status && updatedFields.status !== i.status) {
+          newHist.push({ id: Date.now() + 2, user: 'Emma Clark', date: ts, text: `changed status to ${updatedFields.status}` })
+        }
+        return {
+          ...i,
+          ...updatedFields,
+          history: newHist,
+        }
       })
     )
     setUndoToast(true)
+    setPanel(null)
   }
 
   function handleCreateIssue(data) {
@@ -2599,12 +2759,12 @@ export default function GanttBoard() {
             {/* Hover card */}
             {hovered && <HoverCard issue={hovered.issue} x={hovered.x} y={hovered.y} baseline={hovered.baseline} />}
 
-            {/* Issue Detail Panel */}
+            {/* Issue Detail Modal (CollabCRM Central Pop-up) */}
             {panel && (
-              <IssueDetailPanel
+              <IssueDetailModal
                 issue={issues.find(i => i.id === panel.id) || panel}
                 onClose={() => setPanel(null)}
-                onUpdateDates={handlePanelUpdateDates}
+                onUpdateIssue={handlePanelUpdateIssue}
               />
             )}
           </div>
