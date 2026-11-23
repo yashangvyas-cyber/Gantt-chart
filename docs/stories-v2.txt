@@ -349,13 +349,13 @@ The Hire Base Gantt shows developer rows, contract bands with Remaining Days and
  Story 8 of 9 · replaces S14 + S15
 ## See all boards and all projects
  Role Project Manager 
- Goal one Gantt across every board of a project and a company-wide Gantt on the Dashboard 
+ Goal one Gantt across every board of a project and Projects Timeline on the Dashboard 
  Benefit I can plan across boards and review all projects in one place 
 ### Simple Example se samjho: Yeh kyun chahiye?
  Maan lo: Delivery Head ya CEO ko review meeting me dekhna hai ki company ke 15 chal rahe projects kahan tak pahuche aur kaunsa project late chal raha hai.
  1. Purani Problem: Har project ke andar jao, tasks kholo, board badlo — 15 projects check karne me aadha ghanta lag jata tha aur overall company ka roadmap ek jagah nahi milta tha.
  2. Multi-Board View: Ek project ke andar Default Board aur Test Board dono ke issues ek hi Gantt me Board column badge ke sath merge hoke dikhte hain.
- 3. Company Dashboard Timeline: Side navigation me Dashboard kholte hi Company-wide Gantt timeline khulti hai. Ek hi calendar pe saare projects (Fixed Cost, Hourly, Hire Base) ek ke neeche ek rows me dikhte hain with unke start/end duration aur milestones. Ek glance me pata chal jata hai kaunsa project on track hai aur kaunsa red alert pe hai.
+ 3. Projects Timeline: Side navigation me Dashboard kholte hi Projects Timeline khulti hai. Ek hi calendar pe saare projects (Fixed Cost, Hourly, Hire Base) ek ke neeche ek rows me dikhte hain with unke start/end duration aur milestones. Ek glance me pata chal jata hai kaunsa project on track hai aur kaunsa red alert pe hai.
  Waise sach bolun Sir, to management level pe actual value yahi se aati hai jab poori company ka schedule ek hi screen pe roadmap ban ke dikhta hai.
  Who uses it
  Project Manager Delivery Head 
@@ -368,7 +368,7 @@ View access to the projects and the Dashboard. Common rules apply.
  6 Go to Projects → <project> → Task Boards. Note the boards, for example Default and Test. NEW Click “Project Gantt”.
  NEW One grid and one calendar show issues, epics and milestones from all boards. A board column or grouping shows each row’s board. Each board keeps its own bars and status colours.
  Open one board’s Gantt tab to go back. Both views read the same issue records.
- NEW Go to Side Navigation bar → Dashboard. Read “Total Projects” and “Projects by Engagement Model & Status”. Open the company-wide Gantt panel:
+ NEW Go to Side Navigation bar → Dashboard. Read “Total Projects” and “Projects by Engagement Model & Status”. Open the Projects Timeline:
  Fixed Cost Hourly Hire Base 
  NEW Each project is a row with its milestones marked. Start Date and End Date are bands. Week, Month, Quarter and Today work as on a board.
  Click a project row to open that project’s Gantt.
@@ -381,7 +381,7 @@ View access to the projects and the Dashboard. Common rules apply.
  4 Each board keeps its own Gantt. The project view reads them all together.
  An issue moved between boards keeps its dates and shows under its new board.
  The project view uses the same Milestones and Backlog dates as the boards.
- The company-wide chart reads dates and milestones from project records. All Engagement Models show together.
+ The Projects Timeline reads dates and milestones from project records. All Engagement Models show together.
  When it is done
 The user can compare every board of a project on one Gantt and open any project from the Dashboard timeline.
  ← Previous Plan people on a Hire Base project Next Use the Gantt on mobile → 
