@@ -336,6 +336,8 @@ export const COMPANY_PROJECTS = [
     start: '01-Nov-2026',
     end: '28-Nov-2026',
     status: 'In Progress',
+    health: 'On Track',
+    manager: 'Emma Clark',
     color: '#6366f1',
     milestones: [], // Hourly has NO milestones
     spent_hours: '220h',
@@ -349,6 +351,8 @@ export const COMPANY_PROJECTS = [
     start: '15-Oct-2026',
     end: '15-Dec-2026',
     status: 'In Progress',
+    health: 'At Risk',
+    manager: 'Liam Brooks',
     color: '#8b5cf6',
     milestones: ['01-Nov-2026 (Alpha)', '25-Nov-2026 (Beta)', '15-Dec-2026 (Go-Live)'],
     spent_hours: '420h',
@@ -362,6 +366,8 @@ export const COMPANY_PROJECTS = [
     start: '01-Sep-2026',
     end: '04-Dec-2026',
     status: 'In Progress',
+    health: 'On Track',
+    manager: 'Sofia Reyes',
     color: '#0ea5e9',
     milestones: [], // Hire Base has NO milestones
     spent_hours: '640h',
