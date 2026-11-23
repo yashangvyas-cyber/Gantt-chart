@@ -27,8 +27,7 @@
  past due an open issue past its Due Date, shown with a red outline. 
  Epic summary bar one bar that spans all the children of an Epic. 
  Sub-Task row a child issue shown under its parent. 
- milestone a point in time shown on the project calendar. 
- dependency line a line that joins two linked issues. 
+  dependency line a line that joins two linked issues. 
  critical path the chain that sets the project end date. 
  baseline the saved first plan shown under today’s bars. 
  Unscheduled list issues that have no Start Date or sprint. 
@@ -58,7 +57,7 @@
  Benefit every issue has a clear place on the schedule 
 ### Real-World Business Example
  Business Scenario: A client requests a major deliverable — "Payment Gateway Integration" — targeted for release on 20-Nov, requiring an estimated 4 working days of development effort.
- Current Limitation: In current CollabCRM, issues only have a Due Date (20-Nov). Without an explicit start date, developers frequently begin work on the 19th or 20th, inevitably causing milestone slips.
+ Current Limitation: In current CollabCRM, issues only have a Due Date (20-Nov). Without an explicit start date, developers frequently begin work on the 19th or 20th, inevitably causing delivery deadline slips.
  Solution & Workflow: When creating the issue in the Create Issue modal, the Project Manager selects both Start Date (17-Nov) and Due Date (20-Nov). Both the developer and PM have an unambiguous schedule commitment that development must commence on the 17th.
  Business Value: Establishes clear delivery accountability, prevents last-minute project crunches, and enables precise bar placement on the Gantt timeline.
  Who uses it
@@ -102,7 +101,7 @@ The issue is saved with valid dates. They show in the panel, the Issue List and 
  What it touches
  Link Issue Issue History Roles and Access Levels 
  Needs
-View access. A board with issues, epics and milestones. Common rules apply. 
+View access. A board with issues and sprints. Common rules apply. 
  [IMG] The Gantt tab with sample data. Each coloured bar is one issue. Click to enlarge [IMG] The Sprint, Group by and Type filters. Click to enlarge [IMG] Week, Month, Quarter and Today buttons, and the today marker. Click to enlarge 
 ### Steps
  9 Open the task board. It has these tabs:
@@ -126,7 +125,7 @@ View access. A board with issues, epics and milestones. Common rules apply.
  Today Action Optional Jumps to the viewer’s local date. — 
 ### Rules to check
  6 Bar colour follows the status column (see Common rules).
- An empty board shows the project dates and milestones. The existing “Create” button adds the first issue.
+ An empty board shows the project dates and sprints. The existing “Create” button adds the first issue.
  Filters change what is shown. Issue data stays the same.
  The today line and past-due outline stay visible in every zoom.
  Each bar date change is saved in the issue History tab.
@@ -229,7 +228,7 @@ The issue has its new dates. The bar shows them and History records the change. 
  Goal dependency lines and a saved baseline on the Gantt 
  Benefit I can see what holds up work and how far we moved from the first plan 
 ### Real-World Business Example
- Business Scenario: A client agreement establishes a committed milestone delivery date of 30-Nov.
+ Business Scenario: A client agreement establishes a committed delivery deadline of 30-Nov.
  Current Limitation: When task delays occur mid-sprint, dates are overwritten directly. At project sign-off, management lacks verifiable evidence comparing the initial contractual baseline against subsequent revisions.
  Solution & Workflow:
  • Freeze Plan (Day 1): After planning, the PM clicks "Save Baseline" (e.g. "Agreed Plan") to freeze original commitment dates.
@@ -290,10 +289,10 @@ Board access to export. Edit access to create the client link. Common rules appl
  NEW “Export PDF” writes a PDF with:
  Left grid: Type icon, Key, Title, Assignee, Start Date, Due Date
  Bars
- Pinned Milestones and Sprint rows
+ Pinned Sprint rows
  Today line
  NEW “Client view link” creates a link and shows it in a dialog with a copy button. Copy it and send it.
- NEW The client opens it in another browser, with no login. They see the saved filters, zoom, bars, Milestones and Sprint rows in reading mode.
+ NEW The client opens it in another browser, with no login. They see the saved filters, zoom, bars, Sprint rows in reading mode.
  NEW Turn the link off in the dialog to close access at any time.
  Archived project: Side Navigation bar → Projects → Archived filter. The Gantt opens in reading mode. NEW Export PDF stays available.
 ### Fields
@@ -302,7 +301,7 @@ Board access to export. Edit access to create the client link. Common rules appl
  View link URL Optional Copyable link in the share dialog. — 
 ### Rules to check
  4 The PDF and the shared view include the current filters, zoom, pinned rows, bars and today line.
- Both read the same issue and milestone data as the board.
+ Both read the same issue data as the board.
  Anyone with board access can export. Access Levels has no separate export or share permission.
  Turning the link off closes access for everyone who holds it.
  When it is done
@@ -369,11 +368,11 @@ View access to the projects and the Dashboard. Common rules apply.
  [IMG] The project selector: one Gantt for the whole project. Click to enlarge 
 ### Steps
  6 Go to Projects → <project> → Task Boards. Note the boards, for example Default and Test. NEW Click “Project Gantt”.
- NEW One grid and one calendar show issues, epics and milestones from all boards. A board column or grouping shows each row’s board. Each board keeps its own bars and status colours.
+ NEW One grid and one calendar show issues and sprints from all boards. A board column or grouping shows each row’s board. Each board keeps its own bars and status colours.
  Open one board’s Gantt tab to go back. Both views read the same issue records.
  NEW Go to Side Navigation bar → Dashboard. Read “Total Projects” and “Projects by Engagement Model & Status”. Open the Projects Timeline:
  Fixed Cost Hourly Hire Base 
- NEW Each project is a row with its milestones marked. Start Date and End Date are bands. Week, Month, Quarter and Today work as on a board.
+ NEW Each project is a row with its active duration marked. Start Date and End Date are bands. Week, Month, Quarter and Today work as on a board.
  Click a project row to open that project’s Gantt.
 ### Fields
  3 Field Type Required Format Error message
@@ -383,8 +382,8 @@ View access to the projects and the Dashboard. Common rules apply.
 ### Rules to check
  4 Each board keeps its own Gantt. The project view reads them all together.
  An issue moved between boards keeps its dates and shows under its new board.
- The project view uses the same Milestones and Backlog dates as the boards.
- The Projects Timeline reads dates and milestones from project records. All Engagement Models show together.
+ The project view uses the same Backlog dates as the boards.
+ The Projects Timeline reads dates from project records. All Engagement Models show together.
  When it is done
 The user can compare every board of a project on one Gantt and open any project from the Dashboard timeline.
  ← Previous Plan people on a Hire Base project Next Use the Gantt on mobile → 
