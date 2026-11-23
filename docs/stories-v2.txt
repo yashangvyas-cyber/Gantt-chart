@@ -54,7 +54,7 @@
  Role Project Manager 
  Goal to set a Start Date on an issue 
  Benefit every issue has a clear place on the schedule 
-### Real-World Business Example
+### Business Context
  Business Scenario: A client requests a major deliverable — "Payment Gateway Integration" — targeted for release on 20-Nov, requiring an estimated 4 working days of development effort.
  Current Limitation: In current CollabCRM, issues only have a Due Date (20-Nov). Without an explicit start date, developers frequently begin work on the 19th or 20th, inevitably causing delivery deadline slips.
  Solution & Workflow: When creating the issue in the Create Issue modal, the Project Manager selects both Start Date (17-Nov) and Due Date (20-Nov). Both the developer and PM have an unambiguous schedule commitment that development must commence on the 17th.
@@ -90,7 +90,7 @@ The issue is saved with valid dates. They show in the panel, the Issue List and 
  Role Project Manager 
  Goal a Gantt tab on the task board 
  Benefit I can read the plan on a calendar, narrow it to the work I review and zoom to the scale I need 
-### Real-World Business Example
+### Business Context
  Business Scenario: An active sprint contains 40 concurrent issues, and client stakeholders inquire: "What is our progress today, and what specific deliverables will complete next week?"
  Current Limitation: Kanban boards show cards segregated into vertical status columns. Mentally synthesizing chronological progress, delivery sequences, and upcoming handoffs requires tedious manual inspection.
  Solution & Workflow: The PM navigates to the Gantt tab. Each task renders as a continuous horizontal bar spanning its Start and Due dates. A vertical blue Today Line indicates expected completion progress against the current calendar day. Hovering over any task displays real-time logged vs estimated hours, assignee, and dates.
@@ -137,7 +137,7 @@ The user sees every board issue with the right icon, colour and dates. They can 
  Role Delivery Head 
  Goal project hours and sprints above the issue rows 
  Benefit I can judge plan and spend while I read the schedule 
-### Real-World Business Example
+### Business Context
  Business Scenario: The organization manages projects across distinct commercial engagement models — Fixed Cost, Hourly Bucket, and Hire Base.
  Current Limitation: Project managers must navigate away to separate financial reports to check budget status while planning sprint activities.
  Solution & Workflow: The toolbar KPI section dynamically adapts via compact dropdown pills:
@@ -185,10 +185,10 @@ Project hours and sprints show in pinned top rows with the right colours and dat
  Role Project Manager 
  Goal to drag bars and drop undated issues on the chart 
  Benefit I can schedule work without opening the issue panel 
-### Real-World Business Example
+### Business Context
  Business Scenario: A client requests a schedule shift: "Postpone campaign deliverables by 3 days and shift the final completion deadline accordingly."
  Current Limitation: The PM must open 10 individual task details, manually edit both Start and Due dates in forms, and save each one — requiring dozens of repetitive interactions.
- Solution & Workflow: On the Gantt chart, the PM drags the task bar forward by 3 days — updating both Start and Due dates in a single motion. Dragging a bar edge expands or contracts duration. An undo notification enables 1-click reversion within 10 seconds. Undated backlog tasks in the Unscheduled drawer can be scheduled directly by inputting dates.
+ Solution & Workflow: On the Gantt chart, the PM drags the task bar forward by 3 days — updating both Start and Due dates in a single motion. Dragging a bar edge expands or contracts duration. Hovering over empty timeline cells reveals a circular handle with a "Click or drag to Create Task" tooltip, enabling 1-click task creation or drag-range scheduling with dates and assignees pre-filled. An undo notification enables 1-click reversion within 10 seconds. Undated backlog tasks in the Unscheduled drawer can be scheduled directly by inputting dates.
  Business Value: Reduces sprint rescheduling time from 20 minutes to seconds while preserving an exact audit history.
  Who uses it
  Project Manager Team Member 
@@ -198,7 +198,8 @@ Project hours and sprints show in pinned top rows with the right colours and dat
 Edit access. Common rules apply. 
  [IMG] Drag a bar to change its dates. Click to enlarge [IMG] The Unscheduled button in the toolbar. Click to enlarge 
 ### Steps
- 8 NEW Drag the body of a bar. Start Date and Due Date move by the same number of days.
+ 9 NEW Hover over empty timeline cells to reveal "Click or drag to Create Task" handle/tooltip; clicking or dragging across dates opens Create Issue modal with Start/Due dates and Assignee pre-filled.
+ NEW Drag the body of a bar. Start Date and Due Date move by the same number of days.
  NEW Drag the left edge to change Start Date. Drag the right edge to change Due Date.
  Release. Both dates save and an Undo toast shows. Open the issue panel and History tab to see the change.
  NEW Click “Unscheduled” in the toolbar. It shows the count of issues with no dates and opens a side panel. Search by Key or Title.
@@ -226,7 +227,7 @@ The issue has its new dates. The bar shows them and History records the change. 
  Role Delivery Head 
  Goal dependency lines and a saved baseline on the Gantt 
  Benefit I can see what holds up work and how far we moved from the first plan 
-### Real-World Business Example
+### Business Context
  Business Scenario: A client agreement establishes a committed delivery deadline of 30-Nov.
  Current Limitation: When task delays occur mid-sprint, dates are overwritten directly. At project sign-off, management lacks verifiable evidence comparing the initial contractual baseline against subsequent revisions.
  Solution & Workflow:
@@ -268,7 +269,7 @@ All links show as lines with the right direction and colour (red on conflict). T
  Role Project Manager 
  Goal to export the Gantt as a PDF and share a client view link 
  Benefit a client can follow the plan with or without a CollabCRM login 
-### Real-World Business Example
+### Business Context
  Business Scenario: The PM must share weekly project schedules with client executives who do not have system access to CollabCRM.
  Current Limitation: PMs take screenshots, manually stitch calendar segments, or send raw spreadsheets that lack visual timeline clarity.
  Solution & Workflow:
@@ -311,7 +312,7 @@ A PDF of the current view is saved and a working client link is ready. The clien
  Role Delivery Head 
  Goal developer rows, contract bands and a double-booking warning on a Hire Base Gantt 
  Benefit I can plan dedicated people across projects without clashes 
-### Real-World Business Example
+### Business Context
  Business Scenario: A client retains dedicated developers (e.g., Liam Brooks and Sofia Reyes) on a monthly Hire Base contract ending on 28-Nov.
  Current Limitation: Dedicated resources might inadvertently be assigned tasks across different projects by multiple project managers, resulting in contractual double-booking.
  Solution & Workflow:
@@ -351,7 +352,7 @@ The Hire Base Gantt shows developer rows, contract bands with Remaining Days and
  Role Project Manager 
  Goal one Gantt across every board of a project and Projects Timeline on the Dashboard 
  Benefit I can plan across boards and review all projects in one place 
-### Real-World Business Example
+### Business Context
  Business Scenario: Delivery Heads and Executive Management need an overall status overview across 15 concurrent company projects during portfolio review meetings.
  Current Limitation: Reviewing multiple projects requires navigating into individual project boards separately, consuming hours without generating a unified executive roadmap.
  Solution & Workflow:

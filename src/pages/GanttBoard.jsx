@@ -267,7 +267,7 @@ function ProjectHoursStrip({ model, onOpenResourcePlanner }) {
 
 // ─── Create Issue Drawer (Story 1) ───────────────────────────────────────────
 
-function CreateIssueModal({ open, onClose, onCreate }) {
+function CreateIssueModal({ open, onClose, onCreate, initialData }) {
   const [title, setTitle]         = useState('')
   const [issueType, setIssueType] = useState('Task')
   const [assignee, setAssignee]   = useState('Emma Clark')
@@ -281,10 +281,22 @@ function CreateIssueModal({ open, onClose, onCreate }) {
 
   useEffect(() => {
     if (!open) return
+    if (initialData) {
+      if (initialData.startDate) setStartDate(initialData.startDate)
+      if (initialData.dueDate) setDueDate(initialData.dueDate)
+      if (initialData.assignee) setAssignee(initialData.assignee)
+      if (initialData.title !== undefined) setTitle(initialData.title)
+    } else {
+      setStartDate('20-Nov-2026')
+      setDueDate('27-Nov-2026')
+      setAssignee('Emma Clark')
+      setTitle('')
+    }
+    setErrorMsg('')
     const onKey = (e) => { if (e.key === 'Escape') onClose?.() }
     window.addEventListener('keydown', onKey)
     return () => window.removeEventListener('keydown', onKey)
-  }, [open, onClose])
+  }, [open, onClose, initialData])
 
   if (!open) return null
 
@@ -1350,10 +1362,16 @@ export default function GanttBoard() {
   const [undoToast, setUndoToast]             = useState(false)
   const [undoSnapshot, setUndoSnapshot]       = useState(null)
   const [collapsed, setCollapsed]             = useState({ 'IT-55': false })
+  const [hoverCell, setHoverCell]             = useState(null)
+  const [dragCreate, setDragCreate]           = useState(null)
+  const [createInitialData, setCreateInitialData] = useState(null)
+  const [draggingBar, setDraggingBar]         = useState(null)
 
   const calScrollRef = useRef(null)
   const calAreaRef   = useRef(null)
   const dragStateRef = useRef(null)
+  const dragCreateRef = useRef(null)
+  const justDraggedRef = useRef(false)
 
   function handlePrevYear() {
     setAnchorDate(d => new Date(d.getFullYear() - 1, d.getMonth(), 1))
@@ -1451,6 +1469,15 @@ export default function GanttBoard() {
         devIssues.forEach(child => {
           list.push({ ...child, depth: 1 })
         })
+
+        // Dedicated "+ Add Task" row for this developer (ClickUp pattern)
+        list.push({
+          id: `add-task-${devName}`,
+          key: `add-task-${devName}`,
+          isAddRow: true,
+          assignee_name: devName,
+          depth: 1,
+        })
       })
     } else if (groupBy === 'Epic') {
       const epics = sourceIssues.filter(i => i.issue_type === 'Epic')
@@ -1463,6 +1490,13 @@ export default function GanttBoard() {
       }
       const others = sourceIssues.filter(i => i.issue_type !== 'Epic' && !epics.some(e => (e.children || []).includes(i.key) || i.parent_id === e.id || i.parent_id === e.key))
       others.forEach(i => list.push({ ...i, depth: 0 }))
+      list.push({
+        id: 'add-task-epic',
+        key: 'add-task-epic',
+        isAddRow: true,
+        assignee_name: 'Emma Clark',
+        depth: 0,
+      })
     } else if (groupBy === 'Story') {
       const stories = sourceIssues.filter(i => i.issue_type === 'Story')
       for (const story of stories) {
@@ -1474,6 +1508,13 @@ export default function GanttBoard() {
       }
       const others = sourceIssues.filter(i => i.issue_type !== 'Story' && !stories.some(s => (s.children || []).includes(i.key) || i.parent_id === s.id || i.parent_id === s.key))
       others.forEach(i => list.push({ ...i, depth: 0 }))
+      list.push({
+        id: 'add-task-story',
+        key: 'add-task-story',
+        isAddRow: true,
+        assignee_name: 'Emma Clark',
+        depth: 0,
+      })
     } else if (groupBy === 'Task') {
       const tasks = sourceIssues.filter(i => i.issue_type === 'Task')
       for (const task of tasks) {
@@ -1485,6 +1526,13 @@ export default function GanttBoard() {
       }
       const others = sourceIssues.filter(i => i.issue_type !== 'Task' && !tasks.some(t => (t.children || []).includes(i.key) || i.parent_id === t.id || i.parent_id === t.key))
       others.forEach(i => list.push({ ...i, depth: 0 }))
+      list.push({
+        id: 'add-task-task',
+        key: 'add-task-task',
+        isAddRow: true,
+        assignee_name: 'Emma Clark',
+        depth: 0,
+      })
     } else {
       for (const issue of sourceIssues) {
         if (issue.parent_id) continue
@@ -1497,7 +1545,15 @@ export default function GanttBoard() {
           }
         }
       }
+      list.push({
+        id: 'add-task-global',
+        key: 'add-task-global',
+        isAddRow: true,
+        assignee_name: 'Emma Clark',
+        depth: 0,
+      })
     }
+
     return list
   }, [activeIssues, groupBy, collapsed, doubleBookingActive, selectedDeveloper])
 
@@ -1575,6 +1631,7 @@ export default function GanttBoard() {
   // Drag & drop handlers
   function handleMouseDown(e, issue, mode) {
     if (clientMode) return
+    e.preventDefault()
     e.stopPropagation()
     const start = parseDate(issue.start_date) || TODAY
     const due   = parseDate(issue.due_date) || addDays(start, 5)
@@ -1585,85 +1642,115 @@ export default function GanttBoard() {
       startX: e.clientX,
       initialStart: start,
       initialDue: due,
+      currentStart: start,
+      currentDue: due,
       oldStartDateStr: issue.start_date,
       oldDueDateStr: issue.due_date,
+      hasMoved: false,
     }
 
-    window.addEventListener('mousemove', handleMouseMove)
-    window.addEventListener('mouseup', handleMouseUp)
-  }
-
-  function handleMouseMove(e) {
-    if (!dragStateRef.current) return
-    const { mode, startX, initialStart, initialDue } = dragStateRef.current
-    const deltaDays = Math.round((e.clientX - startX) / cellW)
-    if (deltaDays === 0) return
-
-    let newStart = new Date(initialStart)
-    let newDue   = new Date(initialDue)
-
-    if (mode === 'move') {
-      newStart = addDays(initialStart, deltaDays)
-      newDue   = addDays(initialDue, deltaDays)
-    } else if (mode === 'resize-left') {
-      newStart = addDays(initialStart, deltaDays)
-      if (newStart > newDue) newStart = new Date(newDue)
-    } else if (mode === 'resize-right') {
-      newDue = addDays(initialDue, deltaDays)
-      if (newDue < newStart) newDue = new Date(newStart)
-    }
-
-    setIssues(prev =>
-      prev.map(i => {
-        if (i.id !== dragStateRef.current.issueId) return i
-        return {
-          ...i,
-          start_date: fmtDate(newStart),
-          due_date: fmtDate(newDue),
-        }
-      })
-    )
-  }
-
-  function handleMouseUp() {
-    window.removeEventListener('mousemove', handleMouseMove)
-    window.removeEventListener('mouseup', handleMouseUp)
-
-    if (!dragStateRef.current) return
-    const { issueId, oldStartDateStr, oldDueDateStr } = dragStateRef.current
-    dragStateRef.current = null
-
-    setIssues(prev => {
-      const target = prev.find(i => i.id === issueId)
-      if (!target) return prev
-      if (target.start_date === oldStartDateStr && target.due_date === oldDueDateStr) {
-        return prev
-      }
-
-      setUndoSnapshot({ issueId, prevStart: oldStartDateStr, prevDue: oldDueDateStr })
-      setUndoToast(true)
-
-      const newHistory = [...(target.history || [])]
-      const timestamp = nowTimestamp()
-      if (target.start_date !== oldStartDateStr) {
-        newHistory.push({
-          id: Date.now(),
-          user: 'Emma Clark',
-          date: timestamp,
-          text: `updated Start Date to ${target.start_date}`
-        })
-      }
-      if (target.due_date !== oldDueDateStr) {
-        newHistory.push({
-          id: Date.now() + 1,
-          user: 'Emma Clark',
-          date: timestamp,
-          text: `updated Due Date to ${target.due_date}`
-        })
-      }
-
-      return prev.map(i => i.id === issueId ? { ...i, history: newHistory } : i)
+    setDraggingBar({
+      issueId: issue.id,
+      mode,
+      currentStart: start,
+      currentDue: due,
     })
+
+    document.body.style.userSelect = 'none'
+    document.body.style.cursor = mode === 'move' ? 'grabbing' : 'ew-resize'
+
+    function onBarMouseMove(moveEvt) {
+      moveEvt.preventDefault()
+      if (!dragStateRef.current) return
+      const { mode: m, startX, initialStart, initialDue } = dragStateRef.current
+      const deltaX = moveEvt.clientX - startX
+      if (Math.abs(deltaX) > 2) {
+        dragStateRef.current.hasMoved = true
+      }
+      const deltaDays = Math.round(deltaX / cellW)
+      let newStart = new Date(initialStart)
+      let newDue   = new Date(initialDue)
+
+      if (m === 'move') {
+        newStart = addDays(initialStart, deltaDays)
+        newDue   = addDays(initialDue, deltaDays)
+      } else if (m === 'resize-left') {
+        newStart = addDays(initialStart, deltaDays)
+        if (newStart > newDue) newStart = new Date(newDue)
+      } else if (m === 'resize-right') {
+        newDue = addDays(initialDue, deltaDays)
+        if (newDue < newStart) newDue = new Date(newStart)
+      }
+
+      dragStateRef.current.currentStart = newStart
+      dragStateRef.current.currentDue = newDue
+
+      setDraggingBar({
+        issueId: dragStateRef.current.issueId,
+        mode: m,
+        currentStart: newStart,
+        currentDue: newDue,
+      })
+    }
+
+    function onBarMouseUp() {
+      window.removeEventListener('mousemove', onBarMouseMove)
+      window.removeEventListener('mouseup', onBarMouseUp)
+      document.body.style.userSelect = ''
+      document.body.style.cursor = ''
+
+      if (!dragStateRef.current) return
+      const { issueId, oldStartDateStr, oldDueDateStr, currentStart, currentDue, hasMoved } = dragStateRef.current
+      dragStateRef.current = null
+      setDraggingBar(null)
+
+      if (!hasMoved) return
+
+      justDraggedRef.current = true
+      setTimeout(() => { justDraggedRef.current = false }, 300)
+
+      const newStartStr = fmtDate(currentStart)
+      const newDueStr = fmtDate(currentDue)
+
+      if (newStartStr === oldStartDateStr && newDueStr === oldDueDateStr) return
+
+      setIssues(prev => {
+        const target = prev.find(i => i.id === issueId)
+        if (!target) return prev
+
+        setUndoSnapshot({ issueId, prevStart: oldStartDateStr, prevDue: oldDueDateStr })
+        setUndoToast(true)
+
+        const newHistory = [...(target.history || [])]
+        const timestamp = nowTimestamp()
+        if (newStartStr !== oldStartDateStr) {
+          newHistory.push({
+            id: Date.now(),
+            user: 'Emma Clark',
+            date: timestamp,
+            text: `updated Start Date to ${newStartStr}`
+          })
+        }
+        if (newDueStr !== oldDueDateStr) {
+          newHistory.push({
+            id: Date.now() + 1,
+            user: 'Emma Clark',
+            date: timestamp,
+            text: `updated Due Date to ${newDueStr}`
+          })
+        }
+
+        return prev.map(i => i.id === issueId ? {
+          ...i,
+          start_date: newStartStr,
+          due_date: newDueStr,
+          history: newHistory,
+        } : i)
+      })
+    }
+
+    window.addEventListener('mousemove', onBarMouseMove)
+    window.addEventListener('mouseup', onBarMouseUp)
   }
 
   function handleUndo() {
@@ -1688,6 +1775,61 @@ export default function GanttBoard() {
     )
     setUndoToast(false)
     setUndoSnapshot(null)
+  }
+
+  function handleCreateMouseDown(e, issue, dayIdx) {
+    if (clientMode || e.button !== 0) return
+    e.preventDefault()
+    e.stopPropagation()
+    const startX = e.clientX
+    dragCreateRef.current = {
+      issue,
+      startIdx: dayIdx,
+      currentIdx: dayIdx,
+      startX,
+      hasMoved: false,
+    }
+    setDragCreate({ issueId: issue.id, startIdx: dayIdx, currentIdx: dayIdx })
+    document.body.style.userSelect = 'none'
+
+    function onMouseMove(moveEvt) {
+      moveEvt.preventDefault()
+      if (!dragCreateRef.current) return
+      const deltaX = moveEvt.clientX - dragCreateRef.current.startX
+      if (Math.abs(deltaX) > 4) {
+        dragCreateRef.current.hasMoved = true
+      }
+      const deltaDays = Math.round(deltaX / cellW)
+      const newIdx = Math.max(0, Math.min(days.length - 1, dragCreateRef.current.startIdx + deltaDays))
+      dragCreateRef.current.currentIdx = newIdx
+      setDragCreate(prev => prev ? { ...prev, currentIdx: newIdx } : null)
+    }
+
+    function onMouseUp() {
+      window.removeEventListener('mousemove', onMouseMove)
+      window.removeEventListener('mouseup', onMouseUp)
+      document.body.style.userSelect = ''
+
+      if (!dragCreateRef.current) return
+      const { issue: refIssue, startIdx, currentIdx } = dragCreateRef.current
+      const minI = Math.min(startIdx, currentIdx)
+      const maxI = Math.max(startIdx, currentIdx)
+      const startD = fmtDate(days[minI])
+      const dueD = fmtDate(days[maxI])
+      dragCreateRef.current = null
+      setDragCreate(null)
+      setHoverCell(null)
+
+      setCreateInitialData({
+        startDate: startD,
+        dueDate: dueD,
+        assignee: refIssue.assignee_name || (groupBy === 'Assignee' && refIssue.groupTitle ? refIssue.groupTitle : 'Emma Clark'),
+      })
+      setCreateModalOpen(true)
+    }
+
+    window.addEventListener('mousemove', onMouseMove)
+    window.addEventListener('mouseup', onMouseUp)
   }
 
   function handleScheduleFromUnscheduled(issueId, startStr, dueStr) {
@@ -2463,6 +2605,23 @@ export default function GanttBoard() {
                   )
                 }
 
+                if (issue.isAddRow) {
+                  return (
+                    <div
+                      key={issue.id}
+                      className="flex items-center border-b border-gray-100/70 hover:bg-gray-50/80 cursor-pointer text-gray-400 hover:text-gray-600 text-xs font-normal select-none group px-3 transition-colors"
+                      style={{ height: ROW_H, paddingLeft: issue.depth ? `${issue.depth * 16 + 12}px` : '12px' }}
+                      onClick={() => {
+                        setCreateInitialData({ assignee: issue.assignee_name || 'Emma Clark' })
+                        setCreateModalOpen(true)
+                      }}
+                    >
+                      <span className="icon-plus text-xs mr-2 text-gray-400 group-hover:text-gray-600 transition-colors" />
+                      <span className="group-hover:text-gray-600">Add Task</span>
+                    </div>
+                  )
+                }
+
                 return (
                   <div
                     key={issue.id}
@@ -2699,6 +2858,65 @@ export default function GanttBoard() {
                     )
                   }
 
+                  if (issue.isAddRow) {
+                    return (
+                      <div key={issue.id} className="relative flex group/addrow hover:bg-gray-50/40 transition-colors" style={{ height: ROW_H }}>
+                        {days.map((d, i) => {
+                          const isHovered = hoverCell?.issueId === issue.id && hoverCell?.dayIdx === i && !dragCreate && !draggingBar
+                          return (
+                            <div
+                              key={i}
+                              className={`shrink-0 border-r border-b border-gray-100/70 relative cursor-pointer ${
+                                isWeekend(d) ? 'bg-gray-50/30' : 'hover:bg-gray-100/60'
+                              }`}
+                              style={{ width: cellW, height: ROW_H }}
+                              onMouseEnter={() => {
+                                if (!clientMode && !draggingBar) setHoverCell({ issueId: issue.id, dayIdx: i })
+                              }}
+                              onMouseLeave={() => {
+                                if (hoverCell?.issueId === issue.id && hoverCell?.dayIdx === i) setHoverCell(null)
+                              }}
+                              onMouseDown={(e) => {
+                                if (clientMode || e.button !== 0 || draggingBar) return
+                                handleCreateMouseDown(e, issue, i)
+                              }}
+                            >
+                              {/* Subtle Circular Handle & Tooltip */}
+                              {isHovered && (
+                                <div className="absolute inset-0 flex items-center justify-center pointer-events-none z-30">
+                                  <div className="w-3 h-3 rounded-full bg-gray-300 border border-gray-400 shadow-2xs" />
+                                  <div className="absolute bottom-[28px] left-1/2 -translate-x-1/2 bg-[#1f2937] text-white text-[11px] leading-tight font-medium py-1.5 px-3 rounded shadow-xl whitespace-nowrap z-50 text-center pointer-events-none">
+                                    <div>Click or drag to</div>
+                                    <div className="font-semibold text-gray-100">Create Task</div>
+                                    <div className="absolute -bottom-1 left-1/2 -translate-x-1/2 w-2 h-2 bg-[#1f2937] rotate-45" />
+                                  </div>
+                                </div>
+                              )}
+                            </div>
+                          )
+                        })}
+
+                        {/* Drag Create Preview Bar - subtle and clean */}
+                        {dragCreate?.issueId === issue.id && (() => {
+                          const minI = Math.min(dragCreate.startIdx, dragCreate.currentIdx)
+                          const maxI = Math.max(dragCreate.startIdx, dragCreate.currentIdx)
+                          const pLeft = minI * cellW
+                          const pWidth = (maxI - minI + 1) * cellW
+                          const pStart = days[minI]
+                          const pDue = days[maxI]
+                          return (
+                            <div
+                              className="absolute top-[7px] h-[24px] rounded border border-dashed border-gray-400 bg-gray-100/90 text-gray-700 text-[10px] font-medium flex items-center px-2 z-30 pointer-events-none shadow-2xs"
+                              style={{ left: pLeft, width: pWidth }}
+                            >
+                              <span className="truncate">New Task ({fmtDate(pStart)} – {fmtDate(pDue)})</span>
+                            </div>
+                          )
+                        })()}
+                      </div>
+                    )
+                  }
+
                   const start = parseDate(issue.start_date)
                   const due   = parseDate(issue.due_date)
                   const hasDates = !!(start && due)
@@ -2712,7 +2930,7 @@ export default function GanttBoard() {
                       {days.map((d, i) => (
                         <div
                           key={i}
-                          className={`shrink-0 border-r border-b border-gray-100 ${isWeekend(d) ? 'bg-gray-50/50' : 'hover:bg-indigo-50/40'}`}
+                          className={`shrink-0 border-r border-b border-gray-100 ${isWeekend(d) ? 'bg-gray-50/50' : ''}`}
                           style={{ width: cellW, height: ROW_H }}
                         />
                       ))}
@@ -2735,14 +2953,19 @@ export default function GanttBoard() {
 
                       {/* Scheduled Bar */}
                       {hasDates && (() => {
-                        const left = dayDiff(viewStart, start) * cellW
-                        const width = Math.max((dayDiff(start, due) + 1) * cellW, cellW)
+                        const isDraggingThis = draggingBar?.issueId === issue.id
+                        const effectiveStart = (isDraggingThis && draggingBar.currentStart) ? draggingBar.currentStart : start
+                        const effectiveDue   = (isDraggingThis && draggingBar.currentDue) ? draggingBar.currentDue : due
+                        const left = dayDiff(viewStart, effectiveStart) * cellW
+                        const width = Math.max((dayDiff(effectiveStart, effectiveDue) + 1) * cellW, cellW)
                         const color = STATUS_COLORS[issue.status] || '#696969'
                         const pastDue = isPastDue(issue)
 
                         return (
                           <div
-                            className="absolute top-[7px] h-[24px] rounded group shadow-sm flex items-center cursor-move transition-shadow"
+                            className={`absolute top-[7px] h-[24px] rounded group shadow-sm flex items-center cursor-move transition-shadow ${
+                              isDraggingThis ? 'shadow-xl ring-2 ring-indigo-500 z-30 opacity-95' : 'hover:shadow'
+                            }`}
                             style={{
                               left,
                               width,
@@ -2752,27 +2975,38 @@ export default function GanttBoard() {
                             }}
                             onMouseDown={e => handleMouseDown(e, issue, 'move')}
                             onMouseEnter={e => {
+                              if (isDraggingThis) return
                               const rect = calAreaRef.current?.getBoundingClientRect()
                               if (rect) setHovered({ issue, x: e.clientX - rect.left, y: e.clientY - rect.top, baseline: baseEntry })
                             }}
                             onMouseLeave={() => setHovered(null)}
-                            onClick={() => setPanel(issue)}
+                            onClick={() => {
+                              if (justDraggedRef.current) {
+                                justDraggedRef.current = false
+                                return
+                              }
+                              setPanel(issue)
+                            }}
                           >
                             <div
-                              className="absolute left-0 top-0 bottom-0 w-2 cursor-ew-resize opacity-0 group-hover:opacity-100 bg-black/20 hover:bg-black/40 rounded-l"
-                              title="Drag to change Start Date"
+                              className="absolute left-0 top-0 bottom-0 w-3 cursor-ew-resize opacity-0 group-hover:opacity-100 bg-black/25 hover:bg-black/40 rounded-l flex items-center justify-center z-20 transition-opacity"
+                              title="Drag left edge to change Start Date"
                               onMouseDown={e => handleMouseDown(e, issue, 'resize-left')}
-                            />
+                            >
+                              <div className="w-[2px] h-3 bg-white/80 rounded-full pointer-events-none" />
+                            </div>
 
-                            <span className="text-white text-[10px] font-semibold truncate px-2 select-none pointer-events-none flex items-center gap-1">
+                            <span className="text-white text-[10px] font-semibold truncate px-2.5 select-none pointer-events-none flex items-center gap-1">
                               {issue.key}
                             </span>
 
                             <div
-                              className="absolute right-0 top-0 bottom-0 w-2 cursor-ew-resize opacity-0 group-hover:opacity-100 bg-black/20 hover:bg-black/40 rounded-r"
-                              title="Drag to change Due Date"
+                              className="absolute right-0 top-0 bottom-0 w-3 cursor-ew-resize opacity-0 group-hover:opacity-100 bg-black/25 hover:bg-black/40 rounded-r flex items-center justify-center z-20 transition-opacity"
+                              title="Drag right edge to change Due Date"
                               onMouseDown={e => handleMouseDown(e, issue, 'resize-right')}
-                            />
+                            >
+                              <div className="w-[2px] h-3 bg-white/80 rounded-full pointer-events-none" />
+                            </div>
                           </div>
                         )
                       })()}
@@ -2881,8 +3115,12 @@ export default function GanttBoard() {
       {/* Create Issue Modal (Story 1 & Real CollabCRM popup modal) */}
       <CreateIssueModal
         open={createModalOpen}
-        onClose={() => setCreateModalOpen(false)}
+        onClose={() => {
+          setCreateModalOpen(false)
+          setCreateInitialData(null)
+        }}
         onCreate={handleCreateIssue}
+        initialData={createInitialData}
       />
 
       {/* Baseline Modal (Story 5) */}
