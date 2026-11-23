@@ -1296,12 +1296,10 @@ const PM_NAV = [
 const BOARD_TABS = ['Board', 'Issue List', 'Backlog', 'Completed Sprints', 'Gantt', 'Notification Settings']
 
 const COLS = [
-  { key: 'type',       label: 'Type',       w: 60 },
-  { key: 'key',        label: 'Key',        w: 75 },
-  { key: 'title',      label: 'Title',      w: 180 },
-  { key: 'assignee',   label: 'Assignee',   w: 115 },
-  { key: 'start_date', label: 'Start Date', w: 90 },
-  { key: 'due_date',   label: 'Due Date',   w: 90 },
+  { key: 'type',   label: 'Type',   w: 50 },
+  { key: 'key',    label: 'Key',    w: 75 },
+  { key: 'title',  label: 'Title',  w: 220 },
+  { key: 'status', label: 'Status', w: 95 },
 ]
 
 export default function GanttBoard() {
@@ -1506,22 +1504,17 @@ export default function GanttBoard() {
   const dynamicCols = useMemo(() => {
     if (isMobileView) {
       return [
-        { key: 'key',        label: 'Key',        w: 64 },
-        { key: 'title',      label: 'Title',      w: 130 },
-        { key: 'assignee',   label: 'Assignee',   w: 90 },
-        { key: 'start_date', label: 'Start',      w: 80 },
-        { key: 'due_date',   label: 'Due',        w: 80 },
+        { key: 'key',   label: 'Key',   w: 64 },
+        { key: 'title', label: 'Title', w: 160 },
       ]
     }
     if (selectedBoard === 'Project Gantt (All Boards)') {
       return [
-        { key: 'type',       label: 'Type',       w: 54 },
-        { key: 'board',      label: 'Board',      w: 60 },
-        { key: 'key',        label: 'Key',        w: 70 },
-        { key: 'title',      label: 'Title',      w: 160 },
-        { key: 'assignee',   label: 'Assignee',   w: 110 },
-        { key: 'start_date', label: 'Start Date', w: 90 },
-        { key: 'due_date',   label: 'Due Date',   w: 90 },
+        { key: 'type',   label: 'Type',   w: 50 },
+        { key: 'board',  label: 'Board',  w: 65 },
+        { key: 'key',    label: 'Key',    w: 75 },
+        { key: 'title',  label: 'Title',  w: 200 },
+        { key: 'status', label: 'Status', w: 95 },
       ]
     }
     return COLS
@@ -2568,6 +2561,13 @@ export default function GanttBoard() {
                           </div>
                         )
                       }
+                      if (col.key === 'status') {
+                        return (
+                          <div key="status" className="px-1 shrink-0 truncate flex items-center" style={{ width: col.w }}>
+                            <StatusPill status={issue.status} />
+                          </div>
+                        )
+                      }
                       if (col.key === 'assignee') {
                         return (
                           <div key="assignee" className="2xl:text-xs 2xl-to-xl:text-[11px] text-[11px] text-gray-500 shrink-0 truncate px-1" style={{ width: col.w }}>
@@ -2729,10 +2729,15 @@ export default function GanttBoard() {
                         {/* Contract Duration Band (Story 7) */}
                         {bWidth > 0 && (
                           <div
-                            className="absolute top-[6px] h-[26px] bg-indigo-50/70 border border-indigo-200/80 rounded z-5 shadow-2xs"
+                            className="absolute top-[6px] h-[26px] bg-indigo-50/70 border border-indigo-200/80 rounded z-5 shadow-2xs flex items-center px-1.5"
                             style={{ left: bLeft, width: bWidth }}
                             title={`Contract: ${issue.contract_start} – ${issue.contract_end} (${issue.remaining_days} days left)`}
-                          />
+                          >
+                            <span className="inline-flex items-center gap-1.5 px-2 py-0.5 rounded bg-gray-900 text-white text-[10px] font-medium shadow-xs truncate max-w-full">
+                              <span className="icon-calendar text-indigo-300 text-xs" />
+                              <span className="truncate">Contract: {issue.contract_start} – {issue.contract_end} ({issue.remaining_days} days left)</span>
+                            </span>
+                          </div>
                         )}
 
                         {/* Double-booking warning band if clashing (Story 7) */}
