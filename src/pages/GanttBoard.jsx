@@ -1733,6 +1733,45 @@ export default function GanttBoard() {
                   ))}
                 </div>
               </div>
+
+              {/* Compact Project Hours / Contract KPI Pills (Option A) */}
+              <div className="flex items-center gap-2.5 ml-3 pl-3 border-l border-gray-200 text-xs">
+                {projectModel === 'Fixed Cost' && (
+                  <div className="flex items-center gap-2 text-xs">
+                    <span className="text-gray-500">Estimated: <strong className="text-gray-800 font-semibold">500h</strong></span>
+                    <span className="text-gray-300">·</span>
+                    <span className="text-gray-500">Top-Up: <strong className="text-gray-800 font-semibold">50h</strong></span>
+                    <span className="text-gray-300">·</span>
+                    <span className="text-gray-500">Total: <strong className="text-indigo-700 font-semibold">550h</strong></span>
+                    <span className="text-gray-300">·</span>
+                    <span className="text-gray-500">Spent: <strong className="text-gray-800 font-semibold">210:00</strong></span>
+                  </div>
+                )}
+                {projectModel === 'Hourly' && (
+                  <div className="flex items-center gap-2 text-xs">
+                    <span className="text-gray-500">Purchased: <strong className="text-gray-800 font-semibold">500h</strong></span>
+                    <span className="text-gray-300">·</span>
+                    <span className="text-gray-500">Billed: <strong className="text-gray-800 font-semibold">250h</strong></span>
+                    <span className="text-gray-300">·</span>
+                    <span className="text-gray-500">Spent: <strong className="text-indigo-700 font-semibold">220:00</strong></span>
+                    <span className="text-gray-300">·</span>
+                    <span className="text-gray-500">Balance: <strong className="text-green-600 font-semibold">280:00</strong></span>
+                    <span className="inline-flex items-center px-2 py-0.5 rounded bg-amber-50 border border-amber-200 text-amber-800 text-[11px] font-medium">
+                      Expiry: 26-Nov-2026
+                    </span>
+                  </div>
+                )}
+                {projectModel === 'Hire Base' && (
+                  <div className="flex items-center gap-2 text-xs">
+                    <span className="text-gray-500">Contract Start: <strong className="text-gray-800 font-semibold">01-Nov-2026</strong></span>
+                    <span className="text-gray-300">·</span>
+                    <span className="text-gray-500">Contract End: <strong className="text-gray-800 font-semibold">28-Nov-2026</strong></span>
+                    <span className="inline-flex items-center px-2 py-0.5 rounded bg-indigo-50 border border-indigo-200 text-indigo-700 text-[11px] font-semibold">
+                      Remaining: 8 days
+                    </span>
+                  </div>
+                )}
+              </div>
             </div>
 
             <div className="flex items-center gap-2">
@@ -1939,19 +1978,7 @@ export default function GanttBoard() {
         </div>
       ) : (
         /* Gantt View */
-        <div className="flex flex-col h-[calc(100vh-60px-40px-40px)] overflow-hidden select-none">
-
-          {/* ── Project Hours KPI Strip (Story 3 & Story 7) ── */}
-          <ProjectHoursStrip
-            model={projectModel}
-            onOpenResourcePlanner={() => {
-              setUnscheduledOpen(false)
-              setPanel(null)
-              setCreateModalOpen(false)
-              setCompanyGanttOpen(false)
-              setResourcePlannerOpen(true)
-            }}
-          />
+        <div className="flex flex-col h-[calc(100vh-60px-40px)] overflow-hidden select-none">
 
           {/* Mobile indicator strip (Story 9) */}
           {isMobileView && (
