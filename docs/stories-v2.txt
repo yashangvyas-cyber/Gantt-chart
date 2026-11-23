@@ -181,15 +181,18 @@ View access. Sprint dates set in the Backlog. Common rules apply.
 Project hours and sprints show in pinned top rows with the right colours and dates. Issue bars line up with them.
  ← Previous Read the plan on the Gantt Next Change dates from the Gantt → 
  Story 4 of 9 · replaces S5 + S9
-## Change dates from the Gantt
+## Change dates and schedule tasks from the Gantt
  Role Project Manager 
- Goal to drag bars and drop undated issues on the chart 
- Benefit I can schedule work without opening the issue panel 
+ Goal to drag bars to reschedule work and click or drag on the dedicated "+ Add Task" row to create new tasks 
+ Benefit I can manage sprint schedules and add new tasks directly on the calendar canvas without opening separate forms 
 ### Business Context
- Business Scenario: A client requests a schedule shift: "Postpone campaign deliverables by 3 days and shift the final completion deadline accordingly."
- Current Limitation: The PM must open 10 individual task details, manually edit both Start and Due dates in forms, and save each one — requiring dozens of repetitive interactions.
- Solution & Workflow: On the Gantt chart, the PM drags the task bar forward by 3 days — updating both Start and Due dates in a single motion. Dragging a bar edge expands or contracts duration. Hovering over empty timeline cells reveals a circular handle with a "Click or drag to Create Task" tooltip, enabling 1-click task creation or drag-range scheduling with dates and assignees pre-filled. An undo notification enables 1-click reversion within 10 seconds. Undated backlog tasks in the Unscheduled drawer can be scheduled directly by inputting dates.
- Business Value: Reduces sprint rescheduling time from 20 minutes to seconds while preserving an exact audit history.
+ Business Scenario: A client requests a schedule shift: "Postpone campaign deliverables by 3 days and shift the final completion deadline accordingly," along with scheduling a newly identified task for next week.
+ Current Limitation: Project managers must open individual task modal forms to edit dates manually, and creating a task requires leaving the Gantt view or opening full creation modals from scratch.
+ Solution & Workflow:
+ • Rescheduling existing tasks: On the Gantt chart, the PM drags a task bar forward by 3 days — updating both Start and Due dates in a single smooth motion. Dragging a bar edge expands or contracts duration. An undo toast enables 1-click reversion within 10 seconds. Releasing a dragged bar does not pop open the details panel.
+ • Adding new tasks on the canvas: Each scheduled task occupies its own dedicated horizontal row — multiple tasks are never crowded onto the same row. A dedicated, subtle greyed-out "+ Add Task" row is placed beneath the task rows (and under each developer group). Hovering over any date cell on the "+ Add Task" line displays a circular handle with a "Click or drag to Create Task" tooltip. Clicking on a date or dragging across a date range opens the Create Issue modal with Start Date and Due Date pre-filled to that range (and Assignee pre-filled if under a developer).
+ • Unscheduled drawer: Backlog tasks without dates can be scheduled directly by inputting dates or dragging onto the calendar.
+ Business Value: Reduces sprint rescheduling and new task planning time from 20 minutes to seconds while preserving an exact audit history.
  Who uses it
  Project Manager Team Member 
  What it touches
@@ -198,31 +201,33 @@ Project hours and sprints show in pinned top rows with the right colours and dat
 Edit access. Common rules apply. 
  [IMG] Drag a bar to change its dates. Click to enlarge [IMG] The Unscheduled button in the toolbar. Click to enlarge 
 ### Steps
- 9 NEW Hover over empty timeline cells to reveal "Click or drag to Create Task" handle/tooltip; clicking or dragging across dates opens Create Issue modal with Start/Due dates and Assignee pre-filled.
- NEW Drag the body of a bar. Start Date and Due Date move by the same number of days.
+ 10 NEW Drag the body of a bar. Start Date and Due Date move by the same number of days.
  NEW Drag the left edge to change Start Date. Drag the right edge to change Due Date.
- Release. Both dates save and an Undo toast shows. Open the issue panel and History tab to see the change.
- NEW Click “Unscheduled” in the toolbar. It shows the count of issues with no dates and opens a side panel. Search by Key or Title.
- NEW Drag an issue from the panel onto an empty spot on the calendar. Start Date and Due Date follow the drop position. A solid bar appears and the count falls by one.
- NEW No dragging? Click the issue in the panel and pick dates in a date picker. The result is the same.
- NEW Or choose a Sprint in the issue panel. A light bar spans that sprint’s Start Date to End Date.
- A teammate with View access opens the same Gantt and sees the new dates. The drag control stays hidden.
+ Release. Both dates save and an Undo toast shows for 10 seconds. Releasing does not open the details panel.
+ NEW Each scheduled task occupies its own dedicated horizontal line.
+ NEW A subtle, greyed-out "+ Add Task" line is displayed below tasks and developer groups.
+ NEW Hovering on any date cell of the "+ Add Task" line reveals a circular handle with "Click or drag to Create Task" tooltip.
+ NEW Clicking a date on the "+ Add Task" line opens the Create Issue modal with that date pre-filled as Start and Due Date.
+ NEW Dragging across dates on the "+ Add Task" line displays a dashed preview bar and opens Create Issue modal with Start Date and Due Date pre-filled to that range.
+ NEW Click “Unscheduled” in the toolbar to open the drawer; drag an undated issue onto the calendar or set dates directly.
+ A teammate with View access opens the same Gantt and sees the updated dates. Drag handles stay hidden for View access.
 ### Fields
  3 Field Type Required Format Error message
  Start Date Date Optional Calendar days, DD-MMM-YYYY. Set by the drop position. NEW “Start Date should be on or before Due Date.” 
  Due Date Date Optional Calendar days, DD-MMM-YYYY. Set by the drop position. NEW “Due Date should be on or after Start Date.” 
  Search Alphanumeric Optional Matches Key or Title in the Unscheduled list. — 
 ### Rules to check
- 6 Edit access can drag. View access reads the chart.
+ 6 Edit access can drag and create. View access reads the chart.
  Two people editing the same bar: both entries stay in History. The latest save shows on refresh.
+ Each task row is reserved for exactly one task. Creating new tasks happens on the dedicated "+ Add Task" line.
  No dates and no sprint: the issue stays in the Unscheduled list.
  No dates but a sprint: a light bar spans the sprint.
- Due Date and Estimate but no Start Date: a dashed bar ends on the Due Date. Its length is 8 hours to 1 working day.
- The Unscheduled list stays searchable on large boards (for example 765 Backlog and 724 To Do issues).
+ The Unscheduled list stays searchable on large boards.
  When it is done
-The issue has its new dates. The bar shows them and History records the change. A scheduled issue leaves the Unscheduled list.
+The issue has its new dates. The bar shows them and History records the change. A newly created task appears as its own row on the chart.
  ← Previous See project hours and sprints on top Next Link issues and compare with a baseline → 
  Story 5 of 9 · replaces S6 + S7 + S8
+
 ## Link issues and compare with a baseline
  Role Delivery Head 
  Goal dependency lines and a saved baseline on the Gantt 
@@ -310,14 +315,15 @@ A PDF of the current view is saved and a working client link is ready. The clien
  Story 7 of 9 · replaces S13
 ## Plan people on a Hire Base project
  Role Delivery Head 
- Goal developer rows, contract bands and a double-booking warning on a Hire Base Gantt 
- Benefit I can plan dedicated people across projects without clashes 
+ Goal developer rows and contract duration bands on a Hire Base Gantt 
+ Benefit I can plan dedicated developers and track contract durations directly alongside sprint tasks 
 ### Business Context
  Business Scenario: A client retains dedicated developers (e.g., Liam Brooks and Sofia Reyes) on a monthly Hire Base contract ending on 28-Nov.
- Current Limitation: Dedicated resources might inadvertently be assigned tasks across different projects by multiple project managers, resulting in contractual double-booking.
+ Current Limitation: Delivery heads have to look up developer contract end dates in separate spreadsheets while assigning tasks on the board.
  Solution & Workflow:
- • Developer Contract Bands: Grouping by developer displays horizontal contract duration bands (e.g., 01-Nov to 28-Nov, 8 days left). Tasks scheduled outside active contract dates trigger boundary alerts.
- • Double-Booking Warning: If a developer is simultaneously scheduled on another project (e.g. Apex E-Commerce), a red ⚠️ Double-Booked banner highlights the clash with a [Resolve] shortcut to reallocate capacity.
+ • Developer Contract Bands: Grouping by developer displays horizontal contract duration bands directly on developer header rows (e.g. Contract: 01-Nov – 28-Nov · 8 days left) without overlapping task bars. Left table developer rows include subtle ⓘ tooltip icons for full contract spans.
+ • Direct Developer Task Rows: Tasks assigned to each developer appear as dedicated child rows beneath their header row.
+ • Dedicated Developer Add Task Line: Each developer section includes a subtle "+ Add Task" line to schedule new tasks pre-assigned to that engineer.
  Business Value: Enforces dedicated developer contractual commitments and prevents client billing disputes.
  Who uses it
  Delivery Head Project Manager 
@@ -327,12 +333,11 @@ A PDF of the current view is saved and a working client link is ready. The clien
 View access. A Hire Base project with contract developers. Common rules apply. 
  [IMG] Developer rows and contract bands on the Gantt. Click to enlarge 
 ### Steps
- 6 Go to Projects → <project> → Resources. Read each developer’s contract Start Date and End Date.
- NEW Open the Gantt. It opens grouped by developer (Assignee), one row per person.
- NEW Contract bands span each developer’s contract dates. They show a Remaining Days counter from the Hirebase Report.
- NEW A developer on two projects for the same days gets a double-booking warning on the overlapping band.
- Open Side Navigation bar → Resource Planner. The overload strip below the chart marks the same developer. Use Week, Month or Quarter, and the Graph, % or Hours toggle.
- Change the allocation dates and go back to the Gantt. The warning clears.
+ 5 Go to Projects → <project> → Resources. Read each developer’s contract Start Date and End Date.
+ NEW Open the Gantt. It opens grouped by developer (Assignee), one header row per person.
+ NEW Contract bands span each developer’s contract dates directly on the header row, showing contract start, end, and remaining days.
+ NEW Tasks assigned to each developer appear on individual child rows beneath the developer header.
+ NEW Click or drag on the developer's "+ Add Task" line to create and schedule a new task pre-assigned to that developer.
 ### Fields
  4 Field Type Required Format Error message
  Assignee Dropdown Mandatory Project resources: Developer, Designer, Quality Analyst (QA). — 
@@ -340,14 +345,15 @@ View access. A Hire Base project with contract developers. Common rules apply.
  Contract End Date Date Optional DD-MMM-YYYY, for example 04-Dec-2026. — 
  Remaining Days Number (calculated) Display field Whole days left on the contract, for example 15. — 
 ### Rules to check
- 4 Shared days across projects raise a double-booking warning on the overlapping band.
+ 4 Contract duration bands render on the developer header row without overlapping task bars.
  Remaining Days comes from the hire contract record.
- The Resource Planner overload strip marks the same over-allocation.
  Grouping by developer uses the Assignee field on the board.
+ Tasks outside contract dates highlight with contract boundary indicators.
  When it is done
-The Hire Base Gantt shows developer rows, contract bands with Remaining Days and a double-booking warning that clears when the clash is removed.
+The Hire Base Gantt shows developer header rows with contract duration bands, remaining days, and child task rows beneath each developer.
  ← Previous Export as PDF and share a client link Next See all boards and all projects → 
  Story 8 of 9 · replaces S14 + S15
+
 ## See all boards and all projects
  Role Project Manager 
  Goal one Gantt across every board of a project and Projects Timeline on the Dashboard 
