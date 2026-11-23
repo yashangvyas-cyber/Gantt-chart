@@ -1,0 +1,425 @@
+ Gantt Chart — User Stories 
+ ☰ 
+# Gantt Chart — User Stories
+ Project Management · 9 stories
+ ← → to move · / to search 
+ i Read first ★ Common rules 1 Add a Start Date to an issue 2 Read the plan on the Gantt 3 See hours, milestones and sprints on top 4 Change dates from the Gantt 5 Link issues, find the critical path, compare with a baseline 6 Export as PDF and share a client link 7 Plan people on a Hire Base project 8 See all boards and all projects 9 Use the Gantt on mobile Start here
+## Read first
+ A Gantt is a calendar view of the board.
+ Each issue is a coloured bar from its Start Date to its Due Date. The team sees what happens when.
+ NEW = this part is to be built. Text without the tag already works in CollabCRM today.
+ The first version had 17 stories. Related ones are now merged into 9. Nothing is dropped. Rules that every story repeated now live on one page: Common rules .
+### Old story → new story
+ 9 New story Replaces
+ 1. Add a Start Date to an issue S1 
+ 2. Read the plan on the Gantt S2, S10, S11 
+ 3. See hours, milestones and sprints on top S3, S4 
+ 4. Change dates from the Gantt S5, S9 
+ 5. Link issues, find the critical path, compare with a baseline S6, S7, S8 
+ 6. Export as PDF and share a client link S12, S16 
+ 7. Plan people on a Hire Base project S13 
+ 8. See all boards and all projects S14, S15 
+ 9. Use the Gantt on mobile S17 
+### Words used in these stories
+ 14 Term Meaning
+ bar one coloured strip per issue, from Start Date to Due Date. 
+ today line a line that marks the viewer’s local date. 
+ past due an open issue past its Due Date, shown with a red outline. 
+ Epic summary bar one bar that spans all the children of an Epic. 
+ Sub-Task row a child issue shown under its parent. 
+ milestone a point in time shown on the project calendar. 
+ dependency line a line that joins two linked issues. 
+ critical path the chain that sets the project end date. 
+ baseline the saved first plan shown under today’s bars. 
+ Unscheduled list issues that have no Start Date or sprint. 
+ Group by a filter that gathers rows under a chosen heading. 
+ Quarter view a zoom that shows three months at once. 
+ Hire Base a project billed by developers and contract dates. 
+ client view link a link that opens a shared chart for reading. 
+ Next Common rules → 
+ Applies to every story
+## Common rules
+ Read these once. The stories do not repeat them.
+ Rule What it means
+ Access To read the Gantt: Task management → View. To change dates, link issues, save a baseline or create a client link: Task management → Edit (Project Management → Config → Access Levels). 
+ Where it lives Side Navigation bar → Tasks → <project> → Board → Gantt. Or Projects → <project> → Task Boards → View Task Board → Gantt. Every story starts here unless it says otherwise. The user is logged in with a registered Email ID and Password. 
+ NEW One toolbar All Gantt controls sit in one toolbar, left to right: Sprint, Group by, Type | Week, Month, Quarter, Today | Critical path, Baseline, Unscheduled | Share. Active filters show as chips with one “Clear all”. 
+ Bar colour The bar takes the colour of its status column on the board: To Do #2B83DE, In Progress #F7A23A, In Review #E23333, Ready For QA #7EC451, Closed #696969. 
+ NEW One hover card Point at any bar to see: status, Start Date, Due Date, Logged Time against Estimated Time, and the saved baseline dates when the baseline is on. 
+ Date changes Every Start Date or Due Date change (form, panel, drag, drop) adds a History entry: “<user name> updated Start Date to <date>”. Watchers are told through “Other changes (title, description, priority, etc.)” in Notification Settings. 
+ NEW Undo After a drag or drop, a toast says “Dates updated” with an Undo link for 10 seconds. 
+ Dates Calendar days, DD-MMM-YYYY. “Today” is the viewer’s local date. Start Date must be on or before Due Date, or nothing is saved. Messages: “Start Date should be on or before Due Date.” and “Due Date should be on or after Start Date.” 
+ Large boards Epics start collapsed. Rows load as the user scrolls. 
+ ← Previous Read first Next Add a Start Date to an issue → 
+ Story 1 of 9 · replaces S1
+## Add a Start Date to an issue
+ Role Project Manager 
+ Goal to set a Start Date on an issue 
+ Benefit every issue has a clear place on the schedule 
+### Simple Example se samjho: Yeh kyun chahiye?
+ Maan lo: Client ne ek bada feature diya — "Payment Gateway Integration" jo 20-Nov ko deliver karna hai aur dev team ko karne me 4 din lagenge.
+ 1. Purani Problem: Aaj ke CollabCRM me sirf Due Date (20-Nov) hoti hai. Developer ko kab shuru karna hai kisi ko pata nahi hota, to developer aakhri din (19 ya 20 ko) kaam shuru karta hai aur deliver late ho jata hai.
+ 2. Asli Kaam (Solution): Nayi issue banate waqt pop-up modal me Sprint ke theek neeche Start Date (17-Nov) aur Due Date (20-Nov) dono side-by-side select karenge. Form save hote hi developer aur PM dono ko saaf pata hai ki kaam 17 ko start hona hai, 20 ko nahi.
+ Waise sach bolun Sir, to bina Start Date ke Gantt ban hi nahi sakta, kyunki calendar pe bar kahan se shuru hogi wo Start Date hi decide karti hai.
+ Who uses it
+ Project Manager Team Member Delivery Head 
+ What it touches
+ Issue form and panel Issue History Notification Settings Roles and Access Levels 
+ Needs
+Edit access. A project with a task board. Common rules apply. 
+### Steps
+ 6 Go to Side Navigation bar → Tasks → <project> → Issue List. Click “Create Issue”.
+ NEW The drawer shows Start Date and Due Date side by side, under Sprint. The other fields stay as today:
+ Title Description Assignee Reporter Issue Type Priority Sprint Estimated Time 
+ Enter the Title. Pick the Issue Type:
+ Epic Story Task Bug 
+ Pick a Start Date and a Due Date. Click “Create”.
+ NEW Open the issue. The right-side panel shows Start Date next to Due Date.
+ NEW Click Start Date in the panel and pick a new day. It saves at once and the History tab logs it.
+### Fields
+ 2 Field Type Required Format Error message
+ Start Date Date Optional Date picker, placeholder “Select Date”, DD-MMM-YYYY, for example 30-Nov-2026. NEW “Start Date should be on or before Due Date.” 
+ Due Date Date Optional Same picker and format. NEW “Due Date should be on or after Start Date.” 
+### Rules to check
+ 3 Start Date must be on or before Due Date. If not, the issue is not saved.
+ Start Date can stay blank. With no Start Date and no sprint, the issue goes to the Unscheduled list.
+ Every change is logged and watchers are told (see Common rules).
+ When it is done
+The issue is saved with valid dates. They show in the panel, the Issue List and the Gantt.
+ ← Previous Common rules Next Read the plan on the Gantt → 
+ Story 2 of 9 · replaces S2 + S10 + S11
+## Read the plan on the Gantt
+ Role Project Manager 
+ Goal a Gantt tab on the task board 
+ Benefit I can read the plan on a calendar, narrow it to the work I review and zoom to the scale I need 
+### Simple Example se samjho: Yeh kyun chahiye?
+ Maan lo: Sprint me 40 alag-alag tasks chal rahe hain aur client puchta hai "aaj hum kahan khade hain aur agle hafte kya deliver hoga?"
+ 1. Purani Problem: Kanban board pe 40 cards khambho (columns) me tange hote hain. Kiska kaam kab chalega aur kaun kiske baad deliver hoga, ye calendar ki timeline pe dimaag me visualize karna padta hai.
+ 2. Asli Kaam (Solution): PM Tasks me Gantt tab kholta hai. Har task calendar ke dates par colored strip (bar) ban ke dikhta hai. Beech me vertical blue Today Line khadi hoti hai jo batati hai ki aaj ki date tak kitna kaam complete ho jana chahiye tha. Bar pe mouse le jaate hi Logged vs Estimated time aur dates ka clean card pop-up ho jata hai.
+ Waise sach bolun Sir, to isse PM ko daily standup me har developer se puchna nahi padta ki kab shuru kiya aur kab khatam karoge — screen kholte hi saaf dikh jata hai.
+ Who uses it
+ Project Manager Team Member Delivery Head 
+ What it touches
+ Link Issue Issue History Roles and Access Levels 
+ Needs
+View access. A board with issues, epics and milestones. Common rules apply. 
+ [IMG] The Gantt tab with sample data. Each coloured bar is one issue. Click to enlarge [IMG] The Sprint, Group by and Type filters. Click to enlarge [IMG] Week, Month, Quarter and Today buttons, and the today marker. Click to enlarge 
+### Steps
+ 9 Open the task board. It has these tabs:
+ Board Issue List Backlog Completed Sprints NEW Gantt Notification Settings 
+ NEW Click “Gantt”. The left grid shows:
+ Type icon Key Title Assignee Start Date Due Date 
+ NEW Each issue is one bar from Start Date to Due Date. The today line marks the viewer’s local date.
+ NEW An open issue past its Due Date gets a red outline. A dashed part reaches the today line.
+ NEW Use “Add Child” on a parent. Sub-Task rows sit under it with a collapse arrow. An Epic gets one summary bar over its children.
+ Click any row to open that issue’s panel.
+ NEW Narrow the chart from the toolbar. Filters combine:
+ Sprint Group by: None, Epic, Story, Task Type: Epic, Story, Task, Bug 
+ NEW Pick Week, Month or Quarter. Click “Today” to jump back to the today line.
+ NEW Weekends are shaded grey. Company holidays are shaded too (People → Config → Master Data → Holidays).
+### Fields
+ 5 Field Type Required Format Error message
+ Sprint Dropdown Optional None, Backlog, and every sprint including completed ones. — 
+ Group by Dropdown Optional None, Epic, Story, Task. — 
+ Type Dropdown Optional Epic, Story, Task, Bug. — 
+ Time zoom Button group Optional Week, Month, Quarter. Reuses the control on Daily Allocation. — 
+ Today Action Optional Jumps to the viewer’s local date. — 
+### Rules to check
+ 6 Bar colour follows the status column (see Common rules).
+ An empty board shows the project dates and milestones. The existing “Create” button adds the first issue.
+ Filters change what is shown. Issue data stays the same.
+ The today line and past-due outline stay visible in every zoom.
+ Each bar date change is saved in the issue History tab.
+ Large boards: epics start collapsed and rows load on scroll.
+ When it is done
+The user sees every board issue with the right icon, colour and dates. They can filter, zoom and open any issue.
+ ← Previous Add a Start Date to an issue Next See hours, milestones and sprints on top → 
+ Story 3 of 9 · replaces S3 + S4
+## See hours, milestones and sprints on top
+ Role Delivery Head 
+ Goal project hours, milestones and sprints above the issue rows 
+ Benefit I can judge plan and spend while I read the schedule 
+### Simple Example se samjho: Yeh kyun chahiye?
+ Maan lo: Aap teen alag models pe projects deliver kar rahe ho — Fixed Cost, Hourly, aur Hire Base.
+ 1. Fixed Cost Project: Client se payment milestone pe milni hai. Top pe Milestones row (M1, M2, M3) pinned rehti hai taaki tasks schedule karte waqt milestone date miss na ho.
+ 2. Hourly Project: Client ne 500 hours purchase kiye hain. Top pe strip saaf batati hai: Purchased: 500h | Billed: 250h | Spent: 220h | Balance: 280h aur contract ki Expiry Date line. Agar balance khatam hone lage ya expiry pass aaye, to PM ko turant alert mil jata hai ki client se top-up mangna hai. (Yahan milestones nahi hote).
+ 3. Hire Base Project: Monthly dedicated developer ka contract hai. Top pe contract start, end aur remaining days dikhte hain (milestones yahan bhi nahi hote).
+ Waise sach bolun Sir, to project manager ko ghanta fark nahi padta report me kya hai agar chart ke theek upar live hours aur milestones nahi dikhein.
+ Who uses it
+ Delivery Head Project Manager Client Team Member 
+ What it touches
+ Fixed Cost Report Hourly Report Hirebase Report Work Log and Billing Project Milestones tab Backlog and sprints 
+ Needs
+View access. Milestones added under Projects → <project> → Milestones. Sprint dates set in the Backlog. Common rules apply. 
+ [IMG] The project hours strip above the chart (Hourly project). Click to enlarge [IMG] Sprints and milestones on the top rows of the chart. Click to enlarge 
+### Steps
+ 8 Add a milestone: Side Navigation bar → Projects → <project> → Milestones → Add Milestone. Fill Milestone Name, Status, Estimated Date. Click “Submit”.
+ Set sprint dates: Tasks → <project> → Backlog → “Add Dates” on a sprint. Fill Sprint Title, Start Date, End Date, Sprint Goal. Click “Update”.
+ NEW Fixed Cost projects: the Milestones row sits above the Sprint row, both pinned while issue rows scroll. In Hourly and Hire Base projects, the Milestones row is hidden.
+ NEW Milestones use the colour from Config → Milestone Statuses. A milestone with no date sits under “No date”. Sprint bands span the sprint Start Date to End Date.
+ NEW The header shows hours for the project type:
+ Fixed Cost: Estimated, Top-Up, Total, Spent
+ Hourly: Total Purchased, Total Billed, Total Spent, Balance
+ Hire Base: contract Start and End
+ NEW Hourly: the Expiry Date is a line across the chart. Hire Base: the contract dates are bands across the chart.
+ Point at a bar to see Logged Time against Estimated Time (from Time Tracking and My Work Log).
+ Open Fixed Cost Report, Hourly Report or Hirebase Report. The values match the header.
+### Fields
+ 10 Field Type Required Format Error message
+ Milestone Name Alphanumeric Mandatory Free text. This is a required field. 
+ Status Dropdown Mandatory Pending, Invoice raised, Mail Generated, Payment received, and the other Milestone Statuses. This is a required field. 
+ Estimated Date Date Optional Date picker, DD-MMM-YYYY. — 
+ Sprint Title Alphanumeric Mandatory Free text. This is a required field. 
+ Sprint Start Date Date Optional Date picker in the “Edit Sprint - Default” drawer. NEW “Start Date should be on or before End Date.” 
+ Sprint End Date Date Optional Date picker in the same drawer. NEW “End Date should be on or after Start Date.” 
+ Total Hours Number (calculated) Display field Estimated Hours + Top-Up Hours, for example 1,000. — 
+ Spent Hours Number (calculated) Display field HH:MM, for example 250:00. — 
+ Balance Hours Number (calculated) Display field HH:MM, for example 2675:50. — 
+ Logged Time Number (calculated) Display field Days, hours, minutes, for example 0d 0h 0m. — 
+### Rules to check
+ 5 The header changes with the project’s Engagement Model.
+ The Expiry Date line shows for an Hourly project. It uses the date on the project header.
+ Reports keep their own data. The Gantt reads the same source, so the values match.
+ An issue moved to another sprint: its undated bar moves to the new sprint dates. A dated issue keeps its dates.
+ Completing a sprint moves open issues as the board does today. Their bars follow.
+ When it is done
+Hours, milestones and sprints show in pinned top rows with the right colours and dates. Issue bars line up with them.
+ ← Previous Read the plan on the Gantt Next Change dates from the Gantt → 
+ Story 4 of 9 · replaces S5 + S9
+## Change dates from the Gantt
+ Role Project Manager 
+ Goal to drag bars and drop undated issues on the chart 
+ Benefit I can schedule work without opening the issue panel 
+### Simple Example se samjho: Yeh kyun chahiye?
+ Maan lo: Client ka call aaya ki "Diwali offer campaign 3 din late start karo aur delivery date bhi 3 din aage badha do".
+ 1. Purani Problem: PM ko har task ka detail drawer kholna padta tha, Start Date edit karke save karo, Due Date edit karke save karo — 10 tasks ke liye 20 baar click karo.
+ 2. Asli Kaam (Drag & Drop): Gantt pe task bar ko mouse se pakad kar 3 din aage drag kar diya — Start Date aur Due Date dono ek sath shift ho gayi. Agar sirf duration badhani hai, to bar ke right edge ko pakad kar stretch kar do. Agar galti se move ho gaya, to turant bottom toast pe Undo daba do.
+ 3. Unscheduled Drawer: Jin tasks ki date nahi dali, wo right-side Unscheduled drawer me baithe hote hain. Wahan se direct pakad ke calendar pe drop kiya aur task schedule ho gaya.
+ Waise sach bolun Sir, to Gantt ka 80% maza isi drag & drop me hai, varna Excel sheet me aur Gantt me koi fark nahi rehta.
+ Who uses it
+ Project Manager Team Member 
+ What it touches
+ Issue form and panel Issue History Notification Settings Backlog and sprints Roles and Access Levels 
+ Needs
+Edit access. Common rules apply. 
+ [IMG] Drag a bar to change its dates. Click to enlarge [IMG] The Unscheduled button in the toolbar. Click to enlarge 
+### Steps
+ 8 NEW Drag the body of a bar. Start Date and Due Date move by the same number of days.
+ NEW Drag the left edge to change Start Date. Drag the right edge to change Due Date.
+ Release. Both dates save and an Undo toast shows. Open the issue panel and History tab to see the change.
+ NEW Click “Unscheduled” in the toolbar. It shows the count of issues with no dates and opens a side panel. Search by Key or Title.
+ NEW Drag an issue from the panel onto an empty spot on the calendar. Start Date and Due Date follow the drop position. A solid bar appears and the count falls by one.
+ NEW No dragging? Click the issue in the panel and pick dates in a date picker. The result is the same.
+ NEW Or choose a Sprint in the issue panel. A light bar spans that sprint’s Start Date to End Date.
+ A teammate with View access opens the same Gantt and sees the new dates. The drag control stays hidden.
+### Fields
+ 3 Field Type Required Format Error message
+ Start Date Date Optional Calendar days, DD-MMM-YYYY. Set by the drop position. NEW “Start Date should be on or before Due Date.” 
+ Due Date Date Optional Calendar days, DD-MMM-YYYY. Set by the drop position. NEW “Due Date should be on or after Start Date.” 
+ Search Alphanumeric Optional Matches Key or Title in the Unscheduled list. — 
+### Rules to check
+ 6 Edit access can drag. View access reads the chart.
+ Two people editing the same bar: both entries stay in History. The latest save shows on refresh.
+ No dates and no sprint: the issue stays in the Unscheduled list.
+ No dates but a sprint: a light bar spans the sprint.
+ Due Date and Estimate but no Start Date: a dashed bar ends on the Due Date. Its length is 8 hours to 1 working day.
+ The Unscheduled list stays searchable on large boards (for example 765 Backlog and 724 To Do issues).
+ When it is done
+The issue has its new dates. The bar shows them and History records the change. A scheduled issue leaves the Unscheduled list.
+ ← Previous See hours, milestones and sprints on top Next Link issues, find the critical path, compare with a baseline → 
+ Story 5 of 9 · replaces S6 + S7 + S8
+## Link issues, find the critical path, compare with a baseline
+ Role Delivery Head 
+ Goal dependency lines, the critical path and a saved baseline on the Gantt 
+ Benefit I can see what holds up work, what sets the end date and how far we moved from the first plan 
+### Simple Example se samjho: Yeh kyun chahiye?
+ Maan lo: Client ko bola ki 30 Nov ko project deliver karenge.
+ 1. Day 1 (Freeze Plan): Sabhi tasks ki dates set karke "Save Baseline" (Agreed plan) daba diya — ye original promise freeze ho gaya.
+ 2. Dependencies & Critical Path: Backend API khatam hone par hi Frontend UI banegi (Finish-to-Start line). Agar blocker task delay hota hai, to dependency line RED ho jayegi (conflict warning), lekin koi bhi task auto-shift nahi hoga taaki developers ka calendar disturb na ho. "Critical path" button on karte hi saaf dikhta hai ki kaunsa task delay hone se poori project delivery 30 Nov se aage slip ho jayegi.
+ 3. Day 15 (Kaam Delay Hua): Developer beemar hua to task ko Gantt pe aage khiska ke 05 Dec kar diya. Asli Kaam: Chart pe ek faint grey bar purani date (30 Nov) par chipki rehti hai aur colored bar nayi date (05 Dec) par. Hover karte hi saaf dikhta hai: "Planned: 30-Nov | Actual: 05-Dec (Delay: 5 days)". Client aur management ko crystal-clear proof milta hai ki original commitment kya tha aur kitne din delay hua.
+ Waise sach bolun Sir, to ye project manager ka sabse bada hathiyar hai audit aur client arguments me prove karne ke liye.
+ Who uses it
+ Delivery Head Project Manager Team Member 
+ What it touches
+ Link Issue Issue History Notification Settings 
+ Needs
+Edit access to link issues and save a baseline. Common rules apply. 
+ [IMG] Dependency lines between linked issues. Click to enlarge [IMG] The chain of issues ends at the project End Date. Click to enlarge [IMG] Save baseline and Show baseline. The grey bar under each bar is the saved plan. Click to enlarge 
+### Steps
+ 8 Go to Tasks → <project> → Issue List → <issue key> → Link Issue. Pick “Blocks” or “Is Blocked By”, pick the target issue, click “Link”. NEW History logs user name, link type and linked issue key.
+ NEW Open the Gantt. A dependency line joins linked issues:
+ Finish-to-start: ends at the blocked issue’s Start Date
+ Start-to-start: joins two Start Dates
+ Finish-to-finish: joins two Due Dates
+ NEW If a blocked issue starts before its blocker ends, the line turns red and the bar is flagged. Move the blocker and the linked issue moves with it. The conflict clears.
+ NEW Turn on “Critical path” in the toolbar. The chain of linked issues that sets the latest Due Date is highlighted from first issue to last. Other bars keep their status colours.
+ NEW Drag the last issue’s Due Date 3 days later. The End Date moves 3 days and the highlight follows the chain.
+ NEW Click “Baseline” on the toolbar, enter a name (e.g. Agreed plan) and click “Save baseline”. The original commitment dates of every dated issue are frozen.
+ NEW Drag a task forward to simulate a delay. A faint grey baseline bar stays stuck at the original dates underneath the current colored bar.
+ NEW Point at the bar to see planned vs actual dates and slip: “Planned: 30-Nov-2026 | Actual: 05-Dec-2026 (Delay: 5 days)”. Toggle “Show baseline” to show or hide the saved grey bars.
+### Fields
+ 4 Field Type Required Format Error message
+ Link relationship Dropdown Optional Is Blocked By, Blocks, Is Cloned By, Is Duplicated By, Duplicates, Related To. NEW On the Gantt: start-to-start and finish-to-finish. — 
+ Critical path Toggle Optional On, Off. — 
+ End Date Date (calculated) Display field DD-MMM-YYYY, from the last Due Date in the chain. — 
+ Baseline name Alphanumeric Mandatory Free text, for example Agreed plan. NEW “Baseline name is required.” 
+### Rules to check
+ 6 Existing link types are kept. Linked issues still show under Linked Issues on the panel.
+ Deleting an issue removes it and its lines from the chart.
+ The critical chain is made of issues joined by dependency lines. Its last issue carries the project end date.
+ A date change elsewhere keeps the highlighted chain that sets the end date.
+ The baseline keeps the first saved dates even after bars move: a faint grey bar stays stuck at the original dates under the moved bar and the hover card shows planned vs actual dates with delay in days.
+ Saving a baseline adds no History entry and leaves work logs untouched.
+ When it is done
+All links show as lines with the right direction and colour. The critical chain updates when dates or links change. The first plan sits under today’s bars.
+ ← Previous Change dates from the Gantt Next Export as PDF and share a client link → 
+ Story 6 of 9 · replaces S12 + S16
+## Export as PDF and share a client link
+ Role Project Manager 
+ Goal to export the Gantt as a PDF and share a client view link 
+ Benefit a client can follow the plan with or without a CollabCRM login 
+### Simple Example se samjho: Yeh kyun chahiye?
+ Maan lo: Friday sham ko client ko weekly project schedule dikhana hai, par client ko CollabCRM ka login ID aur password nahi dena kyunki wo internal tasks ya notes na dekh le.
+ 1. Asli Kaam (PDF Export): Share menu se Export as PDF dabaya — turant clean, high-resolution A4 landscape print-ready PDF download ho gayi jisme left side table aur right side calendar timeline ek page pe saaf aate hain.
+ 2. Asli Kaam (Client Link): Ya fir Copy Client Link kiya aur link WhatsApp ya email pe bhej diya. Client bina login kiye browser me live schedule dekh sakta hai, par drag-drop ya dates edit nahi kar sakta (read-only mode).
+ Waise sach bolun Sir, to client ko screenshots crop karke bhejne ki gandi aadat se yeh feature hamesha ke liye aazadi deta hai.
+ Who uses it
+ Client Project Manager Delivery Head 
+ What it touches
+ Client export Roles and Access Levels 
+ Needs
+Board access to export. Edit access to create the client link. Common rules apply. 
+ [IMG] The Export PDF button. Click to enlarge 
+### Steps
+ 7 Set the filters and zoom the client should see.
+ NEW Click “Share” in the toolbar. The menu has Export PDF and Client view link.
+ NEW “Export PDF” writes a PDF with:
+ Left grid: Type icon, Key, Title, Assignee, Start Date, Due Date
+ Bars
+ Pinned Milestones and Sprint rows
+ Today line
+ NEW “Client view link” creates a link and shows it in a dialog with a copy button. Copy it and send it.
+ NEW The client opens it in another browser, with no login. They see the saved filters, zoom, bars, Milestones and Sprint rows in reading mode.
+ NEW Turn the link off in the dialog to close access at any time.
+ Archived project: Side Navigation bar → Projects → Archived filter. The Gantt opens in reading mode. NEW Export PDF stays available.
+### Fields
+ 2 Field Type Required Format Error message
+ Export PDF Action Optional Makes a PDF of the chart with the current filters. — 
+ View link URL Optional Copyable link in the share dialog. — 
+### Rules to check
+ 4 The PDF and the shared view include the current filters, zoom, pinned rows, bars and today line.
+ Both read the same issue and milestone data as the board.
+ Anyone with board access can export. Access Levels has no separate export or share permission.
+ Turning the link off closes access for everyone who holds it.
+ When it is done
+A PDF of the current view is saved and a working client link is ready. The client can read the shared chart.
+ ← Previous Link issues, find the critical path, compare with a baseline Next Plan people on a Hire Base project → 
+ Story 7 of 9 · replaces S13
+## Plan people on a Hire Base project
+ Role Delivery Head 
+ Goal developer rows, contract bands and a double-booking warning on a Hire Base Gantt 
+ Benefit I can plan dedicated people across projects without clashes 
+### Simple Example se samjho: Yeh kyun chahiye?
+ Maan lo: Client ne Liam Brooks aur Sofia Reyes ko monthly dedicated hire kiya hai (Hire Base project) aur dono ka contract 28-Nov ko expire ho raha hai.
+ 1. Developer Contract Bands: Gantt kholte hi developers ke rows dikhte hain. Har developer ke naam ke aage uski contract duration ka blue band dikhta hai (e.g. 01-Nov to 28-Nov, 8 days left). Agar developer ke contract ke bahar task plan kiya to turant warning milti hai.
+ 2. Double-Booking Clash: Agar doosre project manager ne bhi Liam ko usi hafte kisi aur project me assign kar diya, to Liam ke row pe bold red ⚠️ Clashing [Resolve] button flashing shuru ho jayega. PM ko turant pata chal jata hai ki Liam over-allocated hai aur client clash pakad lega.
+ Waise sach bolun Sir, to Hire Base me agar developer double-book ho gaya to client payment rok deta hai — isliye yeh clash warning company ka paisa bachati hai.
+ Who uses it
+ Delivery Head Project Manager 
+ What it touches
+ Resource Planner Work Log and Billing Fixed Cost Report Hourly Report Hirebase Report 
+ Needs
+View access. A Hire Base project with contract developers. Common rules apply. 
+ [IMG] Developer rows and contract bands on the Gantt. Click to enlarge 
+### Steps
+ 6 Go to Projects → <project> → Resources. Read each developer’s contract Start Date and End Date.
+ NEW Open the Gantt. It opens grouped by developer (Assignee), one row per person.
+ NEW Contract bands span each developer’s contract dates. They show a Remaining Days counter from the Hirebase Report.
+ NEW A developer on two projects for the same days gets a double-booking warning on the overlapping band.
+ Open Side Navigation bar → Resource Planner. The overload strip below the chart marks the same developer. Use Week, Month or Quarter, and the Graph, % or Hours toggle.
+ Change the allocation dates and go back to the Gantt. The warning clears.
+### Fields
+ 4 Field Type Required Format Error message
+ Assignee Dropdown Mandatory Project resources: Developer, Designer, Quality Analyst (QA). — 
+ Contract Start Date Date Optional DD-MMM-YYYY, for example 01-Sep-2026. — 
+ Contract End Date Date Optional DD-MMM-YYYY, for example 04-Dec-2026. — 
+ Remaining Days Number (calculated) Display field Whole days left on the contract, for example 15. — 
+### Rules to check
+ 4 Shared days across projects raise a double-booking warning on the overlapping band.
+ Remaining Days comes from the hire contract record.
+ The Resource Planner overload strip marks the same over-allocation.
+ Grouping by developer uses the Assignee field on the board.
+ When it is done
+The Hire Base Gantt shows developer rows, contract bands with Remaining Days and a double-booking warning that clears when the clash is removed.
+ ← Previous Export as PDF and share a client link Next See all boards and all projects → 
+ Story 8 of 9 · replaces S14 + S15
+## See all boards and all projects
+ Role Project Manager 
+ Goal one Gantt across every board of a project and a company-wide Gantt on the Dashboard 
+ Benefit I can plan across boards and review all projects in one place 
+### Simple Example se samjho: Yeh kyun chahiye?
+ Maan lo: Delivery Head ya CEO ko review meeting me dekhna hai ki company ke 15 chal rahe projects kahan tak pahuche aur kaunsa project late chal raha hai.
+ 1. Purani Problem: Har project ke andar jao, tasks kholo, board badlo — 15 projects check karne me aadha ghanta lag jata tha aur overall company ka roadmap ek jagah nahi milta tha.
+ 2. Multi-Board View: Ek project ke andar Default Board aur Test Board dono ke issues ek hi Gantt me Board column badge ke sath merge hoke dikhte hain.
+ 3. Company Dashboard Timeline: Side navigation me Dashboard kholte hi Company-wide Gantt timeline khulti hai. Ek hi calendar pe saare projects (Fixed Cost, Hourly, Hire Base) ek ke neeche ek rows me dikhte hain with unke start/end duration aur milestones. Ek glance me pata chal jata hai kaunsa project on track hai aur kaunsa red alert pe hai.
+ Waise sach bolun Sir, to management level pe actual value yahi se aati hai jab poori company ka schedule ek hi screen pe roadmap ban ke dikhta hai.
+ Who uses it
+ Project Manager Delivery Head 
+ What it touches
+ No impact 
+ Needs
+View access to the projects and the Dashboard. Common rules apply. 
+ [IMG] The project selector: one Gantt for the whole project. Click to enlarge 
+### Steps
+ 6 Go to Projects → <project> → Task Boards. Note the boards, for example Default and Test. NEW Click “Project Gantt”.
+ NEW One grid and one calendar show issues, epics and milestones from all boards. A board column or grouping shows each row’s board. Each board keeps its own bars and status colours.
+ Open one board’s Gantt tab to go back. Both views read the same issue records.
+ NEW Go to Side Navigation bar → Dashboard. Read “Total Projects” and “Projects by Engagement Model & Status”. Open the company-wide Gantt panel:
+ Fixed Cost Hourly Hire Base 
+ NEW Each project is a row with its milestones marked. Start Date and End Date are bands. Week, Month, Quarter and Today work as on a board.
+ Click a project row to open that project’s Gantt.
+### Fields
+ 3 Field Type Required Format Error message
+ Project Dropdown Optional Projects the user can see (name and Engagement Model). — 
+ Board Dropdown Optional Boards of the chosen project, such as Default and Test. — 
+ Time zoom Button group Optional Week, Month, Quarter, Today. — 
+### Rules to check
+ 4 Each board keeps its own Gantt. The project view reads them all together.
+ An issue moved between boards keeps its dates and shows under its new board.
+ The project view uses the same Milestones and Backlog dates as the boards.
+ The company-wide chart reads dates and milestones from project records. All Engagement Models show together.
+ When it is done
+The user can compare every board of a project on one Gantt and open any project from the Dashboard timeline.
+ ← Previous Plan people on a Hire Base project Next Use the Gantt on mobile → 
+ Story 9 of 9 · replaces S17
+## Use the Gantt on mobile
+ Role Team Member 
+ Goal to read the Gantt on a mobile device 
+ Benefit I can check dates and blockers while away from my desk 
+ Who uses it
+ Team Member Project Manager Delivery Head Client 
+ What it touches
+ Mobile application Roles and Access Levels 
+ Needs
+View access. Logged in on a mobile device. Common rules apply. 
+### Steps
+ 6 NEW Open the Gantt. The grid and bars fit the narrow screen. These columns stay readable:
+ Key Title Assignee Start Date Due Date 
+ NEW Swipe sideways to move between weeks. Pinch to change zoom:
+ Week Month Quarter 
+ NEW Tap a bar to read status, dates and Logged Time. Tap a row to open the issue panel.
+ NEW Tap “Today” to return to the viewer’s local date. The today line and past-due outlines show.
+ NEW With Edit access, long-press a bar to drag it. A viewer reads the chart.
+ NEW Unscheduled issues get dates from the date picker, since dropping is hard on a small screen.
+### Fields
+ 2 Field Type Required Format Error message
+ Time zoom Button group Optional Week, Month, Quarter, with pinch and swipe. — 
+ Today Action Optional Returns to the viewer’s local date. — 
+### Rules to check
+ 3 Zoom and the today line work on mobile.
+ Drag on mobile follows Task management → Edit.
+ A past-due open issue keeps its red outline.
+ When it is done
+The user can read, zoom and move around the Gantt on a phone. They can edit dates there with the right permission.
+ ← Previous See all boards and all projects 
+ [IMG]
