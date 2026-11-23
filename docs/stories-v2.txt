@@ -236,9 +236,12 @@ The issue has its new dates. The bar shows them and History records the change. 
  Business Scenario: A client agreement establishes a committed delivery deadline of 30-Nov.
  Current Limitation: When task delays occur mid-sprint, dates are overwritten directly. At project sign-off, management lacks verifiable evidence comparing the initial contractual baseline against subsequent revisions.
  Solution & Workflow:
- • Freeze Plan (Day 1): After planning, the PM clicks "Save Baseline" (e.g. "Agreed Plan") to freeze original commitment dates.
+ • Multi-Baseline Snapshots (ClickUp Architecture): Clicking "Baselines" opens a dedicated side drawer managing all project plan versions (e.g. Baseline 1, Baseline 2).
+ • New Baseline on Every Save: Each time a PM saves a baseline, a new immutable snapshot is generated with a unique color swatch (Purple for Baseline 1, Emerald Green for Baseline 2). Old baselines are preserved rather than overwritten.
+ • Independent Visibility Toggles: Each baseline in the drawer features an independent toggle switch, allowing PMs to compare any combination of historical baselines simultaneously.
+ • Stacked Multi-Baseline Bars: On the Gantt canvas, each active baseline renders as a distinct dashed band beneath scheduled tasks in its assigned color.
+ • Hover Card Variance Tracking: Hovering over any task bar displays all active baselines with planned completion dates and precise delay slips (e.g. Baseline 1: 14-Nov (+6d slip) | Baseline 2: 18-Nov (+2d slip)).
  • Dependency Links: Dependent issues are visually linked (Finish-to-Start). If a blocker task slips past the start date of a successor, the connector line highlights in red to flag a scheduling conflict.
- • Track Variance (Day 15): When tasks slip to 05-Dec, a faint grey baseline bar remains anchored at 30-Nov beneath the colored bar. Hovering clearly displays: Planned: 30-Nov | Actual: 05-Dec (Delay: 5 days).
  Business Value: Delivers incontrovertible audit documentation for client governance and protects agency contractual scope.
  Who uses it
  Delivery Head Project Manager Team Member 
@@ -254,9 +257,10 @@ Edit access to link issues and save a baseline. Common rules apply.
  Start-to-start: joins two Start Dates
  Finish-to-finish: joins two Due Dates
  NEW If a blocked issue starts before its blocker ends, the line turns red and flags the scheduling conflict.
- NEW Click “Baseline” on the toolbar, enter a name (e.g. Agreed plan) and click “Save baseline”. The original commitment dates of every dated issue are frozen.
- NEW Drag a task forward to simulate a delay. A faint grey baseline bar stays stuck at the original dates underneath the current colored bar.
- NEW Point at the bar to see planned vs actual dates and slip: “Planned: 30-Nov-2026 | Actual: 05-Dec-2026 (Delay: 5 days)”. Toggle “Show baseline” to show or hide the saved grey bars.
+ NEW Click “Baselines” on the toolbar to open the Baselines side drawer. Click “+ New Baseline” to capture current task dates into a new named snapshot (e.g. Baseline 1, Baseline 2).
+ NEW Each saved baseline is assigned a distinct color (Purple, Emerald, Sky Blue, Amber) with its own toggle switch in the drawer. Toggling ON displays its dashed baseline band beneath task bars on the Gantt canvas.
+ NEW When tasks slip or dates move, dashed baseline bars stay anchored at their snapshot dates, allowing simultaneous visual comparison of multiple plan revisions.
+ NEW Hovering over any task bar displays planned dates and delay slips across all enabled baselines (e.g. “Baseline 1: 14-Nov (+6d) | Baseline 2: 18-Nov (+2d)”).
 ### Fields
  2 Field Type Required Format Error message
  Link relationship Dropdown Optional Is Blocked By, Blocks, Is Cloned By, Is Duplicated By, Duplicates, Related To. NEW On the Gantt: start-to-start and finish-to-finish. — 

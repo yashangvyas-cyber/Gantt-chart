@@ -168,7 +168,7 @@ function StatusPill({ status }) {
 
 // ─── Hover card (Story 2 & Story 5 baseline) ──────────────────────────────────
 
-function HoverCard({ issue, x, y, baseline }) {
+function HoverCard({ issue, x, y, baseline, baselines = [] }) {
   if (!issue) return null
   const devMeta = HIRE_BASE_DEVELOPERS.find(d => d.name === issue.assignee_name)
   const isOverContract = (() => {
@@ -180,7 +180,7 @@ function HoverCard({ issue, x, y, baseline }) {
 
   return (
     <div
-      className="absolute z-50 bg-white border border-gray-200 rounded-lg shadow-custom-popup-shadow p-3 w-[250px] pointer-events-none"
+      className="absolute z-50 bg-white border border-gray-200 rounded-lg shadow-custom-popup-shadow p-3 w-[270px] pointer-events-none"
       style={{ left: x + 12, top: y - 10 }}
     >
       <p className="text-xs font-semibold text-gray-800 mb-2 truncate">{issue.title}</p>
@@ -210,13 +210,31 @@ function HoverCard({ issue, x, y, baseline }) {
             <span>Due date exceeds contract (ends {devMeta.contract_end})</span>
           </div>
         )}
-        {baseline && (
-          <div className="flex items-center justify-between bg-gray-50 px-1.5 py-0.5 rounded border border-gray-200">
-            <span className="text-gray-600 font-medium text-[11px]">Baseline Plan</span>
-            <span className="text-gray-700 font-semibold text-[11px]">{baseline.start} – {baseline.due}</span>
+        {baselines && baselines.length > 0 && (
+          <div className="space-y-1 pt-1 border-t border-gray-100">
+            <span className="text-gray-500 text-[10px] font-semibold uppercase tracking-wider block">Baselines</span>
+            {baselines.map(b => {
+              const entry = b.data?.[issue.id]
+              if (!entry) return null
+              const delay = dayDiff(parseDate(entry.due), parseDate(issue.due_date))
+              return (
+                <div key={b.id} className="flex items-center justify-between text-[11px] bg-gray-50 px-2 py-0.5 rounded border border-gray-200">
+                  <span className="flex items-center gap-1.5 font-medium text-gray-700">
+                    <span className="w-2 h-2 rounded-full shrink-0" style={{ backgroundColor: b.color }} />
+                    <span className="truncate max-w-[90px]">{b.name}</span>
+                  </span>
+                  <span className="text-gray-600 font-mono text-[10px]">
+                    {entry.due}
+                    {delay > 0 && <span className="text-red-600 font-bold ml-1">+{delay}d</span>}
+                    {delay < 0 && <span className="text-emerald-600 font-bold ml-1">{delay}d</span>}
+                    {delay === 0 && <span className="text-gray-400 ml-1">±0</span>}
+                  </span>
+                </div>
+              )
+            })}
           </div>
         )}
-        <div className="flex items-center justify-between">
+        <div className="flex items-center justify-between pt-0.5 border-t border-gray-100">
           <span className="text-gray-500 text-[11px]">Logged / Est.</span>
           <span className="text-gray-700 font-medium text-[11px]">{issue.logged_hours}h / {issue.estimated_hours}h</span>
         </div>
@@ -1004,58 +1022,145 @@ function UnscheduledDrawer({ open, onClose, issues, onSchedule, onOpenDetail }) 
   )
 }
 
-// ─── Baseline Modal (Story 5) ─────────────────────────────────────────────────
+// ─── Baselines Drawer (Story 5 - ClickUp Multi-Baseline Architecture) ───────────
 
-function BaselineModal({ open, onClose, onSave, showBaseline, onToggleShow }) {
-  const [name, setName] = useState('Agreed plan')
+const BASELINE_PALETTE = ['#8B5CF6', '#10B981', '#3B82F6', '#F59E0B', '#EC4899', '#06B6D4']
+
+function BaselinesDrawer({
+  open,
+  onClose,
+  baselines,
+  onToggleBaseline,
+  onCreateBaseline,
+  onDeleteBaseline
+}) {
+  const [newTitle, setNewTitle] = useState('')
+  const [isCreating, setIsCreating] = useState(false)
 
   if (!open) return null
 
   return (
-    <div className="fixed inset-0 z-50 overflow-hidden flex items-center justify-center" data-html2canvas-ignore="true">
-      <div className="absolute inset-0 bg-gray-900/40" onClick={onClose} />
-      <div className="relative bg-white rounded-xl shadow-2xl w-[360px] p-5 z-10 space-y-4">
-        <div className="flex items-center justify-between border-b border-gray-100 pb-2">
-          <h3 className="text-sm font-semibold text-gray-800">Project Baseline</h3>
-          <button onClick={onClose} className="icon-x-close text-gray-400 hover:text-gray-600 text-sm" />
+    <Drawer
+      title={
+        <div className="flex items-center gap-2">
+          <span className="icon-calendar-check-02 text-indigo-600 text-lg" />
+          <span>Baselines ({baselines.length})</span>
         </div>
+      }
+      onClose={onClose}
+      width="w-[380px]"
+      bodyCls="p-4 space-y-4"
+    >
+      <div className="space-y-3">
+        {baselines.length === 0 ? (
+          <div className="text-center py-10 text-gray-400">
+            <span className="icon-calendar-check-02 text-3xl mb-2 inline-block opacity-40 text-indigo-500" />
+            <p className="text-xs font-medium text-gray-600">No baselines saved yet</p>
+            <p className="text-[11px] text-gray-400 mt-1">Capture your first baseline to track project schedule variances.</p>
+          </div>
+        ) : (
+          baselines.map((b) => (
+            <div
+              key={b.id}
+              className="p-3 rounded-lg border border-gray-200 hover:border-gray-300 bg-white transition-all shadow-xs flex items-center justify-between gap-2"
+            >
+              <div className="flex items-start gap-2.5 min-w-0">
+                <span
+                  className="w-3 h-3 rounded-full mt-0.5 shrink-0 shadow-xs"
+                  style={{ backgroundColor: b.color }}
+                />
+                <div className="min-w-0">
+                  <div className="text-xs font-semibold text-gray-800 truncate">{b.name}</div>
+                  <div className="text-[11px] text-gray-400 truncate mt-0.5">
+                    {b.createdAt} · {Object.keys(b.data || {}).length} tasks
+                  </div>
+                </div>
+              </div>
 
-        <div>
-          <label className="block text-xs font-semibold text-gray-700 mb-1">Baseline Name *</label>
-          <input
-            type="text"
-            value={name}
-            onChange={e => setName(e.target.value)}
-            className="w-full text-xs px-3 py-1.5 border border-gray-300 rounded-lg focus:outline-none focus:border-indigo-600"
-          />
-        </div>
+              <div className="flex items-center gap-2 shrink-0">
+                {/* Toggle Switch */}
+                <label className="relative inline-flex items-center cursor-pointer">
+                  <input
+                    type="checkbox"
+                    checked={b.enabled}
+                    onChange={() => onToggleBaseline(b.id)}
+                    className="sr-only peer"
+                  />
+                  <div className="w-8 h-4 bg-gray-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-3 after:w-3 after:transition-all peer-checked:bg-indigo-600" />
+                </label>
 
-        <div className="flex items-center justify-between p-2 bg-gray-50 rounded-lg border border-gray-200">
-          <span className="text-xs text-gray-700 font-medium">Show Baseline Bars</span>
-          <input
-            type="checkbox"
-            checked={showBaseline}
-            onChange={e => onToggleShow(e.target.checked)}
-            className="rounded text-indigo-600 focus:ring-indigo-500 w-4 h-4 cursor-pointer"
-          />
-        </div>
+                {/* Delete button */}
+                {baselines.length > 1 && (
+                  <button
+                    onClick={() => onDeleteBaseline(b.id)}
+                    title="Delete baseline"
+                    className="p-1 text-gray-300 hover:text-red-600 transition-colors"
+                  >
+                    <span className="icon-trash-01 text-xs" />
+                  </button>
+                )}
+              </div>
+            </div>
+          ))
+        )}
 
-        <div className="flex justify-end gap-2 pt-2">
-          <button
-            onClick={onClose}
-            className="px-3 py-1.5 text-xs font-semibold text-gray-600 hover:bg-gray-100 rounded-md"
-          >
-            Cancel
-          </button>
-          <button
-            onClick={() => { onSave(name); onClose() }}
-            className="px-4 py-1.5 text-xs font-semibold bg-indigo-600 text-white rounded-md hover:bg-indigo-700"
-          >
-            Save Baseline
-          </button>
-        </div>
+        {/* Inline Create Form */}
+        {isCreating && (
+          <div className="p-3 rounded-lg border border-indigo-200 bg-indigo-50/40 space-y-2.5 animate-fadeIn">
+            <label className="block text-[11px] font-semibold text-gray-700">New Baseline Name</label>
+            <input
+              type="text"
+              autoFocus
+              placeholder={`Baseline ${baselines.length + 1}`}
+              value={newTitle}
+              onChange={e => setNewTitle(e.target.value)}
+              className="w-full text-xs px-2.5 py-1.5 bg-white border border-gray-300 rounded focus:outline-none focus:border-indigo-600"
+              onKeyDown={e => {
+                if (e.key === 'Enter') {
+                  onCreateBaseline(newTitle.trim() || `Baseline ${baselines.length + 1}`)
+                  setNewTitle('')
+                  setIsCreating(false)
+                } else if (e.key === 'Escape') {
+                  setIsCreating(false)
+                }
+              }}
+            />
+            <div className="flex justify-end gap-2 pt-1">
+              <button
+                onClick={() => setIsCreating(false)}
+                className="px-2.5 py-1 text-[11px] text-gray-600 hover:bg-gray-200/60 rounded"
+              >
+                Cancel
+              </button>
+              <button
+                onClick={() => {
+                  onCreateBaseline(newTitle.trim() || `Baseline ${baselines.length + 1}`)
+                  setNewTitle('')
+                  setIsCreating(false)
+                }}
+                className="px-3 py-1 text-[11px] font-semibold bg-indigo-600 text-white rounded hover:bg-indigo-700"
+              >
+                Save Snapshot
+              </button>
+            </div>
+          </div>
+        )}
       </div>
-    </div>
+
+      {/* Footer / Add Baseline Button */}
+      <div className="pt-2">
+        <button
+          onClick={() => {
+            setIsCreating(true)
+            setNewTitle(`Baseline ${baselines.length + 1}`)
+          }}
+          className="w-full flex items-center justify-center gap-2 py-2 px-3 text-xs font-semibold text-indigo-700 bg-indigo-50 hover:bg-indigo-100 border border-indigo-200 rounded-lg transition-colors cursor-pointer"
+        >
+          <span className="icon-plus text-sm" />
+          + New Baseline
+        </button>
+      </div>
+    </Drawer>
   )
 }
 
@@ -1368,19 +1473,43 @@ export default function GanttBoard() {
   const [panel, setPanel]                     = useState(null)
   const [createModalOpen, setCreateModalOpen] = useState(initCreate)
   const [unscheduledOpen, setUnscheduledOpen] = useState(false)
-  const [baselineModalOpen, setBaselineModalOpen] = useState(false)
-  const [showBaseline, setShowBaseline]       = useState(initBaseline)
-  const [baselineData, setBaselineData]       = useState(() => {
-    if (initBaseline) {
-      return {
+  const [baselinesDrawerOpen, setBaselinesDrawerOpen] = useState(false)
+  const [baselines, setBaselines] = useState(() => [
+    {
+      id: 'base-1',
+      name: 'Baseline 1',
+      createdAt: '10-Nov-2026',
+      color: '#8B5CF6', // Purple (ClickUp style)
+      enabled: true,
+      data: {
+        'IT-55': { start: '01-Nov-2026', due: '20-Nov-2026' },
         'IT-56': { start: '01-Nov-2026', due: '07-Nov-2026' },
         'IT-57': { start: '06-Nov-2026', due: '14-Nov-2026' },
         'IT-58': { start: '13-Nov-2026', due: '20-Nov-2026' },
         'IT-59': { start: '18-Nov-2026', due: '25-Nov-2026' },
+        'IT-60': { start: '01-Nov-2026', due: '10-Nov-2026' },
+        'IT-61': { start: '10-Nov-2026', due: '18-Nov-2026' },
+        'IT-62': { start: '12-Nov-2026', due: '20-Nov-2026' },
+      }
+    },
+    {
+      id: 'base-2',
+      name: 'Baseline 2',
+      createdAt: '15-Nov-2026',
+      color: '#10B981', // Emerald Green (ClickUp style)
+      enabled: true,
+      data: {
+        'IT-55': { start: '01-Nov-2026', due: '22-Nov-2026' },
+        'IT-56': { start: '01-Nov-2026', due: '10-Nov-2026' },
+        'IT-57': { start: '08-Nov-2026', due: '18-Nov-2026' },
+        'IT-58': { start: '15-Nov-2026', due: '24-Nov-2026' },
+        'IT-59': { start: '20-Nov-2026', due: '28-Nov-2026' },
+        'IT-60': { start: '01-Nov-2026', due: '12-Nov-2026' },
+        'IT-61': { start: '12-Nov-2026', due: '22-Nov-2026' },
+        'IT-62': { start: '15-Nov-2026', due: '25-Nov-2026' },
       }
     }
-    return {}
-  })
+  ])
   const [anchorDate, setAnchorDate]           = useState(new Date(2026, 10, 1))
   const [datePickerOpen, setDatePickerOpen]   = useState(false)
   const [clientMode, setClientMode]           = useState(initClient)
@@ -1921,20 +2050,36 @@ export default function GanttBoard() {
         }] : [])
       ]
     }
-    setIssues(prev => [newIssue, ...prev])
+    setIssues(prev => [...prev, newIssue])
     setUndoSnapshot({ issueId: newKey, prevStart: '', prevDue: '' })
     setUndoToast(true)
   }
 
-  function handleSaveBaseline(name) {
+  function handleCreateBaseline(customName) {
     const map = {}
     for (const item of issues) {
       if (item.start_date && item.due_date) {
         map[item.id] = { start: item.start_date, due: item.due_date }
       }
     }
-    setBaselineData(map)
-    setShowBaseline(true)
+    const color = BASELINE_PALETTE[baselines.length % BASELINE_PALETTE.length]
+    const newBaseline = {
+      id: `base-${Date.now()}`,
+      name: customName || `Baseline ${baselines.length + 1}`,
+      createdAt: 'Just now',
+      color,
+      enabled: true,
+      data: map
+    }
+    setBaselines(prev => [...prev, newBaseline])
+  }
+
+  function handleToggleBaseline(id) {
+    setBaselines(prev => prev.map(b => b.id === id ? { ...b, enabled: !b.enabled } : b))
+  }
+
+  function handleDeleteBaseline(id) {
+    setBaselines(prev => prev.filter(b => b.id !== id))
   }
 
   // Connector lines between linked issues (Story 5)
@@ -2587,17 +2732,23 @@ export default function GanttBoard() {
                 </div>
               )}
 
-              {/* Baseline toggle */}
+              {/* Baselines Drawer Button (ClickUp style) */}
               <button
-                onClick={() => setBaselineModalOpen(true)}
+                onClick={() => setBaselinesDrawerOpen(true)}
                 className={`px-2.5 py-1 rounded-lg text-xs font-semibold border transition-all flex items-center gap-1.5 shadow-2xs ${
-                  showBaseline
+                  baselines.some(b => b.enabled)
                     ? 'bg-indigo-600 border-indigo-700 text-white shadow-xs'
                     : 'border-gray-300 bg-white text-gray-700 hover:bg-gray-50'
                 }`}
+                title="Manage project baselines and compare snapshots"
               >
-                <span>Baseline</span>
-                {showBaseline && <span className="bg-white/20 text-white rounded px-1 text-[10px]">ON</span>}
+                <span className="icon-calendar-check-02 text-xs" />
+                <span>Baselines</span>
+                <span className={`px-1.5 py-0.2 rounded-full text-[10px] font-bold ${
+                  baselines.some(b => b.enabled) ? 'bg-white/20 text-white' : 'bg-gray-100 text-gray-700'
+                }`}>
+                  {baselines.filter(b => b.enabled).length}
+                </span>
               </button>
 
               {/* Unscheduled Drawer Button */}
@@ -3020,7 +3171,6 @@ export default function GanttBoard() {
                   const sprint = issue.sprint_id ? GANTT_SPRINTS.find(s => s.id === issue.sprint_id) : null
                   const sprintStart = sprint ? parseDate(sprint.start) : null
                   const sprintEnd   = sprint ? parseDate(sprint.end) : null
-                  const baseEntry = baselineData[issue.id]
 
                   return (
                     <div key={issue.id} className="relative flex" style={{ height: ROW_H }}>
@@ -3032,21 +3182,33 @@ export default function GanttBoard() {
                         />
                       ))}
 
-                      {/* Baseline Plan Faint Bar (Story 5) */}
-                      {showBaseline && baseEntry && (() => {
-                        const bStart = parseDate(baseEntry.start)
-                        const bDue   = parseDate(baseEntry.due)
-                        if (!bStart || !bDue) return null
-                        const bLeft  = dayDiff(viewStart, bStart) * cellW
-                        const bWidth = Math.max((dayDiff(bStart, bDue) + 1) * cellW, cellW)
-                        return (
-                          <div
-                            className="absolute top-[28px] h-[7px] rounded-sm bg-gray-400/50 border border-gray-500/40 pointer-events-none"
-                            style={{ left: bLeft, width: bWidth }}
-                            title={`Baseline: ${baseEntry.start} – ${baseEntry.due}`}
-                          />
-                        )
-                      })()}
+                      {/* Multi-Baseline Bars (ClickUp Style) */}
+                      {baselines
+                        .filter(b => b.enabled && b.data?.[issue.id])
+                        .map((b, bIdx) => {
+                          const entry = b.data[issue.id]
+                          const bStart = parseDate(entry.start)
+                          const bDue   = parseDate(entry.due)
+                          if (!bStart || !bDue) return null
+                          const bLeft  = dayDiff(viewStart, bStart) * cellW
+                          const bWidth = Math.max((dayDiff(bStart, bDue) + 1) * cellW, cellW)
+                          const topPos = 27 + (bIdx * 5)
+                          return (
+                            <div
+                              key={b.id}
+                              className="absolute rounded-[2px] pointer-events-none transition-all shadow-2xs"
+                              style={{
+                                left: bLeft,
+                                width: bWidth,
+                                top: `${topPos}px`,
+                                height: '4px',
+                                backgroundColor: `${b.color}33`,
+                                border: `1px dashed ${b.color}`,
+                              }}
+                              title={`${b.name}: ${entry.start} – ${entry.due}`}
+                            />
+                          )
+                        })}
 
                       {/* Scheduled Bar */}
                       {hasDates && (() => {
@@ -3074,7 +3236,8 @@ export default function GanttBoard() {
                             onMouseEnter={e => {
                               if (isDraggingThis) return
                               const rect = calAreaRef.current?.getBoundingClientRect()
-                              if (rect) setHovered({ issue, x: e.clientX - rect.left, y: e.clientY - rect.top, baseline: baseEntry })
+                              const activeBaselinesForIssue = baselines.filter(b => b.enabled && b.data?.[issue.id])
+                              if (rect) setHovered({ issue, x: e.clientX - rect.left, y: e.clientY - rect.top, baselines: activeBaselinesForIssue })
                             }}
                             onMouseLeave={() => setHovered(null)}
                             onClick={() => {
@@ -3183,7 +3346,7 @@ export default function GanttBoard() {
             </div>
 
             {/* Hover card */}
-            {hovered && <HoverCard issue={hovered.issue} x={hovered.x} y={hovered.y} baseline={hovered.baseline} />}
+            {hovered && <HoverCard issue={hovered.issue} x={hovered.x} y={hovered.y} baselines={hovered.baselines} />}
 
             {/* Issue Detail Modal (CollabCRM Central Pop-up) */}
             {panel && (
@@ -3220,13 +3383,14 @@ export default function GanttBoard() {
         initialData={createInitialData}
       />
 
-      {/* Baseline Modal (Story 5) */}
-      <BaselineModal
-        open={baselineModalOpen}
-        onClose={() => setBaselineModalOpen(false)}
-        onSave={handleSaveBaseline}
-        showBaseline={showBaseline}
-        onToggleShow={setShowBaseline}
+      {/* Baselines Drawer (Story 5 - ClickUp Multi-Baseline Architecture) */}
+      <BaselinesDrawer
+        open={baselinesDrawerOpen}
+        onClose={() => setBaselinesDrawerOpen(false)}
+        baselines={baselines}
+        onToggleBaseline={handleToggleBaseline}
+        onCreateBaseline={handleCreateBaseline}
+        onDeleteBaseline={handleDeleteBaseline}
       />
 
 
