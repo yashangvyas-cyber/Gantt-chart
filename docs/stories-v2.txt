@@ -105,8 +105,8 @@ View access. A board with issues and sprints. Common rules apply.
 ### Steps
  9 Open the task board. It has these tabs:
  Board Issue List Backlog Completed Sprints NEW Gantt Notification Settings 
- NEW Click “Gantt”. The left grid shows:
- Type icon Key Title Assignee Start Date Due Date 
+ NEW Click “Gantt”. To maximize horizontal canvas space, the left grid shows:
+ Type icon Key Title Status (Assignee and Start/Due dates are visualized directly on the timeline and available on issue hover) 
  NEW Each issue is one bar from Start Date to Due Date. The today line marks the viewer’s local date.
  NEW An open issue past its Due Date gets a red outline. A dashed part reaches the today line.
  NEW Use “Add Child” on a parent. Sub-Task rows sit under it with a collapse arrow. An Epic gets one summary bar over its children.
@@ -140,10 +140,10 @@ The user sees every board issue with the right icon, colour and dates. They can 
 ### Real-World Business Example
  Business Scenario: The organization manages projects across distinct commercial engagement models — Fixed Cost, Hourly Bucket, and Hire Base.
  Current Limitation: Project managers must navigate away to separate financial reports to check budget status while planning sprint activities.
- Solution & Workflow: The top KPI header dynamically adapts to the project's commercial model:
- • Fixed Cost: Shows Estimated Budget Hours vs Total Spent Hours alongside active sprint dates.
- • Hourly: Displays Total Purchased (500h), Billed (250h), Spent (220h), Balance (280h), and a contract Expiry Date marker.
- • Hire Base: Displays contract start/end dates and remaining days.
+ Solution & Workflow: The toolbar KPI section dynamically adapts via compact dropdown pills:
+ • Fixed Cost: Displays compact [ Spent: 210h / 500h ▾ ] pill revealing Estimated, Top-Up, and Spent hours.
+ • Hourly: Displays compact [ Balance: 280h ▾ ] pill revealing Total Purchased (500h), Billed (250h), Spent (220h), Balance (280h), and Contract Expiry Date.
+ • Hire Base: Displays contract overview in the toolbar with individual developer contract spans tracked on respective timeline rows.
  Business Value: Keeps commercial budget health directly visible alongside sprint scheduling, preventing unbilled team overruns.
  Who uses it
  Delivery Head Project Manager Client Team Member 
