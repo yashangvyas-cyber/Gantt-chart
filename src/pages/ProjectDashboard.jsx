@@ -113,8 +113,7 @@ export default function ProjectDashboard() {
         <div className="p-6 space-y-6">
           {/* Header Title & Intro */}
           <div>
-            <h1 className="text-xl font-bold text-gray-800">Project Management Dashboard</h1>
-            <p className="text-xs text-gray-500 mt-1">Overview of active projects, engagement models, and company-wide Gantt timeline.</p>
+            <h1 className="text-xl font-bold text-gray-800">Project Dashboard</h1>
           </div>
 
           {/* Overview KPI Cards (COPIED verbatim from yop_project_management_dashboard__default.html) */}
@@ -160,12 +159,9 @@ export default function ProjectDashboard() {
           <div className="bg-white border border-gray-200 rounded-xl shadow-xs overflow-hidden">
             {/* Header with Filters & Controls */}
             <div className="p-4 border-b border-gray-200 flex flex-wrap items-center justify-between gap-3 bg-gray-50/50">
-              <div className="flex items-center gap-3">
-                <span className="icon-calendar text-indigo-600 text-lg" />
-                <div>
-                  <h2 className="text-sm font-bold text-gray-800">Company-wide Gantt Timeline</h2>
-                  <p className="text-[11px] text-gray-500">Review all project durations, milestones, and engagement models in one place.</p>
-                </div>
+              <div className="flex items-center gap-2">
+                <span className="icon-calendar text-indigo-600 text-base" />
+                <h2 className="text-sm font-bold text-gray-800">Projects Timeline</h2>
               </div>
 
               <div className="flex items-center gap-3 flex-wrap">

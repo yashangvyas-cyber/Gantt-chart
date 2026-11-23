@@ -801,20 +801,14 @@ function ShareModal({ open, onClose, isClientLinkActive, onToggleClientLink, onO
         <div className="flex items-center justify-between border-b border-gray-100 pb-2">
           <div className="flex items-center gap-2">
             <span className="icon-share-07 text-indigo-600 text-base" />
-            <h3 className="text-sm font-semibold text-gray-800">Share Gantt Chart</h3>
+            <h3 className="text-sm font-semibold text-gray-800">Share Client Link</h3>
           </div>
           <button onClick={onClose} className="icon-x-close text-gray-400 hover:text-gray-600 text-sm" />
         </div>
 
-        <div>
-          <p className="text-xs text-gray-600">
-            Share a read-only view of the schedule with clients or external stakeholders without login.
-          </p>
-        </div>
-
         <div className="flex items-center justify-between p-3 bg-gray-50 rounded-lg border border-gray-200">
           <div>
-            <div className="text-xs font-semibold text-gray-800">Public Client View Link</div>
+            <div className="text-xs font-semibold text-gray-800">Client View Link</div>
             <div className="text-[11px] text-gray-500">
               {isClientLinkActive ? 'Anyone with this link can view the chart' : 'Link access is disabled'}
             </div>
@@ -1032,11 +1026,8 @@ function CompanyDashboardModal({ open, onClose, onSelectProject }) {
           <div>
             <h2 className="text-base font-bold text-gray-900 flex items-center gap-2">
               <span className="icon-grid-01 text-indigo-600 text-lg" />
-              Dashboard — Company Projects Gantt
+              Projects Timeline
             </h2>
-            <p className="text-xs text-gray-500 mt-0.5">
-              Cross-project timeline view across Fixed Cost, Hourly, and Hire Base engagements.
-            </p>
           </div>
           <button onClick={onClose} className="icon-x-close text-gray-400 hover:text-gray-600 text-base" />
         </div>
@@ -1712,10 +1703,10 @@ export default function GanttBoard() {
                   setCompanyGanttOpen(true)
                 }}
                 className="flex items-center gap-1.5 px-2.5 py-1.5 bg-gray-100 hover:bg-gray-200 text-gray-700 rounded-lg text-xs font-semibold transition-colors"
-                title="View company-wide timeline across projects"
+                title="Projects Timeline"
               >
                 <span className="icon-grid-01 text-xs text-indigo-600" />
-                <span>Dashboard Timeline</span>
+                <span>Projects Timeline</span>
               </button>
 
             </div>
