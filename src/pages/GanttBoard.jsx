@@ -2383,42 +2383,6 @@ export default function GanttBoard() {
                   )}
                 </div>
               )}
-              {projectModel === 'Hire Base' && (
-                <div
-                  className="relative"
-                  onMouseEnter={() => setKpiMenuOpen(true)}
-                  onMouseLeave={() => setKpiMenuOpen(false)}
-                >
-                  <button
-                    type="button"
-                    onClick={() => setKpiMenuOpen(prev => !prev)}
-                    className="flex items-center gap-1.5 px-2.5 py-1 rounded-lg border border-gray-300 bg-white text-xs font-semibold text-gray-700 hover:bg-gray-50 shadow-2xs cursor-pointer"
-                  >
-                    <span className="icon-calendar text-indigo-600 text-xs" />
-                    <span>Contract: <strong className="text-indigo-700 font-bold">8 days left</strong></span>
-                    <span className="text-[10px] text-gray-400">▾</span>
-                  </button>
-                  {kpiMenuOpen && (
-                    <div className="absolute right-0 mt-1 w-60 bg-white rounded-lg shadow-xl border border-gray-200 p-3 z-50 text-xs space-y-2">
-                      <div className="text-[11px] font-bold text-gray-400 uppercase tracking-wider border-b pb-1">
-                        Hire Base Contract
-                      </div>
-                      <div className="flex justify-between py-0.5">
-                        <span className="text-gray-500">Contract Start:</span>
-                        <strong className="text-gray-800">01-Nov-2026</strong>
-                      </div>
-                      <div className="flex justify-between py-0.5">
-                        <span className="text-gray-500">Contract End:</span>
-                        <strong className="text-gray-800">28-Nov-2026</strong>
-                      </div>
-                      <div className="flex justify-between py-0.5 border-t pt-1">
-                        <span className="text-gray-500">Remaining:</span>
-                        <strong className="text-indigo-700 font-bold">8 days</strong>
-                      </div>
-                    </div>
-                  )}
-                </div>
-              )}
 
               {/* Baseline toggle */}
               <button
@@ -2487,14 +2451,6 @@ export default function GanttBoard() {
                       </div>
                       <span className="truncate font-bold text-gray-900">{issue.groupTitle}</span>
                       <span className="text-[10px] text-gray-500 ml-1 font-normal">({issue.role})</span>
-                      {issue.hasClash && (
-                        <span
-                          className="ml-1.5 px-1.5 py-0.2 bg-red-100 text-red-700 text-[9px] font-bold rounded flex items-center gap-0.5"
-                          title="Double-booked clash on this timeline"
-                        >
-                          ⚠️ Clashing
-                        </span>
-                      )}
                       {projectModel === 'Hire Base' && (
                         <span
                           className="ml-1.5 text-gray-400 hover:text-indigo-600 cursor-pointer inline-flex items-center"
@@ -2739,33 +2695,6 @@ export default function GanttBoard() {
                             </span>
                           </div>
                         )}
-
-                        {/* Double-booking warning band if clashing (Story 7) */}
-                        {issue.hasClash && (() => {
-                          const oStart = parseDate('05-Nov-2026')
-                          const oEnd   = parseDate('12-Nov-2026')
-                          if (!oStart || !oEnd) return null
-                          const oLeft  = dayDiff(viewStart, oStart) * cellW
-                          const oWidth = (dayDiff(oStart, oEnd) + 1) * cellW
-                          return (
-                            <div
-                              className="absolute top-[4px] h-[30px] bg-red-100/95 border-2 border-dashed border-red-500 rounded z-20 flex items-center justify-between px-2 shadow-xs"
-                              style={{ left: oLeft, width: oWidth }}
-                              title="Double-booking conflict: Developer allocated on Apex E-Commerce for these dates"
-                            >
-                              <span className="text-red-800 text-[10px] font-bold truncate flex items-center gap-1">
-                                <span className="icon-alert-triangle text-red-600 text-xs" />
-                                ⚠️ Double-booked (Apex E-Commerce)
-                              </span>
-                              <button
-                                onClick={() => setResourcePlannerOpen(true)}
-                                className="ml-2 px-1.5 py-0.5 bg-red-600 hover:bg-red-700 text-white rounded text-[9px] font-bold whitespace-nowrap shadow-xs"
-                              >
-                                Resolve
-                              </button>
-                            </div>
-                          )
-                        })()}
                       </div>
                     )
                   }
