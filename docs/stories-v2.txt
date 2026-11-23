@@ -3,7 +3,7 @@
 # Gantt Chart — User Stories
  Project Management · 9 stories
  ← → to move · / to search 
- i Read first ★ Common rules 1 Add a Start Date to an issue 2 Read the plan on the Gantt 3 See hours, milestones and sprints on top 4 Change dates from the Gantt 5 Link issues and compare with a baseline 6 Export as PDF and share a client link 7 Plan people on a Hire Base project 8 See all boards and all projects 9 Use the Gantt on mobile Start here
+ i Read first ★ Common rules 1 Add a Start Date to an issue 2 Read the plan on the Gantt 3 See project hours and sprints on top 4 Change dates from the Gantt 5 Link issues and compare with a baseline 6 Export as PDF and share a client link 7 Plan people on a Hire Base project 8 See all boards and all projects 9 Use the Gantt on mobile Start here
 ## Read first
  A Gantt is a calendar view of the board.
  Each issue is a coloured bar from its Start Date to its Due Date. The team sees what happens when.
@@ -13,7 +13,7 @@
  9 New story Replaces
  1. Add a Start Date to an issue S1 
  2. Read the plan on the Gantt S2, S10, S11 
- 3. See hours, milestones and sprints on top S3, S4 
+ 3. See project hours and sprints on top S3, S4 
  4. Change dates from the Gantt S5, S9 
  5. Link issues and compare with a baseline S6, S7, S8 
  6. Export as PDF and share a client link S12, S16 
@@ -133,42 +133,37 @@ View access. A board with issues, epics and milestones. Common rules apply.
  Large boards: epics start collapsed and rows load on scroll.
  When it is done
 The user sees every board issue with the right icon, colour and dates. They can filter, zoom and open any issue.
- ← Previous Add a Start Date to an issue Next See hours, milestones and sprints on top → 
+ ← Previous Add a Start Date to an issue Next See project hours and sprints on top → 
  Story 3 of 9 · replaces S3 + S4
-## See hours, milestones and sprints on top
+## See project hours and sprints on top
  Role Delivery Head 
- Goal project hours, milestones and sprints above the issue rows 
+ Goal project hours and sprints above the issue rows 
  Benefit I can judge plan and spend while I read the schedule 
 ### Simple Example se samjho: Yeh kyun chahiye?
  Maan lo: Aap teen alag models pe projects deliver kar rahe ho — Fixed Cost, Hourly, aur Hire Base.
- 1. Fixed Cost Project: Client se payment milestone pe milni hai. Top pe Milestones row (M1, M2, M3) pinned rehti hai taaki tasks schedule karte waqt milestone date miss na ho.
+ 1. Fixed Cost Project: Client ke sath total budget hours agreed hain. Top pe strip saaf dikhati hai: Estimated Hours vs Spent Hours aur active sprint ki dates.
  2. Hourly Project: Client ne 500 hours purchase kiye hain. Top pe strip saaf batati hai: Purchased: 500h | Billed: 250h | Spent: 220h | Balance: 280h aur contract ki Expiry Date line. Agar balance khatam hone lage ya expiry pass aaye, to PM ko turant alert mil jata hai ki client se top-up mangna hai. (Yahan milestones nahi hote).
  3. Hire Base Project: Monthly dedicated developer ka contract hai. Top pe contract start, end aur remaining days dikhte hain (milestones yahan bhi nahi hote).
- Waise sach bolun Sir, to project manager ko ghanta fark nahi padta report me kya hai agar chart ke theek upar live hours aur milestones nahi dikhein.
+ Waise sach bolun Sir, to project manager ko ghanta fark nahi padta report me kya hai agar chart ke theek upar live project hours aur sprints na dikhein.
  Who uses it
  Delivery Head Project Manager Client Team Member 
  What it touches
- Fixed Cost Report Hourly Report Hirebase Report Work Log and Billing Project Milestones tab Backlog and sprints 
+ Fixed Cost Report Hourly Report Hirebase Report Work Log and Billing Backlog and sprints 
  Needs
-View access. Milestones added under Projects → <project> → Milestones. Sprint dates set in the Backlog. Common rules apply. 
- [IMG] The project hours strip above the chart (Hourly project). Click to enlarge [IMG] Sprints and milestones on the top rows of the chart. Click to enlarge 
+View access. Sprint dates set in the Backlog. Common rules apply. 
+ [IMG] The project hours strip above the chart (Hourly project). Click to enlarge 
 ### Steps
- 8 Add a milestone: Side Navigation bar → Projects → <project> → Milestones → Add Milestone. Fill Milestone Name, Status, Estimated Date. Click “Submit”.
- Set sprint dates: Tasks → <project> → Backlog → “Add Dates” on a sprint. Fill Sprint Title, Start Date, End Date, Sprint Goal. Click “Update”.
- NEW Fixed Cost projects: the Milestones row sits above the Sprint row, both pinned while issue rows scroll. In Hourly and Hire Base projects, the Milestones row is hidden.
- NEW Milestones use the colour from Config → Milestone Statuses. A milestone with no date sits under “No date”. Sprint bands span the sprint Start Date to End Date.
+ 5 Set sprint dates: Tasks → <project> → Backlog → “Add Dates” on a sprint. Fill Sprint Title, Start Date, End Date, Sprint Goal. Click “Update”.
+ NEW The Sprint row sits pinned at the top while issue rows scroll underneath.
  NEW The header shows hours for the project type:
  Fixed Cost: Estimated, Top-Up, Total, Spent
  Hourly: Total Purchased, Total Billed, Total Spent, Balance
- Hire Base: contract Start and End
+ Hire Base: contract Start and End (with remaining days)
  NEW Hourly: the Expiry Date is a line across the chart. Hire Base: the contract dates are bands across the chart.
  Point at a bar to see Logged Time against Estimated Time (from Time Tracking and My Work Log).
  Open Fixed Cost Report, Hourly Report or Hirebase Report. The values match the header.
 ### Fields
- 10 Field Type Required Format Error message
- Milestone Name Alphanumeric Mandatory Free text. This is a required field. 
- Status Dropdown Mandatory Pending, Invoice raised, Mail Generated, Payment received, and the other Milestone Statuses. This is a required field. 
- Estimated Date Date Optional Date picker, DD-MMM-YYYY. — 
+ 7 Field Type Required Format Error message
  Sprint Title Alphanumeric Mandatory Free text. This is a required field. 
  Sprint Start Date Date Optional Date picker in the “Edit Sprint - Default” drawer. NEW “Start Date should be on or before End Date.” 
  Sprint End Date Date Optional Date picker in the same drawer. NEW “End Date should be on or after Start Date.” 
@@ -183,7 +178,7 @@ View access. Milestones added under Projects → <project> → Milestones. Sprin
  An issue moved to another sprint: its undated bar moves to the new sprint dates. A dated issue keeps its dates.
  Completing a sprint moves open issues as the board does today. Their bars follow.
  When it is done
-Hours, milestones and sprints show in pinned top rows with the right colours and dates. Issue bars line up with them.
+Project hours and sprints show in pinned top rows with the right colours and dates. Issue bars line up with them.
  ← Previous Read the plan on the Gantt Next Change dates from the Gantt → 
  Story 4 of 9 · replaces S5 + S9
 ## Change dates from the Gantt
@@ -226,7 +221,7 @@ Edit access. Common rules apply.
  The Unscheduled list stays searchable on large boards (for example 765 Backlog and 724 To Do issues).
  When it is done
 The issue has its new dates. The bar shows them and History records the change. A scheduled issue leaves the Unscheduled list.
- ← Previous See hours, milestones and sprints on top Next Link issues and compare with a baseline → 
+ ← Previous See project hours and sprints on top Next Link issues and compare with a baseline → 
  Story 5 of 9 · replaces S6 + S7 + S8
 ## Link issues and compare with a baseline
  Role Delivery Head 

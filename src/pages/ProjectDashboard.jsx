@@ -345,26 +345,6 @@ export default function ProjectDashboard() {
                               {proj.name} ({proj.model})
                             </span>
                           </div>
-
-                          {/* Milestones marked along timeline (Fixed Cost only) */}
-                          {proj.model === 'Fixed Cost' && proj.milestones && proj.milestones.map((ms, idx) => {
-                            const dateStr = ms.split(' ')[0]
-                            const msDate = parseDate(dateStr)
-                            if (!msDate) return null
-                            const msLeft = dayDiff(viewStart, msDate) * cellW
-                            return (
-                              <div
-                                key={idx}
-                                className="absolute z-15 flex flex-col items-center pointer-events-none"
-                                style={{ left: msLeft - 10, top: 4 }}
-                              >
-                                <span className="icon-flag-01 text-xs text-amber-500 drop-shadow-xs" />
-                                <span className="text-[9px] font-bold text-gray-700 bg-white/90 border border-gray-200 rounded px-1 shadow-2xs whitespace-nowrap mt-0.5">
-                                  {ms.replace(`${dateStr} `, '')}
-                                </span>
-                              </div>
-                            )
-                          })}
                         </div>
                       )
                     })}

@@ -1652,8 +1652,8 @@ export default function GanttBoard() {
 
         const fromRowIdx = rowMap[r.id]
         // Coordinates relative to calendar canvas top-left:
-        // Pinned header has height 80px (Milestones: 40px, Sprints: 40px)
-        const PINNED_OFFSET = 80
+        // Pinned header has height 40px (Sprints row only)
+        const PINNED_OFFSET = 40
         const y1 = PINNED_OFFSET + fromRowIdx * ROW_H + ROW_H / 2
         const x1 = dayDiff(viewStart, fromDue) * cellW + cellW
         const y2 = PINNED_OFFSET + toRowIdx * ROW_H + ROW_H / 2
@@ -2139,18 +2139,10 @@ export default function GanttBoard() {
                 ))}
               </div>
 
-              {/* Pinned Milestones Row in Grid (Story 3 — Fixed Cost only) */}
-              {projectModel === 'Fixed Cost' && (
-                <div className="flex items-center px-3 border-b border-gray-200 bg-gray-50/70 font-semibold text-xs text-gray-700 sticky top-[40px] z-10" style={{ height: ROW_H }}>
-                  <span className="icon-flag-01 text-gray-400 mr-2 text-sm" />
-                  Milestones ({GANTT_MILESTONES.length})
-                </div>
-              )}
-
               {/* Pinned Sprints Row in Grid (Story 3) */}
               <div
-                className="flex items-center px-3 border-b border-gray-200 bg-gray-50/70 font-semibold text-xs text-gray-700 sticky z-10"
-                style={{ height: ROW_H, top: projectModel === 'Fixed Cost' ? 80 : 40 }}
+                className="flex items-center px-3 border-b border-gray-200 bg-gray-50/70 font-semibold text-xs text-gray-700 sticky top-[40px] z-10"
+                style={{ height: ROW_H }}
               >
                 <span className="icon-calendar-check-02 text-gray-400 mr-2 text-sm" />
                 Sprints ({GANTT_SPRINTS.length})
@@ -2308,39 +2300,10 @@ export default function GanttBoard() {
                   </div>
                 </div>
 
-                {/* Pinned Milestones Row on Canvas (Story 3 — Fixed Cost only) */}
-                {projectModel === 'Fixed Cost' && (
-                  <div className="relative flex border-b border-gray-200 bg-gray-50/40 sticky top-[40px] z-10" style={{ height: ROW_H }}>
-                    {days.map((d, i) => (
-                      <div
-                        key={i}
-                        className={`shrink-0 border-r border-gray-100 ${isWeekend(d) ? 'bg-gray-50/50' : ''}`}
-                        style={{ width: cellW, height: ROW_H }}
-                      />
-                    ))}
-                    {GANTT_MILESTONES.map(m => {
-                      const mDate = parseDate(m.date)
-                      if (!mDate) return null
-                      const left = dayDiff(viewStart, mDate) * cellW
-                      return (
-                        <div
-                          key={m.id}
-                          className="absolute top-[8px] h-[24px] rounded-full px-2.5 flex items-center gap-1.5 shadow-xs cursor-pointer text-white text-[10px] font-semibold"
-                          style={{ left, backgroundColor: m.color }}
-                          title={`${m.name} (${m.status}) - ${m.date}`}
-                        >
-                          <span className="w-1.5 h-1.5 rounded-full bg-white" />
-                          <span className="truncate">{m.name}</span>
-                        </div>
-                      )
-                    })}
-                  </div>
-                )}
-
                 {/* Pinned Sprints Row on Canvas (Story 3) */}
                 <div
-                  className="relative flex border-b border-gray-200 bg-gray-50/40 sticky z-10"
-                  style={{ height: ROW_H, top: projectModel === 'Fixed Cost' ? 80 : 40 }}
+                  className="relative flex border-b border-gray-200 bg-gray-50/40 sticky top-[40px] z-10"
+                  style={{ height: ROW_H }}
                 >
                   {days.map((d, i) => (
                     <div

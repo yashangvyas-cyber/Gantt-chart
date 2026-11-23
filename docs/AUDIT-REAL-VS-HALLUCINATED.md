@@ -7,9 +7,9 @@
    - Sprints pinned top row with status badges (In Progress, Ends in X days).
 
 2. **Billing-Model Aware Rules (Exact Business Logic):**
-   - **Fixed Cost:** Milestones visible on timeline with deliverable markers.
-   - **Hourly:** No milestones; Expiry date line & hours tracking.
-   - **Hire Base:** Developer contract allocation (no fake milestones).
+   - **Fixed Cost:** Sprints, tasks, and budgeted hours.
+   - **Hourly:** Expiry date line & hours tracking (Billed/Spent/Balance).
+   - **Hire Base:** Developer contract allocation & remaining days.
 
 3. **Core Timeline Drag & Drop (Story 1 & 2):**
    - Adjusting Start/Due dates by dragging bars directly updates the issue.
@@ -35,3 +35,7 @@
 
 4. **Quarter / Year Zoom on Task Level:**
    - *Reality:* Tasks 2-week ya 1-month ke horizon me plan hote hain. Quarter zoom sirf Story 8 dashboard ke liye real hai, task board ke liye noise hai.
+
+5. **Commercial Payment Milestones on Task Gantt [HATA DIYA GAYA]:**
+   - *Status:* Poori tarah se drop kar diya gaya hai.
+   - *Reason:* CollabCRM me Milestones financial/payment tranches hain (`Pending`, `Invoice raised`, `Mail Generated`, `Payment received`). Developer task board par payment invoice status dikhana 0% practical tha aur vertical space waste kar raha tha. Milestones `Projects › Milestones` tab me hi rahenge; Gantt chart ab sirf Sprints aur Tasks par focused hai.
