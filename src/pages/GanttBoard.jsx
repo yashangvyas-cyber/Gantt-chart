@@ -1393,6 +1393,7 @@ export default function GanttBoard() {
   const [draggingBar, setDraggingBar]         = useState(null)
 
   const calScrollRef = useRef(null)
+  const leftGridRef  = useRef(null)
   const calAreaRef   = useRef(null)
   const dragStateRef = useRef(null)
   const dragCreateRef = useRef(null)
@@ -1960,8 +1961,8 @@ export default function GanttBoard() {
 
         const fromRowIdx = rowMap[r.id]
         // Coordinates relative to calendar canvas top-left:
-        // Pinned header has height 40px (Sprints row only)
-        const PINNED_OFFSET = 40
+        // Pinned header has height 80px (Month/Day Header 40px + Sprints row 40px)
+        const PINNED_OFFSET = 80
         const y1 = PINNED_OFFSET + fromRowIdx * ROW_H + ROW_H / 2
         const x1 = dayDiff(viewStart, fromDue) * cellW + cellW
         const y2 = PINNED_OFFSET + toRowIdx * ROW_H + ROW_H / 2
@@ -2616,7 +2617,16 @@ export default function GanttBoard() {
           <div className="flex flex-1 overflow-hidden relative" ref={calAreaRef}>
 
             {/* Left Grid */}
-            <div className="flex-shrink-0 border-r border-gray-200 overflow-y-auto overflow-x-hidden bg-white" style={{ width: dynamicGridW }}>
+            <div
+              ref={leftGridRef}
+              onWheel={(e) => {
+                if (calScrollRef.current) {
+                  calScrollRef.current.scrollTop += e.deltaY
+                }
+              }}
+              className="flex-shrink-0 border-r border-gray-200 overflow-hidden bg-white select-none"
+              style={{ width: dynamicGridW }}
+            >
               {/* Day Header row alignment */}
               <div className="flex items-center bg-gray-50 border-b border-gray-200 sticky top-0 z-20 h-[40px]">
                 {dynamicCols.map(col => (
@@ -2632,7 +2642,7 @@ export default function GanttBoard() {
 
               {/* Pinned Sprints Row in Grid (Story 3) */}
               <div
-                className="flex items-center px-3 border-b border-gray-200 bg-gray-50/70 font-semibold text-xs text-gray-700 sticky top-[40px] z-10"
+                className="flex items-center px-3 border-b border-gray-200 bg-gray-50 font-semibold text-xs text-gray-700 sticky top-[40px] z-10"
                 style={{ height: ROW_H }}
               >
                 <span className="icon-calendar-check-02 text-gray-400 mr-2 text-sm" />
@@ -2772,7 +2782,15 @@ export default function GanttBoard() {
             </div>
 
             {/* Calendar Canvas */}
-            <div className="flex-1 overflow-x-auto overflow-y-auto relative bg-white" ref={calScrollRef}>
+            <div
+              className="flex-1 overflow-x-auto overflow-y-auto relative bg-white"
+              ref={calScrollRef}
+              onScroll={(e) => {
+                if (leftGridRef.current) {
+                  leftGridRef.current.scrollTop = e.target.scrollTop
+                }
+              }}
+            >
               <div style={{ width: Math.max(calendarWidth, 800), minHeight: '100%', position: 'relative' }}>
 
                 {/* Calendar Timeline Header (2-tier: Months + Days/Weeks) */}
@@ -2820,7 +2838,7 @@ export default function GanttBoard() {
 
                 {/* Pinned Sprints Row on Canvas (Story 3) */}
                 <div
-                  className="relative flex border-b border-gray-200 bg-gray-50/40 sticky top-[40px] z-10"
+                  className="relative flex border-b border-gray-200 bg-gray-50 sticky top-[40px] z-10"
                   style={{ height: ROW_H }}
                 >
                   {days.map((d, i) => (
@@ -2920,7 +2938,13 @@ export default function GanttBoard() {
 
                   if (issue.isAddRow) {
                     return (
-                      <div key={issue.id} className="relative flex group/addrow hover:bg-gray-50/40 transition-colors" style={{ height: ROW_H }}>
+                      <div key={issue.id} className="relative flex group/addrow hover:bg-indigo-50/20 transition-colors" style={{ height: ROW_H }}>
+                        {/* Faint hint guide on row hover */}
+                        <div className="absolute inset-y-0 left-2 flex items-center pointer-events-none opacity-0 group-hover/addrow:opacity-100 transition-opacity z-10">
+                          <span className="text-[10px] font-medium text-indigo-600/80 bg-white/95 px-2 py-0.5 rounded border border-dashed border-indigo-200 shadow-2xs">
+                            + Click or drag dates to schedule task for {issue.assignee_name || 'developer'}
+                          </span>
+                        </div>
                         {days.map((d, i) => {
                           const isHovered = hoverCell?.issueId === issue.id && hoverCell?.dayIdx === i && !dragCreate && !draggingBar
                           return (
