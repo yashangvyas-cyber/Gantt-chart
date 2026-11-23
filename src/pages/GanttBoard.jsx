@@ -1453,6 +1453,39 @@ export default function GanttBoard() {
           list.push({ ...child, depth: 1 })
         })
       })
+    } else if (groupBy === 'Epic') {
+      const epics = sourceIssues.filter(i => i.issue_type === 'Epic')
+      for (const epic of epics) {
+        list.push({ ...epic, depth: 0 })
+        if (!collapsed[epic.id]) {
+          const children = sourceIssues.filter(i => (epic.children || []).includes(i.key) || i.parent_id === epic.id || i.parent_id === epic.key)
+          children.forEach(c => list.push({ ...c, depth: 1 }))
+        }
+      }
+      const others = sourceIssues.filter(i => i.issue_type !== 'Epic' && !epics.some(e => (e.children || []).includes(i.key) || i.parent_id === e.id || i.parent_id === e.key))
+      others.forEach(i => list.push({ ...i, depth: 0 }))
+    } else if (groupBy === 'Story') {
+      const stories = sourceIssues.filter(i => i.issue_type === 'Story')
+      for (const story of stories) {
+        list.push({ ...story, depth: 0 })
+        if (!collapsed[story.id]) {
+          const children = sourceIssues.filter(i => (story.children || []).includes(i.key) || i.parent_id === story.id || i.parent_id === story.key)
+          children.forEach(c => list.push({ ...c, depth: 1 }))
+        }
+      }
+      const others = sourceIssues.filter(i => i.issue_type !== 'Story' && !stories.some(s => (s.children || []).includes(i.key) || i.parent_id === s.id || i.parent_id === s.key))
+      others.forEach(i => list.push({ ...i, depth: 0 }))
+    } else if (groupBy === 'Task') {
+      const tasks = sourceIssues.filter(i => i.issue_type === 'Task')
+      for (const task of tasks) {
+        list.push({ ...task, depth: 0 })
+        if (!collapsed[task.id]) {
+          const children = sourceIssues.filter(i => (task.children || []).includes(i.key) || i.parent_id === task.id || i.parent_id === task.key)
+          children.forEach(c => list.push({ ...c, depth: 1 }))
+        }
+      }
+      const others = sourceIssues.filter(i => i.issue_type !== 'Task' && !tasks.some(t => (t.children || []).includes(i.key) || i.parent_id === t.id || i.parent_id === t.key))
+      others.forEach(i => list.push({ ...i, depth: 0 }))
     } else {
       for (const issue of sourceIssues) {
         if (issue.parent_id) continue
@@ -1979,6 +2012,8 @@ export default function GanttBoard() {
               >
                 {groupBy === 'None' && <span className="icon-layers-three text-xs text-gray-500" />}
                 {groupBy === 'Epic' && <TypeIcon type="Epic" />}
+                {groupBy === 'Story' && <TypeIcon type="Story" />}
+                {groupBy === 'Task' && <TypeIcon type="Task" />}
                 {groupBy === 'Assignee' && <span className="icon-user-01 text-xs text-indigo-600" />}
                 <span>{groupBy === 'Assignee' ? 'Developer' : groupBy}</span>
                 <span className={`icon-chevron-${groupMenuOpen ? 'up' : 'down'} text-xs text-gray-400`} />
@@ -1988,6 +2023,8 @@ export default function GanttBoard() {
                   {[
                     { id: 'None', label: 'None', icon: <span className="icon-layers-three text-xs text-gray-500" /> },
                     { id: 'Epic', label: 'Epic', icon: <TypeIcon type="Epic" /> },
+                    { id: 'Story', label: 'Story', icon: <TypeIcon type="Story" /> },
+                    { id: 'Task', label: 'Task', icon: <TypeIcon type="Task" /> },
                     { id: 'Assignee', label: 'Developer', icon: <span className="icon-user-01 text-xs text-indigo-600" /> },
                   ].map(item => (
                     <button
