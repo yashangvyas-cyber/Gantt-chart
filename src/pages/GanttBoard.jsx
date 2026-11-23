@@ -245,13 +245,6 @@ function ProjectHoursStrip({ model, onOpenResourcePlanner }) {
             <div className="flex items-center gap-1.5"><span className="text-gray-500">Contract Start:</span><span className="font-semibold text-gray-800">{hours.contract_start}</span></div>
             <div className="flex items-center gap-1.5"><span className="text-gray-500">Contract End:</span><span className="font-semibold text-gray-800">{hours.contract_end}</span></div>
             <div className="flex items-center gap-1.5"><span className="text-gray-500">Remaining:</span><span className="font-semibold text-indigo-700">{hours.remaining_days}</span></div>
-            <button
-              onClick={onOpenResourcePlanner}
-              className="flex items-center gap-1 px-2.5 py-1 bg-indigo-50 hover:bg-indigo-100 border border-indigo-200 rounded text-indigo-700 font-semibold text-xs transition-colors"
-            >
-              <span className="icon-users-02 text-xs" />
-              Resource Planner
-            </button>
           </>
         )}
       </div>
