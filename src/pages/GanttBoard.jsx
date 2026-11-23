@@ -170,9 +170,17 @@ function StatusPill({ status }) {
 
 function HoverCard({ issue, x, y, baseline }) {
   if (!issue) return null
+  const devMeta = HIRE_BASE_DEVELOPERS.find(d => d.name === issue.assignee_name)
+  const isOverContract = (() => {
+    if (!devMeta?.contract_end || !issue.due_date) return false
+    const cEnd = parseDate(devMeta.contract_end)
+    const tDue = parseDate(issue.due_date)
+    return !!(cEnd && tDue && tDue > cEnd)
+  })()
+
   return (
     <div
-      className="absolute z-50 bg-white border border-gray-200 rounded-lg shadow-custom-popup-shadow p-3 w-[240px] pointer-events-none"
+      className="absolute z-50 bg-white border border-gray-200 rounded-lg shadow-custom-popup-shadow p-3 w-[250px] pointer-events-none"
       style={{ left: x + 12, top: y - 10 }}
     >
       <p className="text-xs font-semibold text-gray-800 mb-2 truncate">{issue.title}</p>
@@ -185,6 +193,23 @@ function HoverCard({ issue, x, y, baseline }) {
           <span className="text-gray-500 text-[11px]">Current Dates</span>
           <span className="text-gray-800 font-medium text-[11px]">{issue.start_date || '—'} – {issue.due_date || '—'}</span>
         </div>
+        {issue.assignee_name && (
+          <div className="flex items-center justify-between pt-0.5 border-t border-gray-100">
+            <span className="text-gray-500 text-[11px]">Assignee</span>
+            <div className="text-right">
+              <span className="text-gray-800 font-medium text-[11px] block">{issue.assignee_name}</span>
+              {devMeta && (
+                <span className="text-[10px] text-gray-500 block">Contract till {devMeta.contract_end}</span>
+              )}
+            </div>
+          </div>
+        )}
+        {isOverContract && (
+          <div className="bg-amber-50 border border-amber-200 text-amber-800 px-2 py-1 rounded text-[10px] font-medium flex items-center gap-1">
+            <span className="text-amber-600 font-bold">⚠️</span>
+            <span>Due date exceeds contract (ends {devMeta.contract_end})</span>
+          </div>
+        )}
         {baseline && (
           <div className="flex items-center justify-between bg-gray-50 px-1.5 py-0.5 rounded border border-gray-200">
             <span className="text-gray-600 font-medium text-[11px]">Baseline Plan</span>
@@ -2520,6 +2545,53 @@ export default function GanttBoard() {
                       <div className="flex justify-between py-0.5">
                         <span className="text-gray-500">Spent:</span>
                         <strong className="text-indigo-700 font-semibold">210h</strong>
+                      </div>
+                    </div>
+                  )}
+                </div>
+              )}
+              {projectModel === 'Hire Base' && (
+                <div
+                  className="relative"
+                  onMouseEnter={() => setKpiMenuOpen(true)}
+                  onMouseLeave={() => setKpiMenuOpen(false)}
+                >
+                  <button
+                    type="button"
+                    onClick={() => setKpiMenuOpen(prev => !prev)}
+                    className="flex items-center gap-1.5 px-2.5 py-1 rounded-lg border border-gray-300 bg-white text-xs font-semibold text-gray-700 hover:bg-gray-50 shadow-2xs cursor-pointer"
+                  >
+                    <span className="icon-users-01 text-indigo-600 text-xs" />
+                    <span>Team Contracts (<strong className="text-indigo-700 font-bold">{HIRE_BASE_DEVELOPERS.length}</strong>)</span>
+                    <span className="text-[10px] text-gray-400">▾</span>
+                  </button>
+                  {kpiMenuOpen && (
+                    <div className="absolute right-0 mt-1 w-72 bg-white rounded-lg shadow-xl border border-gray-200 p-3 z-50 text-xs space-y-2">
+                      <div className="flex items-center justify-between border-b pb-1">
+                        <span className="text-[11px] font-bold text-gray-400 uppercase tracking-wider">
+                          Active Team Contracts
+                        </span>
+                        <span className="text-[10px] bg-indigo-50 text-indigo-700 font-semibold px-1.5 py-0.5 rounded">
+                          Hire Base
+                        </span>
+                      </div>
+                      <div className="space-y-2 max-h-56 overflow-y-auto divide-y divide-gray-100">
+                        {HIRE_BASE_DEVELOPERS.map(dev => (
+                          <div key={dev.name} className="pt-1.5 first:pt-0">
+                            <div className="flex justify-between items-center">
+                              <span className="font-semibold text-gray-800">{dev.name}</span>
+                              <span className={`text-[10px] font-medium px-1.5 py-0.2 rounded ${
+                                dev.remaining_days <= 10 ? 'bg-amber-50 text-amber-700 border border-amber-200' : 'bg-green-50 text-green-700'
+                              }`}>
+                                {dev.remaining_days}d left
+                              </span>
+                            </div>
+                            <div className="flex justify-between text-[11px] text-gray-500 mt-0.5">
+                              <span>{dev.role}</span>
+                              <span>{dev.contract_start} – {dev.contract_end}</span>
+                            </div>
+                          </div>
+                        ))}
                       </div>
                     </div>
                   )}

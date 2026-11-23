@@ -321,8 +321,10 @@ A PDF of the current view is saved and a working client link is ready. The clien
  Business Scenario: A client retains dedicated developers (e.g., Liam Brooks and Sofia Reyes) on a monthly Hire Base contract ending on 28-Nov.
  Current Limitation: Delivery heads have to look up developer contract end dates in separate spreadsheets while assigning tasks on the board.
  Solution & Workflow:
+ • Toolbar Team Contracts Pill: A compact [ 👥 Team Contracts (4) ▾ ] dropdown pill in the toolbar lets managers inspect all active contracted engineers, dates, and days left in 1-click — regardless of which 'Group by' mode (Epic, Story, Task, Developer, None) is active.
  • Developer Contract Bands: Grouping by developer displays horizontal contract duration bands directly on developer header rows (e.g. Contract: 01-Nov – 28-Nov · 8 days left) without overlapping task bars. Left table developer rows include subtle ⓘ tooltip icons for full contract spans.
  • Direct Developer Task Rows: Tasks assigned to each developer appear as dedicated child rows beneath their header row.
+ • Task Bar Hover Card Contract Tracking: Hovering over any task bar displays the assigned developer's contract span (e.g. Contract till 28-Nov); if the task Due Date exceeds the contract end date, an instant amber indicator warns: ⚠️ Due date exceeds contract.
  • Dedicated Developer Add Task Line: Each developer section includes a subtle "+ Add Task" line to schedule new tasks pre-assigned to that engineer.
  Business Value: Enforces dedicated developer contractual commitments and prevents client billing disputes.
  Who uses it
