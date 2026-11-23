@@ -1992,7 +1992,7 @@ export default function GanttBoard() {
           </div>
 
           {/* Ends in days indicator */}
-          <div className="flex items-center gap-1 text-xs text-gray-500">
+          <div className="flex items-center gap-1 text-xs text-gray-500 whitespace-nowrap">
             <span className="icon-clock text-gray-400 text-xs" />
             <span>Ends in 8 days</span>
           </div>
@@ -2001,8 +2001,8 @@ export default function GanttBoard() {
         {/* Right: Group by + Create Issue + Fullscreen + Settings */}
         <div className="flex items-center gap-2">
           {/* Group by */}
-          <div className="flex items-center gap-1.5">
-            <span className="text-xs text-gray-500 font-medium">Group by:</span>
+          <div className="flex items-center gap-1.5 whitespace-nowrap">
+            <span className="text-xs text-gray-500 font-medium whitespace-nowrap">Group by:</span>
             <div className="relative">
               <button
                 onClick={() => setGroupMenuOpen(prev => !prev)}
