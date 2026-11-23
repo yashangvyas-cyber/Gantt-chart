@@ -1328,6 +1328,7 @@ export default function GanttBoard() {
   const [isMobileView, setIsMobileView]       = useState(initMobile)
   const [boardMenuOpen, setBoardMenuOpen]     = useState(false)
   const [groupMenuOpen, setGroupMenuOpen]     = useState(false)
+  const [kpiMenuOpen, setKpiMenuOpen]         = useState(false)
   const [hovered, setHovered]                 = useState(null)
   const [panel, setPanel]                     = useState(null)
   const [createModalOpen, setCreateModalOpen] = useState(initCreate)
@@ -2307,27 +2308,122 @@ export default function GanttBoard() {
               )}
             </div>
 
-            {/* Right: Project KPI (Hourly / Fixed Cost only) + Baseline + Unscheduled */}
-            <div className="flex items-center gap-3">
+            {/* Right: Project KPI Dropdown Pill (Clean, compact, no horizontal collision) + Baseline + Unscheduled */}
+            <div className="flex items-center gap-2.5">
               {projectModel === 'Hourly' && (
-                <div className="flex items-center gap-2 text-[11px] text-gray-600 bg-white px-2.5 py-1 rounded-lg border border-gray-200 shadow-2xs">
-                  <span>Purchased: <strong className="text-gray-800 font-semibold">500h</strong></span>
-                  <span className="text-gray-300">·</span>
-                  <span>Billed: <strong className="text-gray-800 font-semibold">250h</strong></span>
-                  <span className="text-gray-300">·</span>
-                  <span>Spent: <strong className="text-indigo-700 font-semibold">220:00</strong></span>
-                  <span className="text-gray-300">·</span>
-                  <span>Balance: <strong className="text-green-600 font-semibold">280:00</strong></span>
-                  <span className="inline-flex items-center px-1.5 py-0.2 rounded bg-amber-50 border border-amber-200 text-amber-800 text-[10px] font-medium ml-1">
-                    Expiry: 26-Nov
-                  </span>
+                <div
+                  className="relative"
+                  onMouseEnter={() => setKpiMenuOpen(true)}
+                  onMouseLeave={() => setKpiMenuOpen(false)}
+                >
+                  <button
+                    type="button"
+                    onClick={() => setKpiMenuOpen(prev => !prev)}
+                    className="flex items-center gap-1.5 px-2.5 py-1 rounded-lg border border-gray-300 bg-white text-xs font-semibold text-gray-700 hover:bg-gray-50 shadow-2xs cursor-pointer"
+                  >
+                    <span className="icon-clock text-indigo-600 text-xs" />
+                    <span>Balance: <strong className="text-green-600 font-bold">280h</strong></span>
+                    <span className="text-[10px] text-gray-400">▾</span>
+                  </button>
+                  {kpiMenuOpen && (
+                    <div className="absolute right-0 mt-1 w-64 bg-white rounded-lg shadow-xl border border-gray-200 p-3 z-50 text-xs space-y-2">
+                      <div className="text-[11px] font-bold text-gray-400 uppercase tracking-wider border-b pb-1">
+                        Hourly Project Financials
+                      </div>
+                      <div className="flex justify-between py-0.5">
+                        <span className="text-gray-500">Purchased:</span>
+                        <strong className="text-gray-800">500h</strong>
+                      </div>
+                      <div className="flex justify-between py-0.5">
+                        <span className="text-gray-500">Billed:</span>
+                        <strong className="text-gray-800">250h</strong>
+                      </div>
+                      <div className="flex justify-between py-0.5">
+                        <span className="text-gray-500">Spent:</span>
+                        <strong className="text-indigo-700 font-semibold">220h</strong>
+                      </div>
+                      <div className="flex justify-between py-0.5 border-t pt-1">
+                        <span className="text-gray-500">Balance:</span>
+                        <strong className="text-green-600 font-bold">280h</strong>
+                      </div>
+                      <div className="flex justify-between py-0.5 bg-amber-50 px-2 py-1 rounded text-amber-800 border border-amber-200 text-[11px]">
+                        <span>Expiry Date:</span>
+                        <strong className="font-semibold">26-Nov-2026</strong>
+                      </div>
+                    </div>
+                  )}
                 </div>
               )}
               {projectModel === 'Fixed Cost' && (
-                <div className="flex items-center gap-2 text-[11px] text-gray-600 bg-white px-2.5 py-1 rounded-lg border border-gray-200 shadow-2xs">
-                  <span>Estimated: <strong className="text-gray-800 font-semibold">500h</strong></span>
-                  <span className="text-gray-300">·</span>
-                  <span>Spent: <strong className="text-gray-800 font-semibold">210:00</strong></span>
+                <div
+                  className="relative"
+                  onMouseEnter={() => setKpiMenuOpen(true)}
+                  onMouseLeave={() => setKpiMenuOpen(false)}
+                >
+                  <button
+                    type="button"
+                    onClick={() => setKpiMenuOpen(prev => !prev)}
+                    className="flex items-center gap-1.5 px-2.5 py-1 rounded-lg border border-gray-300 bg-white text-xs font-semibold text-gray-700 hover:bg-gray-50 shadow-2xs cursor-pointer"
+                  >
+                    <span className="icon-clock text-indigo-600 text-xs" />
+                    <span>Spent: <strong className="text-indigo-700 font-bold">210h / 500h</strong></span>
+                    <span className="text-[10px] text-gray-400">▾</span>
+                  </button>
+                  {kpiMenuOpen && (
+                    <div className="absolute right-0 mt-1 w-56 bg-white rounded-lg shadow-xl border border-gray-200 p-3 z-50 text-xs space-y-2">
+                      <div className="text-[11px] font-bold text-gray-400 uppercase tracking-wider border-b pb-1">
+                        Fixed Cost Financials
+                      </div>
+                      <div className="flex justify-between py-0.5">
+                        <span className="text-gray-500">Estimated:</span>
+                        <strong className="text-gray-800">500h</strong>
+                      </div>
+                      <div className="flex justify-between py-0.5">
+                        <span className="text-gray-500">Top-Up:</span>
+                        <strong className="text-gray-800">50h</strong>
+                      </div>
+                      <div className="flex justify-between py-0.5">
+                        <span className="text-gray-500">Spent:</span>
+                        <strong className="text-indigo-700 font-semibold">210h</strong>
+                      </div>
+                    </div>
+                  )}
+                </div>
+              )}
+              {projectModel === 'Hire Base' && (
+                <div
+                  className="relative"
+                  onMouseEnter={() => setKpiMenuOpen(true)}
+                  onMouseLeave={() => setKpiMenuOpen(false)}
+                >
+                  <button
+                    type="button"
+                    onClick={() => setKpiMenuOpen(prev => !prev)}
+                    className="flex items-center gap-1.5 px-2.5 py-1 rounded-lg border border-gray-300 bg-white text-xs font-semibold text-gray-700 hover:bg-gray-50 shadow-2xs cursor-pointer"
+                  >
+                    <span className="icon-calendar text-indigo-600 text-xs" />
+                    <span>Contract: <strong className="text-indigo-700 font-bold">8 days left</strong></span>
+                    <span className="text-[10px] text-gray-400">▾</span>
+                  </button>
+                  {kpiMenuOpen && (
+                    <div className="absolute right-0 mt-1 w-60 bg-white rounded-lg shadow-xl border border-gray-200 p-3 z-50 text-xs space-y-2">
+                      <div className="text-[11px] font-bold text-gray-400 uppercase tracking-wider border-b pb-1">
+                        Hire Base Contract
+                      </div>
+                      <div className="flex justify-between py-0.5">
+                        <span className="text-gray-500">Contract Start:</span>
+                        <strong className="text-gray-800">01-Nov-2026</strong>
+                      </div>
+                      <div className="flex justify-between py-0.5">
+                        <span className="text-gray-500">Contract End:</span>
+                        <strong className="text-gray-800">28-Nov-2026</strong>
+                      </div>
+                      <div className="flex justify-between py-0.5 border-t pt-1">
+                        <span className="text-gray-500">Remaining:</span>
+                        <strong className="text-indigo-700 font-bold">8 days</strong>
+                      </div>
+                    </div>
+                  )}
                 </div>
               )}
 
@@ -2397,15 +2493,21 @@ export default function GanttBoard() {
                         {issue.groupTitle.split(' ').map(n => n[0]).join('')}
                       </div>
                       <span className="truncate font-bold text-gray-900">{issue.groupTitle}</span>
-                      <span className="text-[10px] text-gray-500 ml-1.5 font-normal">({issue.role})</span>
-                      {projectModel === 'Hire Base' && (
-                        <span className="text-[10px] text-indigo-700 font-medium ml-2 bg-indigo-50 px-1.5 py-0.5 rounded border border-indigo-200 whitespace-nowrap">
-                          Contract: {issue.contract_start} to {issue.contract_end} ({issue.remaining_days}d left)
+                      <span className="text-[10px] text-gray-500 ml-1 font-normal">({issue.role})</span>
+                      {issue.hasClash && (
+                        <span
+                          className="ml-1.5 px-1.5 py-0.2 bg-red-100 text-red-700 text-[9px] font-bold rounded flex items-center gap-0.5"
+                          title="Double-booked clash on this timeline"
+                        >
+                          ⚠️ Clashing
                         </span>
                       )}
-                      {issue.hasClash && (
-                        <span className="ml-auto px-1.5 py-0.2 bg-red-100 text-red-700 text-[9px] font-bold rounded">
-                          ⚠️ Clashing
+                      {projectModel === 'Hire Base' && (
+                        <span
+                          className="ml-1.5 text-gray-400 hover:text-indigo-600 cursor-pointer inline-flex items-center"
+                          title={`Contract: ${issue.contract_start} to ${issue.contract_end} (${issue.remaining_days}d left)`}
+                        >
+                          <span className="icon-info-circle text-xs" />
                         </span>
                       )}
                     </div>
@@ -2627,14 +2729,10 @@ export default function GanttBoard() {
                         {/* Contract Duration Band (Story 7) */}
                         {bWidth > 0 && (
                           <div
-                            className="absolute top-[6px] h-[26px] bg-indigo-50 border border-indigo-200 rounded flex items-center px-2.5 z-5 shadow-2xs"
+                            className="absolute top-[6px] h-[26px] bg-indigo-50/70 border border-indigo-200/80 rounded z-5 shadow-2xs"
                             style={{ left: bLeft, width: bWidth }}
-                          >
-                            <span className="text-indigo-800 text-[10px] font-semibold truncate flex items-center gap-1.5">
-                              <span className="icon-calendar text-indigo-600 text-xs" />
-                              Contract: {issue.contract_start} – {issue.contract_end} ({issue.remaining_days} days left)
-                            </span>
-                          </div>
+                            title={`Contract: ${issue.contract_start} – ${issue.contract_end} (${issue.remaining_days} days left)`}
+                          />
                         )}
 
                         {/* Double-booking warning band if clashing (Story 7) */}

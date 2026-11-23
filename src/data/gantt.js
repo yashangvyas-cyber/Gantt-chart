@@ -34,13 +34,13 @@ export const ENGAGEMENT_HOURS = {
     estimated: '500h',
     top_up: '50h',
     total: '550h',
-    spent: '210:00',
+    spent: '210h',
   },
   'Hourly': {
     purchased: '500h',
     billed: '250h',
-    spent: '220:00',
-    balance: '280:00',
+    spent: '220h',
+    balance: '280h',
   },
   'Hire Base': {
     contract_start: '01-Nov-2026',
@@ -338,7 +338,7 @@ export const COMPANY_PROJECTS = [
     status: 'In Progress',
     color: '#6366f1',
     milestones: [], // Hourly has NO milestones
-    spent_hours: '220:00',
+    spent_hours: '220h',
     total_hours: '500h',
   },
   {
@@ -351,7 +351,7 @@ export const COMPANY_PROJECTS = [
     status: 'In Progress',
     color: '#8b5cf6',
     milestones: ['01-Nov-2026 (Alpha)', '25-Nov-2026 (Beta)', '15-Dec-2026 (Go-Live)'],
-    spent_hours: '420:00',
+    spent_hours: '420h',
     total_hours: '800h',
   },
   {
@@ -364,7 +364,7 @@ export const COMPANY_PROJECTS = [
     status: 'In Progress',
     color: '#0ea5e9',
     milestones: [], // Hire Base has NO milestones
-    spent_hours: '640:00',
+    spent_hours: '640h',
     total_hours: '1200h',
   },
 ]
