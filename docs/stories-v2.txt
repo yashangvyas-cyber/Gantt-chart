@@ -34,15 +34,14 @@
  Group by a filter that gathers rows under a chosen heading. 
  Quarter view a zoom that shows three months at once. 
  Hire Base a project billed by developers and contract dates. 
- client view link a link that opens a shared chart for reading. 
- Next Common rules → 
+  Next Common rules → 
  Applies to every story
 ## Common rules
  Read these once. The stories do not repeat them.
  Rule What it means
- Access To read the Gantt: Task management → View. To change dates, link issues, save a baseline or create a client link: Task management → Edit (Project Management → Config → Access Levels). 
+ Access To read the Gantt: Task management → View. To change dates, link issues, save a baseline: Task management → Edit (Project Management → Config → Access Levels). 
  Where it lives Side Navigation bar → Tasks → <project> → Board → Gantt. Or Projects → <project> → Task Boards → View Task Board → Gantt. Every story starts here unless it says otherwise. The user is logged in with a registered Email ID and Password. 
- NEW One toolbar All Gantt controls sit in one toolbar, left to right: Sprint, Group by, Type | Week, Month, Quarter, Today | Baseline, Unscheduled | Share. Active filters show as chips with one “Clear all”. 
+ NEW One toolbar All Gantt controls sit in one toolbar, left to right: Sprint, Group by, Type | Week, Month, Quarter, Today | Baseline, Unscheduled. Active filters show as chips with one “Clear all”. 
  Bar colour The bar takes the colour of its status column on the board: To Do #2B83DE, In Progress #F7A23A, In Review #E23333, Ready For QA #7EC451, Closed #696969. 
  NEW One hover card Point at any bar to see: status, Start Date, Due Date, Logged Time against Estimated Time, and the saved baseline dates when the baseline is on. 
  Date changes Every Start Date or Due Date change (form, panel, drag, drop) adds a History entry: “<user name> updated Start Date to <date>”. Watchers are told through “Other changes (title, description, priority, etc.)” in Notification Settings. 

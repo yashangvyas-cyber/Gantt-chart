@@ -93,29 +93,42 @@ function nowTimestamp() {
 const ROW_H = 40
 const GRID_LEFT_W = 574
 
-function getViewConfig(mode) {
+function getViewConfig(mode, anchorDate = new Date(2026, 10, 1)) {
+  const year = anchorDate.getFullYear()
+  const month = anchorDate.getMonth()
+
   if (mode === 'Week') {
+    const d = new Date(anchorDate)
+    const day = d.getDay()
+    const diff = d.getDate() - day
+    const weekStart = new Date(year, month, diff)
     return {
-      start: new Date(2026, 10, 1),
+      start: weekStart,
       count: 28,
       cellW: 44,
     }
   }
   if (mode === 'Month') {
+    const monthStart = new Date(year, month, 1)
+    const daysInMonth = new Date(year, month + 1, 0).getDate()
     return {
-      start: new Date(2026, 10, 1),
-      count: 30,
+      start: monthStart,
+      count: daysInMonth,
       cellW: 34,
     }
   }
   if (mode === 'Quarter') {
+    const qStartMonth = Math.floor(month / 3) * 3
+    const qStart = new Date(year, qStartMonth, 1)
+    const qEnd = new Date(year, qStartMonth + 3, 0)
+    const count = Math.round((qEnd - qStart) / (1000 * 60 * 60 * 24)) + 1
     return {
-      start: new Date(2026, 9, 1),
-      count: 92,
+      start: qStart,
+      count: count,
       cellW: 14,
     }
   }
-  return { start: new Date(2026, 10, 1), count: 30, cellW: 34 }
+  return { start: new Date(year, month, 1), count: 30, cellW: 34 }
 }
 
 // ─── Issue Type Icons ─────────────────────────────────────────────────────────
@@ -857,93 +870,7 @@ function BaselineModal({ open, onClose, onSave, showBaseline, onToggleShow }) {
   )
 }
 
-// ─── Share / Client Link Modal (Story 6) ──────────────────────────────────────
 
-function ShareModal({ open, onClose, isClientLinkActive, onToggleClientLink, onOpenClientView }) {
-  const [copied, setCopied] = useState(false)
-  const clientUrl = `${typeof window !== 'undefined' ? window.location.origin : ''}/gantt?client=1`
-
-  if (!open) return null
-
-  function handleCopy() {
-    navigator.clipboard?.writeText(clientUrl)
-    setCopied(true)
-    setTimeout(() => setCopied(false), 2000)
-  }
-
-  return (
-    <div className="fixed inset-0 z-50 overflow-hidden flex items-center justify-center" data-html2canvas-ignore="true">
-      <div className="absolute inset-0 bg-gray-900/40" onClick={onClose} />
-      <div className="relative bg-white rounded-xl shadow-2xl w-[440px] p-5 z-10 space-y-4">
-        <div className="flex items-center justify-between border-b border-gray-100 pb-2">
-          <div className="flex items-center gap-2">
-            <span className="icon-share-07 text-indigo-600 text-base" />
-            <h3 className="text-sm font-semibold text-gray-800">Share Client Link</h3>
-          </div>
-          <button onClick={onClose} className="icon-x-close text-gray-400 hover:text-gray-600 text-sm" />
-        </div>
-
-        <div className="flex items-center justify-between p-3 bg-gray-50 rounded-lg border border-gray-200">
-          <div>
-            <div className="text-xs font-semibold text-gray-800">Client View Link</div>
-            <div className="text-[11px] text-gray-500">
-              {isClientLinkActive ? 'Anyone with this link can view the chart' : 'Link access is disabled'}
-            </div>
-          </div>
-          <input
-            type="checkbox"
-            checked={isClientLinkActive}
-            onChange={e => onToggleClientLink(e.target.checked)}
-            className="rounded text-indigo-600 focus:ring-indigo-500 w-4 h-4 cursor-pointer"
-          />
-        </div>
-
-        {isClientLinkActive ? (
-          <div className="space-y-2">
-            <label className="block text-xs font-semibold text-gray-700">Client Link</label>
-            <div className="flex items-center gap-2">
-              <input
-                type="text"
-                readOnly
-                value={clientUrl}
-                className="w-full text-xs px-3 py-2 bg-gray-50 border border-gray-300 rounded-lg text-gray-700 select-all"
-              />
-              <button
-                onClick={handleCopy}
-                className="px-3 py-2 bg-indigo-600 hover:bg-indigo-700 text-white rounded-lg text-xs font-semibold flex items-center gap-1.5 whitespace-nowrap shadow-xs"
-              >
-                <span className="icon-copy-01 text-xs" />
-                {copied ? 'Copied!' : 'Copy'}
-              </button>
-            </div>
-            <div className="flex justify-between items-center pt-2">
-              <button
-                onClick={() => { onClose(); onOpenClientView() }}
-                className="text-xs text-indigo-600 hover:text-indigo-800 font-semibold flex items-center gap-1"
-              >
-                <span>Preview client view</span>
-                <span className="icon-arrow-narrow-right text-xs" />
-              </button>
-            </div>
-          </div>
-        ) : (
-          <div className="p-3 bg-amber-50 border border-amber-200 rounded-lg text-xs text-amber-800">
-            Link sharing is currently turned off. Anyone visiting the link will be denied access.
-          </div>
-        )}
-
-        <div className="flex justify-end pt-2 border-t border-gray-100">
-          <button
-            onClick={onClose}
-            className="px-4 py-1.5 text-xs font-semibold bg-gray-100 text-gray-700 hover:bg-gray-200 rounded-md"
-          >
-            Done
-          </button>
-        </div>
-      </div>
-    </div>
-  )
-}
 
 // ─── Resource Planner Drawer (Story 7) ────────────────────────────────────────
 
@@ -1266,9 +1193,8 @@ export default function GanttBoard() {
     }
     return {}
   })
-  const [shareMenuOpen, setShareMenuOpen]     = useState(false)
-  const [shareModalOpen, setShareModalOpen]   = useState(false)
-  const [isClientLinkActive, setIsClientLinkActive] = useState(true)
+  const [anchorDate, setAnchorDate]           = useState(new Date(2026, 10, 1))
+  const [datePickerOpen, setDatePickerOpen]   = useState(false)
   const [clientMode, setClientMode]           = useState(initClient)
   const [undoToast, setUndoToast]             = useState(false)
   const [undoSnapshot, setUndoSnapshot]       = useState(null)
@@ -1278,11 +1204,36 @@ export default function GanttBoard() {
   const calAreaRef   = useRef(null)
   const dragStateRef = useRef(null)
 
-  function handleExportPDF() {
-    window.print()
+  function handlePrevYear() {
+    setAnchorDate(d => new Date(d.getFullYear() - 1, d.getMonth(), 1))
+  }
+  function handleNextYear() {
+    setAnchorDate(d => new Date(d.getFullYear() + 1, d.getMonth(), 1))
+  }
+  function handlePrevPeriod() {
+    if (viewMode === 'Week') {
+      setAnchorDate(d => new Date(d.getTime() - 7 * 86400000))
+    } else if (viewMode === 'Quarter') {
+      setAnchorDate(d => new Date(d.getFullYear(), d.getMonth() - 3, 1))
+    } else {
+      setAnchorDate(d => new Date(d.getFullYear(), d.getMonth() - 1, 1))
+    }
+  }
+  function handleNextPeriod() {
+    if (viewMode === 'Week') {
+      setAnchorDate(d => new Date(d.getTime() + 7 * 86400000))
+    } else if (viewMode === 'Quarter') {
+      setAnchorDate(d => new Date(d.getFullYear(), d.getMonth() + 3, 1))
+    } else {
+      setAnchorDate(d => new Date(d.getFullYear(), d.getMonth() + 1, 1))
+    }
+  }
+  function handleToday() {
+    setAnchorDate(new Date(2026, 10, 1))
+    scrollToToday()
   }
 
-  // Multi-board active issues (Story 8)
+  // Multi-board active issues (Story 7)
   const activeIssues = useMemo(() => {
     if (selectedBoard === 'Test') {
       return TEST_BOARD_ISSUES
@@ -1293,9 +1244,24 @@ export default function GanttBoard() {
     return issues.map(i => ({ ...i, board: 'Default' }))
   }, [issues, selectedBoard])
 
-  const { start: viewStart, count: dayCount, cellW } = getViewConfig(viewMode)
+  const { start: viewStart, count: dayCount, cellW } = getViewConfig(viewMode, anchorDate)
   const calendarWidth = dayCount * cellW
   const todayOffset   = dayDiff(viewStart, TODAY) * cellW
+
+  const rangeLabel = useMemo(() => {
+    if (viewMode === 'Quarter') {
+      const qStartMonth = Math.floor(anchorDate.getMonth() / 3) * 3
+      const startM = new Date(anchorDate.getFullYear(), qStartMonth, 1).toLocaleString('default', { month: 'long' })
+      const endM = new Date(anchorDate.getFullYear(), qStartMonth + 2, 1).toLocaleString('default', { month: 'long' })
+      return `${startM} ${anchorDate.getFullYear()} – ${endM} ${anchorDate.getFullYear()}`
+    }
+    if (viewMode === 'Week') {
+      const end = new Date(viewStart)
+      end.setDate(end.getDate() + dayCount - 1)
+      return `${fmtDate(viewStart)} – ${fmtDate(end)}`
+    }
+    return `${anchorDate.toLocaleString('default', { month: 'long' })} ${anchorDate.getFullYear()}`
+  }, [viewMode, anchorDate, viewStart, dayCount])
 
   const unscheduledCount = activeIssues.filter(i => !i.start_date && !i.due_date && !i.sprint_id).length
 
@@ -2005,8 +1971,108 @@ export default function GanttBoard() {
 
           {/* ── Gantt Timeline Sub-bar (compact, authentic to CollabCRM) ── */}
           <div className="flex items-center justify-between bg-gray-50/80 border-b border-gray-200 2xl:px-6 px-4 py-1.5 w-full">
-            {/* Left: Week / Month / Quarter segmented toggle + Today button + Active Filter Chips */}
-            <div className="flex items-center gap-3">
+            {/* Left: CollabCRM Resource Planner Date Navigator + View Mode Segmented Toggle + Active Filter Chips */}
+            <div className="flex items-center gap-2.5">
+              {/* Date Pagination Box (CollabCRM Resource Planner pattern) */}
+              <div className="flex items-center bg-white p-0.5 border border-gray-200 rounded-lg shadow-2xs">
+                <button
+                  title="Previous year"
+                  onClick={handlePrevYear}
+                  className="flex items-center justify-center w-6 h-6 rounded text-gray-500 hover:text-indigo-600 hover:bg-gray-100 transition-colors"
+                >
+                  <span className="text-[11px] font-bold leading-none">«</span>
+                </button>
+                <button
+                  title="Previous period"
+                  onClick={handlePrevPeriod}
+                  className="flex items-center justify-center w-6 h-6 rounded text-gray-500 hover:text-indigo-600 hover:bg-gray-100 transition-colors"
+                >
+                  <span className="text-xs font-bold leading-none">‹</span>
+                </button>
+                <div className="relative inline-block">
+                  <button
+                    onClick={() => setDatePickerOpen(prev => !prev)}
+                    className="flex items-center gap-1 px-2 py-1 justify-center rounded hover:bg-gray-50 transition-colors cursor-pointer group"
+                  >
+                    <span className="text-xs font-bold text-gray-800 tracking-tight group-hover:text-indigo-600 whitespace-nowrap">
+                      {rangeLabel}
+                    </span>
+                    <span className="icon-chevron-down text-[10px] text-gray-400 group-hover:text-indigo-500" />
+                  </button>
+
+                  {/* Dropdown Jump Picker */}
+                  {datePickerOpen && (
+                    <div className="absolute left-0 mt-1 w-56 bg-white rounded-lg shadow-xl border border-gray-200 p-2.5 z-50">
+                      <div className="flex items-center justify-between pb-1.5 mb-1.5 border-b border-gray-100 text-xs font-bold text-gray-800">
+                        <button onClick={handlePrevYear} className="px-1 hover:text-indigo-600">‹</button>
+                        <span>{anchorDate.getFullYear()}</span>
+                        <button onClick={handleNextYear} className="px-1 hover:text-indigo-600">›</button>
+                      </div>
+                      {viewMode === 'Quarter' ? (
+                        <div className="grid grid-cols-2 gap-1 text-xs">
+                          {['Q1: Jan - Mar', 'Q2: Apr - Jun', 'Q3: Jul - Sep', 'Q4: Oct - Dec'].map((q, idx) => (
+                            <button
+                              key={q}
+                              onClick={() => {
+                                setAnchorDate(new Date(anchorDate.getFullYear(), idx * 3, 1))
+                                setDatePickerOpen(false)
+                              }}
+                              className={`py-1.5 px-1.5 rounded text-[11px] font-semibold border ${
+                                Math.floor(anchorDate.getMonth() / 3) === idx
+                                  ? 'bg-indigo-600 text-white border-indigo-600'
+                                  : 'bg-gray-50 text-gray-700 hover:bg-indigo-50 border-gray-200'
+                              }`}
+                            >
+                              {q}
+                            </button>
+                          ))}
+                        </div>
+                      ) : (
+                        <div className="grid grid-cols-3 gap-1 text-xs">
+                          {['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'].map((m, idx) => (
+                            <button
+                              key={m}
+                              onClick={() => {
+                                setAnchorDate(new Date(anchorDate.getFullYear(), idx, 1))
+                                setDatePickerOpen(false)
+                              }}
+                              className={`py-1 rounded text-[11px] font-semibold ${
+                                anchorDate.getMonth() === idx
+                                  ? 'bg-indigo-600 text-white'
+                                  : 'text-gray-700 hover:bg-gray-100'
+                              }`}
+                            >
+                              {m}
+                            </button>
+                          ))}
+                        </div>
+                      )}
+                    </div>
+                  )}
+                </div>
+                <button
+                  title="Next period"
+                  onClick={handleNextPeriod}
+                  className="flex items-center justify-center w-6 h-6 rounded text-gray-500 hover:text-indigo-600 hover:bg-gray-100 transition-colors"
+                >
+                  <span className="text-xs font-bold leading-none">›</span>
+                </button>
+                <button
+                  title="Next year"
+                  onClick={handleNextYear}
+                  className="flex items-center justify-center w-6 h-6 rounded text-gray-500 hover:text-indigo-600 hover:bg-gray-100 transition-colors"
+                >
+                  <span className="text-[11px] font-bold leading-none">»</span>
+                </button>
+                <div className="w-px h-4 bg-gray-200 mx-1" />
+                <button
+                  onClick={handleToday}
+                  className="inline-flex items-center justify-center px-2 py-0.5 rounded text-[11px] font-semibold bg-gray-50 text-gray-700 hover:text-indigo-600 hover:bg-indigo-50"
+                >
+                  Today
+                </button>
+              </div>
+
               {/* Segmented View Mode (directly from resource_planner.html) */}
               <div className="relative flex items-center p-0.5 bg-gray-200/70 rounded-lg border border-gray-200 overflow-hidden" role="group">
                 {['Week','Month','Quarter'].map(m => (
@@ -2024,14 +2090,6 @@ export default function GanttBoard() {
                   </button>
                 ))}
               </div>
-
-              {/* Today Button */}
-              <button
-                onClick={scrollToToday}
-                className="px-3 py-1 rounded-md text-xs font-semibold bg-white text-gray-700 border border-gray-300 hover:text-indigo-600 hover:border-indigo-200 hover:bg-indigo-50/50 shadow-2xs transition-all"
-              >
-                Today
-              </button>
 
               {/* Active filter chip if a developer is selected */}
               {selectedDeveloper && (
@@ -2057,7 +2115,7 @@ export default function GanttBoard() {
               )}
             </div>
 
-            {/* Right: Baseline + Unscheduled + Share */}
+            {/* Right: Baseline + Unscheduled */}
             <div className="flex items-center gap-2">
               {/* Baseline toggle */}
               <button
@@ -2082,42 +2140,6 @@ export default function GanttBoard() {
                   {unscheduledCount}
                 </span>
               </button>
-
-              {/* Share Button Dropdown */}
-              <div className="relative">
-                <button
-                  onClick={() => setShareMenuOpen(prev => !prev)}
-                  className="px-2.5 py-1 rounded-lg text-xs font-semibold border border-gray-300 bg-white text-gray-700 hover:bg-gray-50 shadow-2xs flex items-center gap-1.5 transition-all"
-                >
-                  <span className="icon-share-07 text-xs text-gray-600" />
-                  <span>Share</span>
-                  <span className="icon-chevron-down text-[10px] text-gray-400" />
-                </button>
-
-                {shareMenuOpen && (
-                  <div className="absolute right-0 mt-1 w-44 bg-white rounded-lg shadow-lg border border-gray-200 py-1 z-40">
-                    <button
-                      onClick={() => { setShareMenuOpen(false); handleExportPDF() }}
-                      className="w-full text-left px-3 py-2 text-xs text-gray-700 hover:bg-gray-100 flex items-center gap-2"
-                    >
-                      <span className="icon-download-02 text-xs text-gray-500" />
-                      <span>Export as PDF</span>
-                    </button>
-                    <button
-                      onClick={() => {
-                        setShareMenuOpen(false)
-                        navigator.clipboard?.writeText(window.location.origin + '/gantt?share=client-token-apex-789')
-                        setUndoToast({ msg: 'Client view link copied to clipboard', action: null })
-                        setTimeout(() => setUndoToast(null), 3000)
-                      }}
-                      className="w-full text-left px-3 py-2 text-xs text-gray-700 hover:bg-gray-100 flex items-center gap-2"
-                    >
-                      <span className="icon-link-01 text-xs text-gray-500" />
-                      <span>Copy Client Link</span>
-                    </button>
-                  </div>
-                )}
-              </div>
             </div>
           </div>
 
@@ -2621,14 +2643,7 @@ export default function GanttBoard() {
         onToggleShow={setShowBaseline}
       />
 
-      {/* Share Modal (Story 6) */}
-      <ShareModal
-        open={shareModalOpen}
-        onClose={() => setShareModalOpen(false)}
-        isClientLinkActive={isClientLinkActive}
-        onToggleClientLink={setIsClientLinkActive}
-        onOpenClientView={() => setClientMode(true)}
-      />
+
 
       {/* Resource Planner Drawer (Story 7) */}
       <ResourcePlannerDrawer
