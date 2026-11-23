@@ -25,8 +25,9 @@
    - *Reality:* CollabCRM me baseline ka koi backend table ya history tracking nahi hai.
    - *Verdict:* Fancy feature from MS Project/Jira Enterprise. Real agency PMs seedha date change karte hain.
 
-2. **Critical Path Calculation (Story 4):**
-   - *Reality:* Red highlighted dependency chains are overkill. Agency projects sprint-based hote hain, waterfall critical-path method (CPM) agency PMs use nahi karte.
+2. **Critical Path Calculation (Story 4/5) [HATA DIYA GAYA]:**
+   - *Status:* Poori tarah se drop kar diya gaya hai.
+   - *Reason:* ClickUp/MS Project ka heavy waterfall concept (DuPont 1950s) jo construction/engineering me use hota hai. IT agency ke 2-week agile sprints me iski koi real utility nahi hai. Prototype UI se toggle button, amber highlights, aur Critical Chain End badge poori tarah se clean kar diye gaye hain.
 
 3. **Auto-Cascading Dependency Shifts [HATA DIYA GAYA]:**
    - *Status:* Poori tarah se drop kar diya gaya hai.

@@ -7,7 +7,7 @@
 // NEW: Story 1 — Add Start Date side by side with Due Date under Sprint in Create Issue drawer + validation
 // NEW: Story 4 — Drag bars, resize handles, Unscheduled drawer, sprint-only light bar, 10s Undo toast
 // NEW: Story 3 — Hours KPI strip (Fixed Cost, Hourly, Hire Base), pinned Milestones and Sprints top rows, expiry date line, contract band
-// NEW: Story 5 — Dependency connector lines (SVG), Critical path chain highlight + End Date, Baseline save and compare
+// NEW: Story 5 — Dependency connector lines (SVG), Baseline save and compare
 
 // NEW: Story 6 — Export as PDF and share a client link (reading mode, public link toggle)
 // NEW: Story 7 — Plan people on a Hire Base project (developer grouping, contract bands, double-booking warning, Resource Planner occupancy)
@@ -1166,7 +1166,6 @@ const COLS = [
 
 export default function GanttBoard() {
   const searchParams = typeof window !== 'undefined' ? new URLSearchParams(window.location.search) : null
-  const initCritical = searchParams?.get('critical') === '1'
   const initBaseline = searchParams?.get('baseline') === '1'
   const initClient   = searchParams?.get('client') === '1'
   const initModel    = searchParams?.get('model') || 'Hourly'
@@ -1206,7 +1205,6 @@ export default function GanttBoard() {
     }
     return {}
   })
-  const [criticalPathOn, setCriticalPathOn]   = useState(initCritical)
   const [shareMenuOpen, setShareMenuOpen]     = useState(false)
   const [shareModalOpen, setShareModalOpen]   = useState(false)
   const [isClientLinkActive, setIsClientLinkActive] = useState(true)
@@ -1354,12 +1352,6 @@ export default function GanttBoard() {
     }
     return weeks
   }, [viewMode, days])
-
-  // Critical path chain calculation (Story 5)
-  // IT-56 -> IT-57 -> IT-58 -> IT-59 is the chain setting the end date
-  const criticalKeys = useMemo(() => {
-    return new Set(['IT-56', 'IT-57', 'IT-58', 'IT-59'])
-  }, [])
 
   function scrollToToday() {
     if (calScrollRef.current) {
@@ -1607,19 +1599,17 @@ export default function GanttBoard() {
         const x2 = dayDiff(viewStart, toStart) * cellW
 
         const conflict = toStart < fromDue
-        const isCritical = criticalPathOn && criticalKeys.has(r.id) && criticalKeys.has(toIssue.id)
 
         lines.push({
           id: `${r.id}->${toIssue.id}`,
           x1, y1, x2, y2,
           conflict,
-          isCritical,
         })
       })
     })
 
     return lines
-  }, [rows, issues, viewStart, cellW, criticalPathOn, criticalKeys])
+  }, [rows, issues, viewStart, cellW])
 
   return (
     <AppShell
@@ -1734,14 +1724,6 @@ export default function GanttBoard() {
                 <span className="icon-grid-01 text-xs text-indigo-600" />
                 <span>Dashboard Timeline</span>
               </button>
-
-              {criticalPathOn && (
-                <div className="flex items-center gap-1.5 px-2.5 py-1 bg-amber-50 border border-amber-300 rounded-lg text-amber-800 text-xs font-semibold shadow-2xs">
-                  <span className="w-2 h-2 rounded-full bg-amber-500 animate-pulse" />
-                  Critical Chain End: 28-Nov-2026
-                </div>
-              )}
-
 
             </div>
           </>
@@ -2014,21 +1996,8 @@ export default function GanttBoard() {
               )}
             </div>
 
-            {/* Right: Critical Path + Baseline + Unscheduled + Share */}
+            {/* Right: Baseline + Unscheduled + Share */}
             <div className="flex items-center gap-2">
-              {/* Critical path toggle */}
-              <button
-                onClick={() => setCriticalPathOn(prev => !prev)}
-                className={`px-2.5 py-1 rounded-lg text-xs font-semibold border transition-all flex items-center gap-1.5 shadow-2xs ${
-                  criticalPathOn
-                    ? 'bg-amber-500 border-amber-600 text-white shadow-xs'
-                    : 'border-gray-300 bg-white text-gray-700 hover:bg-gray-50'
-                }`}
-              >
-                <span className={`w-2 h-2 rounded-full ${criticalPathOn ? 'bg-white' : 'bg-gray-400'}`} />
-                <span>Critical path</span>
-              </button>
-
               {/* Baseline toggle */}
               <button
                 onClick={() => setBaselineModalOpen(true)}
@@ -2350,16 +2319,13 @@ export default function GanttBoard() {
                     <marker id="arrow-conf" markerWidth="6" markerHeight="6" refX="5" refY="3" orient="auto">
                       <path d="M0,0 L6,3 L0,6 Z" fill="#ef4444" />
                     </marker>
-                    <marker id="arrow-crit" markerWidth="6" markerHeight="6" refX="5" refY="3" orient="auto">
-                      <path d="M0,0 L6,3 L0,6 Z" fill="#f59e0b" />
-                    </marker>
                   </defs>
 
                   {dependencyLines.map(l => {
                     const midX = l.x1 + 12
                     const path = `M ${l.x1} ${l.y1} L ${midX} ${l.y1} L ${midX} ${l.y2} L ${l.x2} ${l.y2}`
-                    const strokeColor = l.conflict ? '#ef4444' : l.isCritical ? '#f59e0b' : '#6366f1'
-                    const marker = l.conflict ? 'url(#arrow-conf)' : l.isCritical ? 'url(#arrow-crit)' : 'url(#arrow-norm)'
+                    const strokeColor = l.conflict ? '#ef4444' : '#6366f1'
+                    const marker = l.conflict ? 'url(#arrow-conf)' : 'url(#arrow-norm)'
 
                     return (
                       <path
@@ -2367,7 +2333,7 @@ export default function GanttBoard() {
                         d={path}
                         fill="none"
                         stroke={strokeColor}
-                        strokeWidth={l.isCritical ? '2.5' : '1.5'}
+                        strokeWidth="1.5"
                         strokeDasharray={l.conflict ? '4 2' : 'none'}
                         markerEnd={marker}
                       />
@@ -2442,7 +2408,6 @@ export default function GanttBoard() {
                   const sprint = issue.sprint_id ? GANTT_SPRINTS.find(s => s.id === issue.sprint_id) : null
                   const sprintStart = sprint ? parseDate(sprint.start) : null
                   const sprintEnd   = sprint ? parseDate(sprint.end) : null
-                  const isCrit = criticalPathOn && criticalKeys.has(issue.id)
                   const baseEntry = baselineData[issue.id]
 
                   return (
@@ -2480,14 +2445,12 @@ export default function GanttBoard() {
 
                         return (
                           <div
-                            className={`absolute top-[7px] h-[24px] rounded group shadow-sm flex items-center cursor-move transition-shadow ${
-                              isCrit ? 'ring-2 ring-amber-400 ring-offset-1 border-amber-500' : ''
-                            }`}
+                            className="absolute top-[7px] h-[24px] rounded group shadow-sm flex items-center cursor-move transition-shadow"
                             style={{
                               left,
                               width,
                               backgroundColor: color,
-                              border: pastDue ? '2px solid #E23333' : isCrit ? '2px solid #f59e0b' : '1px solid rgba(0,0,0,0.1)',
+                              border: pastDue ? '2px solid #E23333' : '1px solid rgba(0,0,0,0.1)',
                               outline: pastDue ? '1px dashed #E23333' : 'none',
                             }}
                             onMouseDown={e => handleMouseDown(e, issue, 'move')}
@@ -2505,7 +2468,6 @@ export default function GanttBoard() {
                             />
 
                             <span className="text-white text-[10px] font-semibold truncate px-2 select-none pointer-events-none flex items-center gap-1">
-                              {isCrit && <span className="w-1.5 h-1.5 rounded-full bg-amber-300" />}
                               {issue.key}
                             </span>
 

@@ -3,7 +3,7 @@
 # Gantt Chart — User Stories
  Project Management · 9 stories
  ← → to move · / to search 
- i Read first ★ Common rules 1 Add a Start Date to an issue 2 Read the plan on the Gantt 3 See hours, milestones and sprints on top 4 Change dates from the Gantt 5 Link issues, find the critical path, compare with a baseline 6 Export as PDF and share a client link 7 Plan people on a Hire Base project 8 See all boards and all projects 9 Use the Gantt on mobile Start here
+ i Read first ★ Common rules 1 Add a Start Date to an issue 2 Read the plan on the Gantt 3 See hours, milestones and sprints on top 4 Change dates from the Gantt 5 Link issues and compare with a baseline 6 Export as PDF and share a client link 7 Plan people on a Hire Base project 8 See all boards and all projects 9 Use the Gantt on mobile Start here
 ## Read first
  A Gantt is a calendar view of the board.
  Each issue is a coloured bar from its Start Date to its Due Date. The team sees what happens when.
@@ -15,7 +15,7 @@
  2. Read the plan on the Gantt S2, S10, S11 
  3. See hours, milestones and sprints on top S3, S4 
  4. Change dates from the Gantt S5, S9 
- 5. Link issues, find the critical path, compare with a baseline S6, S7, S8 
+ 5. Link issues and compare with a baseline S6, S7, S8 
  6. Export as PDF and share a client link S12, S16 
  7. Plan people on a Hire Base project S13 
  8. See all boards and all projects S14, S15 
@@ -43,7 +43,7 @@
  Rule What it means
  Access To read the Gantt: Task management → View. To change dates, link issues, save a baseline or create a client link: Task management → Edit (Project Management → Config → Access Levels). 
  Where it lives Side Navigation bar → Tasks → <project> → Board → Gantt. Or Projects → <project> → Task Boards → View Task Board → Gantt. Every story starts here unless it says otherwise. The user is logged in with a registered Email ID and Password. 
- NEW One toolbar All Gantt controls sit in one toolbar, left to right: Sprint, Group by, Type | Week, Month, Quarter, Today | Critical path, Baseline, Unscheduled | Share. Active filters show as chips with one “Clear all”. 
+ NEW One toolbar All Gantt controls sit in one toolbar, left to right: Sprint, Group by, Type | Week, Month, Quarter, Today | Baseline, Unscheduled | Share. Active filters show as chips with one “Clear all”. 
  Bar colour The bar takes the colour of its status column on the board: To Do #2B83DE, In Progress #F7A23A, In Review #E23333, Ready For QA #7EC451, Closed #696969. 
  NEW One hover card Point at any bar to see: status, Start Date, Due Date, Logged Time against Estimated Time, and the saved baseline dates when the baseline is on. 
  Date changes Every Start Date or Due Date change (form, panel, drag, drop) adds a History entry: “<user name> updated Start Date to <date>”. Watchers are told through “Other changes (title, description, priority, etc.)” in Notification Settings. 
@@ -226,12 +226,12 @@ Edit access. Common rules apply.
  The Unscheduled list stays searchable on large boards (for example 765 Backlog and 724 To Do issues).
  When it is done
 The issue has its new dates. The bar shows them and History records the change. A scheduled issue leaves the Unscheduled list.
- ← Previous See hours, milestones and sprints on top Next Link issues, find the critical path, compare with a baseline → 
+ ← Previous See hours, milestones and sprints on top Next Link issues and compare with a baseline → 
  Story 5 of 9 · replaces S6 + S7 + S8
-## Link issues, find the critical path, compare with a baseline
+## Link issues and compare with a baseline
  Role Delivery Head 
- Goal dependency lines, the critical path and a saved baseline on the Gantt 
- Benefit I can see what holds up work, what sets the end date and how far we moved from the first plan 
+ Goal dependency lines and a saved baseline on the Gantt 
+ Benefit I can see what holds up work and how far we moved from the first plan 
 ### Simple Example se samjho: Yeh kyun chahiye?
  Maan lo: Client ko bola ki 30 Nov ko project deliver karenge.
  1. Day 1 (Freeze Plan): Sabhi tasks ki dates set karke "Save Baseline" (Agreed plan) daba diya — ye original promise freeze ho gaya.
@@ -246,32 +246,26 @@ The issue has its new dates. The bar shows them and History records the change. 
 Edit access to link issues and save a baseline. Common rules apply. 
  [IMG] Dependency lines between linked issues. Click to enlarge [IMG] The chain of issues ends at the project End Date. Click to enlarge [IMG] Save baseline and Show baseline. The grey bar under each bar is the saved plan. Click to enlarge 
 ### Steps
- 8 Go to Tasks → <project> → Issue List → <issue key> → Link Issue. Pick “Blocks” or “Is Blocked By”, pick the target issue, click “Link”. NEW History logs user name, link type and linked issue key.
+ 6 Go to Tasks → <project> → Issue List → <issue key> → Link Issue. Pick “Blocks” or “Is Blocked By”, pick the target issue, click “Link”. NEW History logs user name, link type and linked issue key.
  NEW Open the Gantt. A dependency line joins linked issues:
  Finish-to-start: ends at the blocked issue’s Start Date
  Start-to-start: joins two Start Dates
  Finish-to-finish: joins two Due Dates
- NEW If a blocked issue starts before its blocker ends, the line turns red and the bar is flagged. Move the blocker and the linked issue moves with it. The conflict clears.
- NEW Turn on “Critical path” in the toolbar. The chain of linked issues that sets the latest Due Date is highlighted from first issue to last. Other bars keep their status colours.
- NEW Drag the last issue’s Due Date 3 days later. The End Date moves 3 days and the highlight follows the chain.
+ NEW If a blocked issue starts before its blocker ends, the line turns red and flags the scheduling conflict.
  NEW Click “Baseline” on the toolbar, enter a name (e.g. Agreed plan) and click “Save baseline”. The original commitment dates of every dated issue are frozen.
  NEW Drag a task forward to simulate a delay. A faint grey baseline bar stays stuck at the original dates underneath the current colored bar.
  NEW Point at the bar to see planned vs actual dates and slip: “Planned: 30-Nov-2026 | Actual: 05-Dec-2026 (Delay: 5 days)”. Toggle “Show baseline” to show or hide the saved grey bars.
 ### Fields
- 4 Field Type Required Format Error message
+ 2 Field Type Required Format Error message
  Link relationship Dropdown Optional Is Blocked By, Blocks, Is Cloned By, Is Duplicated By, Duplicates, Related To. NEW On the Gantt: start-to-start and finish-to-finish. — 
- Critical path Toggle Optional On, Off. — 
- End Date Date (calculated) Display field DD-MMM-YYYY, from the last Due Date in the chain. — 
  Baseline name Alphanumeric Mandatory Free text, for example Agreed plan. NEW “Baseline name is required.” 
 ### Rules to check
- 6 Existing link types are kept. Linked issues still show under Linked Issues on the panel.
+ 4 Existing link types are kept. Linked issues still show under Linked Issues on the panel.
  Deleting an issue removes it and its lines from the chart.
- The critical chain is made of issues joined by dependency lines. Its last issue carries the project end date.
- A date change elsewhere keeps the highlighted chain that sets the end date.
  The baseline keeps the first saved dates even after bars move: a faint grey bar stays stuck at the original dates under the moved bar and the hover card shows planned vs actual dates with delay in days.
  Saving a baseline adds no History entry and leaves work logs untouched.
  When it is done
-All links show as lines with the right direction and colour. The critical chain updates when dates or links change. The first plan sits under today’s bars.
+All links show as lines with the right direction and colour (red on conflict). The first plan sits under today’s bars.
  ← Previous Change dates from the Gantt Next Export as PDF and share a client link → 
  Story 6 of 9 · replaces S12 + S16
 ## Export as PDF and share a client link
@@ -313,7 +307,7 @@ Board access to export. Edit access to create the client link. Common rules appl
  Turning the link off closes access for everyone who holds it.
  When it is done
 A PDF of the current view is saved and a working client link is ready. The client can read the shared chart.
- ← Previous Link issues, find the critical path, compare with a baseline Next Plan people on a Hire Base project → 
+ ← Previous Link issues and compare with a baseline Next Plan people on a Hire Base project → 
  Story 7 of 9 · replaces S13
 ## Plan people on a Hire Base project
  Role Delivery Head 
