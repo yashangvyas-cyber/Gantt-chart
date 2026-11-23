@@ -249,12 +249,12 @@ export const HIRE_BASE_DEVELOPERS = [
     role: 'Senior Developer',
     department: 'Engineering',
     contract_start: '01-Nov-2026',
-    contract_end: '28-Nov-2026',
-    remaining_days: 8,
+    contract_end: '15-Dec-2026',
+    remaining_days: 25,
     double_booked: true,
     double_booking_overlap: '05-Nov-2026 to 12-Nov-2026',
     allocations: [
-      { project: 'IT Project', start: '01-Nov-2026', end: '28-Nov-2026', hours: 40 },
+      { project: 'IT Project', start: '01-Nov-2026', end: '15-Dec-2026', hours: 40 },
       { project: 'Apex E-Commerce', start: '05-Nov-2026', end: '12-Nov-2026', hours: 20 }
     ]
   },
@@ -262,12 +262,12 @@ export const HIRE_BASE_DEVELOPERS = [
     name: 'Sofia Reyes',
     role: 'Backend Developer',
     department: 'Engineering',
-    contract_start: '05-Nov-2026',
-    contract_end: '28-Nov-2026',
-    remaining_days: 8,
+    contract_start: '10-Nov-2026',
+    contract_end: '10-Feb-2027',
+    remaining_days: 82,
     double_booked: false,
     allocations: [
-      { project: 'IT Project', start: '05-Nov-2026', end: '28-Nov-2026', hours: 40 }
+      { project: 'IT Project', start: '10-Nov-2026', end: '10-Feb-2027', hours: 40 }
     ]
   },
   {
@@ -275,11 +275,11 @@ export const HIRE_BASE_DEVELOPERS = [
     role: 'Frontend Developer',
     department: 'Engineering',
     contract_start: '15-Nov-2026',
-    contract_end: '28-Nov-2026',
-    remaining_days: 8,
+    contract_end: '30-Nov-2026',
+    remaining_days: 10,
     double_booked: false,
     allocations: [
-      { project: 'IT Project', start: '15-Nov-2026', end: '28-Nov-2026', hours: 40 }
+      { project: 'IT Project', start: '15-Nov-2026', end: '30-Nov-2026', hours: 40 }
     ]
   },
 ]
