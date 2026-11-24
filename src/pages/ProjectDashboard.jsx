@@ -460,17 +460,11 @@ export default function ProjectDashboard() {
                           {proj.code}
                         </div>
                         <div>
-                          <div className="text-xs font-bold text-gray-800 hover:text-indigo-600 transition-colors flex items-center gap-1.5">
+                          <div className="text-xs font-bold text-gray-800 hover:text-indigo-600 transition-colors flex items-center gap-1">
                             <span>{proj.name}</span>
-                            <span className={`px-1.5 py-0.2 rounded text-[9.5px] font-bold border ${
-                              proj.health === 'On Track'
-                                ? 'bg-emerald-50 text-emerald-700 border-emerald-200'
-                                : 'bg-amber-50 text-amber-700 border-amber-200'
-                            }`}>
-                              {proj.health}
-                            </span>
+                            <span className="icon-arrow-narrow-right text-xs text-gray-400" />
                           </div>
-                          <div className="text-[10px] text-gray-500 font-medium mt-0.5 flex items-center gap-2">
+                          <div className="text-[10px] text-gray-500 font-medium mt-0.5">
                             <span className={`px-1.5 py-0.2 rounded font-semibold border ${
                               proj.model === 'Fixed Cost'
                                 ? 'bg-purple-50 text-purple-700 border-purple-200'
@@ -480,7 +474,6 @@ export default function ProjectDashboard() {
                             }`}>
                               {proj.model}
                             </span>
-                            <span>PM: {proj.manager}</span>
                           </div>
                         </div>
                       </div>
