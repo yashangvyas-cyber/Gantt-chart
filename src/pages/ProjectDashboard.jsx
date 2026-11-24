@@ -84,7 +84,6 @@ function getViewConfig(mode, anchorDate = new Date(2026, 10, 1)) {
 
 export default function ProjectDashboard() {
   const navigate = useNavigate()
-  const [modelFilter, setModelFilter] = useState('All')
   const [viewMode, setViewMode] = useState('Month')
   const [anchorDate, setAnchorDate] = useState(new Date(2026, 10, 1))
   const [datePickerOpen, setDatePickerOpen] = useState(false)
@@ -133,10 +132,7 @@ export default function ProjectDashboard() {
     }
   }
 
-  const filteredProjects = useMemo(() => {
-    if (modelFilter === 'All') return COMPANY_PROJECTS
-    return COMPANY_PROJECTS.filter(p => p.model === modelFilter)
-  }, [modelFilter])
+  const filteredProjects = COMPANY_PROJECTS
 
   const { start: viewStart, count: dayCount, cellW } = useMemo(() => {
     return getViewConfig(viewMode, anchorDate)
@@ -296,26 +292,6 @@ export default function ProjectDashboard() {
               </div>
 
               <div className="flex items-center gap-2.5 flex-wrap">
-                {/* Engagement Model Filter */}
-                <div className="flex items-center gap-1.5">
-                  <span className="text-xs text-gray-500 font-medium">Model:</span>
-                  <div className="flex items-center bg-gray-100 p-0.5 rounded-lg border border-gray-200 text-xs">
-                    {['All', 'Hourly', 'Fixed Cost', 'Hire Base'].map(m => (
-                      <button
-                        key={m}
-                        onClick={() => setModelFilter(m)}
-                        className={`px-2.5 py-1 rounded-md font-semibold transition-all ${
-                          modelFilter === m
-                            ? 'bg-white text-indigo-700 shadow-xs'
-                            : 'text-gray-500 hover:text-gray-800'
-                        }`}
-                      >
-                        {m}
-                      </button>
-                    ))}
-                  </div>
-                </div>
-
                 {/* Date Navigation & Period Picker */}
                 <div className="flex items-center gap-1 bg-white border border-gray-200 rounded-lg p-0.5 shadow-2xs">
                   <button

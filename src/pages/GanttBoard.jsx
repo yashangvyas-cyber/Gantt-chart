@@ -877,7 +877,7 @@ function UnscheduledDrawer({ open, onClose, issues, onSchedule, onOpenDetail }) 
 
   if (!open) return null
 
-  const unscheduled = issues.filter(i => !i.start_date && !i.due_date && !i.sprint_id)
+  const unscheduled = issues.filter(i => !i.start_date || !i.due_date)
   const filtered = unscheduled.filter(i =>
     i.key.toLowerCase().includes(search.toLowerCase()) ||
     i.title.toLowerCase().includes(search.toLowerCase())
@@ -927,7 +927,18 @@ function UnscheduledDrawer({ open, onClose, issues, onSchedule, onOpenDetail }) 
                   <TypeIcon type={item.issue_type} />
                   <span className="text-xs font-semibold text-indigo-700">{item.key}</span>
                 </div>
-                <StatusPill status={item.status} />
+                <div className="flex items-center gap-1.5">
+                  <span className={`px-2 py-0.5 text-[10px] font-semibold rounded-md border ${
+                    item.sprint_id === 2 || item.sprint_name === 'Sprint 8 (Active)'
+                      ? 'bg-indigo-50 text-indigo-700 border-indigo-200'
+                      : item.sprint_id === 1 || item.sprint_name === 'Sprint 7'
+                      ? 'bg-purple-50 text-purple-700 border-purple-200'
+                      : 'bg-gray-100 text-gray-700 border-gray-200'
+                  }`}>
+                    {item.sprint_name || (item.sprint_id ? `Sprint ${item.sprint_id}` : 'Sprint: None')}
+                  </span>
+                  <StatusPill status={item.status} />
+                </div>
               </div>
               <p
                 className="text-xs text-gray-800 font-medium cursor-pointer hover:text-indigo-600"
@@ -1468,6 +1479,8 @@ export default function GanttBoard() {
   const [isMobileView, setIsMobileView]       = useState(initMobile)
   const [boardMenuOpen, setBoardMenuOpen]     = useState(false)
   const [groupMenuOpen, setGroupMenuOpen]     = useState(false)
+  const [sprintMenuOpen, setSprintMenuOpen]   = useState(false)
+  const [sprintFilter, setSprintFilter]       = useState(searchParams?.get('sprint') || 'Sprint 8 (Active)')
   const [kpiMenuOpen, setKpiMenuOpen]         = useState(false)
   const [hovered, setHovered]                 = useState(null)
   const [panel, setPanel]                     = useState(null)
@@ -1557,13 +1570,24 @@ export default function GanttBoard() {
     scrollToToday()
   }
 
-  // Active issues for the selected board
-  const activeIssues = useMemo(() => {
-    if (selectedBoard === 'Test') {
-      return TEST_BOARD_ISSUES
+  // Active issues filtered by selected board and sprint filter
+  const sprintFilteredIssues = useMemo(() => {
+    const base = selectedBoard === 'Test' ? TEST_BOARD_ISSUES : issues
+    if (sprintFilter === 'Sprint 8 (Active)') {
+      return base.filter(i => i.sprint_id === 2 || (i.issue_type === 'Epic' && (i.children || []).some(c => base.find(b => b.key === c)?.sprint_id === 2)))
     }
-    return issues.map(i => ({ ...i, board: 'Default' }))
-  }, [issues, selectedBoard])
+    if (sprintFilter === 'Sprint 7 (Completed)') {
+      return base.filter(i => i.sprint_id === 1 || (i.issue_type === 'Epic' && (i.children || []).some(c => base.find(b => b.key === c)?.sprint_id === 1)))
+    }
+    if (sprintFilter === 'None') {
+      return base.filter(i => !i.sprint_id || i.sprint_name === 'None' || i.sprint_id === null)
+    }
+    return base // 'All Sprints'
+  }, [issues, selectedBoard, sprintFilter])
+
+  const activeIssues = useMemo(() => {
+    return sprintFilteredIssues.map(i => ({ ...i, board: selectedBoard }))
+  }, [sprintFilteredIssues, selectedBoard])
 
   const { start: viewStart, count: dayCount, cellW } = getViewConfig(viewMode, anchorDate)
   const calendarWidth = dayCount * cellW
@@ -1584,7 +1608,9 @@ export default function GanttBoard() {
     return `${anchorDate.toLocaleString('default', { month: 'long' })} ${anchorDate.getFullYear()}`
   }, [viewMode, anchorDate, viewStart, dayCount])
 
-  const unscheduledCount = activeIssues.filter(i => !i.start_date && !i.due_date && !i.sprint_id).length
+  const unscheduledCount = useMemo(() => {
+    return activeIssues.filter(i => !i.start_date || !i.due_date).length
+  }, [activeIssues])
 
   // Flat list respecting collapse or grouping (Story 2 & Story 7)
   const rows = useMemo(() => {
@@ -1688,7 +1714,7 @@ export default function GanttBoard() {
     } else {
       for (const issue of sourceIssues) {
         if (issue.parent_id) continue
-        if (!issue.start_date && !issue.due_date && !issue.sprint_id && issue.issue_type !== 'Epic') continue
+        if (sprintFilter !== 'None' && !issue.start_date && !issue.due_date && !issue.sprint_id && issue.issue_type !== 'Epic') continue
         list.push({ ...issue, depth: 0 })
         if (issue.issue_type === 'Epic' && !collapsed[issue.id]) {
           for (const childKey of issue.children || []) {
@@ -1707,7 +1733,7 @@ export default function GanttBoard() {
     }
 
     return list
-  }, [activeIssues, groupBy, collapsed, doubleBookingActive, selectedDeveloper])
+  }, [activeIssues, groupBy, collapsed, doubleBookingActive, selectedDeveloper, sprintFilter])
 
   const dynamicCols = useMemo(() => {
     if (isMobileView) {
@@ -2279,18 +2305,64 @@ export default function GanttBoard() {
             </div>
           </div>
 
-          {/* Sprint Dropdown */}
-          <div className="flex items-center gap-1.5 px-2.5 py-1 rounded-lg border border-gray-300 bg-white text-xs font-medium text-gray-700 cursor-pointer hover:border-gray-400">
-            <span className="text-gray-500">Sprint:</span>
-            <span className="font-semibold text-gray-800">Sprint 8 (Active)</span>
-            <span className="icon-chevron-down text-xs text-gray-400 ml-0.5" />
+          {/* Sprint Dropdown (CollabCRM capture pattern) */}
+          <div className="relative">
+            <button
+              onClick={() => setSprintMenuOpen(prev => !prev)}
+              className="flex items-center gap-1.5 px-2.5 py-1 rounded-lg border border-gray-300 bg-white text-xs font-medium text-gray-700 cursor-pointer hover:border-gray-400 shadow-2xs"
+            >
+              <span className="text-gray-500">Sprint:</span>
+              <span className="font-semibold text-gray-800">{sprintFilter}</span>
+              <span className="icon-chevron-down text-xs text-gray-400 ml-0.5" />
+            </button>
+
+            {sprintMenuOpen && (
+              <div className="absolute left-0 mt-1.5 w-52 bg-white border border-gray-200 rounded-xl shadow-custom-popup-shadow py-1 z-50">
+                <div className="px-3 py-1.5 text-[10px] font-bold text-gray-400 uppercase tracking-wider border-b border-gray-100">
+                  Select Sprint
+                </div>
+                {[
+                  { id: 'Sprint 8 (Active)', label: 'Sprint 8 (Active)', badge: 'Active', badgeCls: 'text-emerald-700 bg-emerald-50' },
+                  { id: 'Sprint 7 (Completed)', label: 'Sprint 7 (Completed)', badge: 'Completed', badgeCls: 'text-red-700 bg-red-50' },
+                  { id: 'None', label: 'None (Backlog)', badge: 'Backlog', badgeCls: 'text-gray-700 bg-gray-100' },
+                  { id: 'All Sprints', label: 'All Sprints', badge: null, badgeCls: '' },
+                ].map(opt => (
+                  <button
+                    key={opt.id}
+                    onClick={() => {
+                      setSprintFilter(opt.id)
+                      setSprintMenuOpen(false)
+                    }}
+                    className={`w-full flex items-center justify-between px-3 py-2 text-xs text-left transition-colors ${
+                      sprintFilter === opt.id
+                        ? 'bg-indigo-50 text-indigo-700 font-semibold'
+                        : 'text-gray-700 hover:bg-gray-50'
+                    }`}
+                  >
+                    <span>{opt.label}</span>
+                    {opt.badge && (
+                      <span className={`text-[9.5px] font-semibold px-1.5 py-0.2 rounded ${opt.badgeCls}`}>
+                        {opt.badge}
+                      </span>
+                    )}
+                  </button>
+                ))}
+              </div>
+            )}
           </div>
 
-          {/* Ends in days indicator */}
-          <div className="flex items-center gap-1 text-xs text-gray-500 whitespace-nowrap">
-            <span className="icon-clock text-gray-400 text-xs" />
-            <span>Ends in 8 days</span>
-          </div>
+          {/* Sprint status indicator */}
+          {sprintFilter === 'Sprint 8 (Active)' ? (
+            <div className="flex items-center gap-1 text-xs text-gray-500 whitespace-nowrap">
+              <span className="icon-clock text-gray-400 text-xs" />
+              <span>Ends in 8 days</span>
+            </div>
+          ) : sprintFilter === 'None' ? (
+            <div className="flex items-center gap-1 text-xs text-amber-700 bg-amber-50 px-2 py-0.5 rounded-md border border-amber-200 whitespace-nowrap">
+              <span className="icon-layers-three text-xs" />
+              <span className="font-semibold">Backlog items ({activeIssues.length})</span>
+            </div>
+          ) : null}
         </div>
 
         {/* Right: Group by + Create Issue + Fullscreen + Settings */}
@@ -3364,7 +3436,7 @@ export default function GanttBoard() {
       <UnscheduledDrawer
         open={unscheduledOpen}
         onClose={() => setUnscheduledOpen(false)}
-        issues={issues}
+        issues={activeIssues}
         onSchedule={handleScheduleFromUnscheduled}
         onOpenDetail={(item) => {
           setUnscheduledOpen(false)
