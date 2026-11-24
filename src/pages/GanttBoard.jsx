@@ -1579,10 +1579,11 @@ export default function GanttBoard() {
     if (sprintFilter === 'Sprint 7 (Completed)') {
       return base.filter(i => i.sprint_id === 1 || (i.issue_type === 'Epic' && (i.children || []).some(c => base.find(b => b.key === c)?.sprint_id === 1)))
     }
-    if (sprintFilter === 'None') {
+    if (sprintFilter === 'Backlog') {
       return base.filter(i => !i.sprint_id || i.sprint_name === 'None' || i.sprint_id === null)
     }
-    return base // 'All Sprints'
+    // 'None' (In CollabCRM, 'None' filter means NO filter is applied -> ALL sprints + backlog)
+    return base
   }, [issues, selectedBoard, sprintFilter])
 
   const activeIssues = useMemo(() => {
@@ -1714,7 +1715,7 @@ export default function GanttBoard() {
     } else {
       for (const issue of sourceIssues) {
         if (issue.parent_id) continue
-        if (sprintFilter !== 'None' && !issue.start_date && !issue.due_date && !issue.sprint_id && issue.issue_type !== 'Epic') continue
+        if (sprintFilter !== 'Backlog' && !issue.start_date && !issue.due_date && !issue.sprint_id && issue.issue_type !== 'Epic') continue
         list.push({ ...issue, depth: 0 })
         if (issue.issue_type === 'Epic' && !collapsed[issue.id]) {
           for (const childKey of issue.children || []) {
@@ -2322,10 +2323,10 @@ export default function GanttBoard() {
                   Select Sprint
                 </div>
                 {[
+                  { id: 'None', label: 'None', badge: null, badgeCls: '' },
                   { id: 'Sprint 8 (Active)', label: 'Sprint 8 (Active)', badge: 'Active', badgeCls: 'text-emerald-700 bg-emerald-50' },
                   { id: 'Sprint 7 (Completed)', label: 'Sprint 7 (Completed)', badge: 'Completed', badgeCls: 'text-red-700 bg-red-50' },
-                  { id: 'None', label: 'None (Backlog)', badge: 'Backlog', badgeCls: 'text-gray-700 bg-gray-100' },
-                  { id: 'All Sprints', label: 'All Sprints', badge: null, badgeCls: '' },
+                  { id: 'Backlog', label: 'Backlog', badge: 'Backlog', badgeCls: 'text-gray-700 bg-gray-100' },
                 ].map(opt => (
                   <button
                     key={opt.id}
@@ -2357,7 +2358,7 @@ export default function GanttBoard() {
               <span className="icon-clock text-gray-400 text-xs" />
               <span>Ends in 8 days</span>
             </div>
-          ) : sprintFilter === 'None' ? (
+          ) : sprintFilter === 'Backlog' ? (
             <div className="flex items-center gap-1 text-xs text-amber-700 bg-amber-50 px-2 py-0.5 rounded-md border border-amber-200 whitespace-nowrap">
               <span className="icon-layers-three text-xs" />
               <span className="font-semibold">Backlog items ({activeIssues.length})</span>
