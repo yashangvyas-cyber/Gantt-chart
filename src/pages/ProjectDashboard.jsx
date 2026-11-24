@@ -85,10 +85,6 @@ function getViewConfig(mode, anchorDate = new Date(2026, 10, 1)) {
 export default function ProjectDashboard() {
   const navigate = useNavigate()
   const [modelFilter, setModelFilter] = useState('All')
-  const [searchQuery, setSearchQuery] = useState('')
-  const [healthFilter, setHealthFilter] = useState('All')
-  const [managerFilter, setManagerFilter] = useState('All')
-  const [filterMenuOpen, setFilterMenuOpen] = useState(false)
   const [viewMode, setViewMode] = useState('Month')
   const [anchorDate, setAnchorDate] = useState(new Date(2026, 10, 1))
   const [datePickerOpen, setDatePickerOpen] = useState(false)
@@ -137,19 +133,10 @@ export default function ProjectDashboard() {
     }
   }
 
-  const hasActiveFilters = healthFilter !== 'All' || managerFilter !== 'All' || searchQuery !== ''
-
   const filteredProjects = useMemo(() => {
-    return COMPANY_PROJECTS.filter(p => {
-      const matchModel = modelFilter === 'All' || p.model === modelFilter
-      const matchSearch = !searchQuery ||
-        p.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-        p.code.toLowerCase().includes(searchQuery.toLowerCase())
-      const matchHealth = healthFilter === 'All' || p.health === healthFilter
-      const matchManager = managerFilter === 'All' || p.manager === managerFilter
-      return matchModel && matchSearch && matchHealth && matchManager
-    })
-  }, [modelFilter, searchQuery, healthFilter, managerFilter])
+    if (modelFilter === 'All') return COMPANY_PROJECTS
+    return COMPANY_PROJECTS.filter(p => p.model === modelFilter)
+  }, [modelFilter])
 
   const { start: viewStart, count: dayCount, cellW } = useMemo(() => {
     return getViewConfig(viewMode, anchorDate)
@@ -309,105 +296,6 @@ export default function ProjectDashboard() {
               </div>
 
               <div className="flex items-center gap-2.5 flex-wrap">
-                {/* Search Box */}
-                <div className="relative flex items-center">
-                  <span className="icon-search-refraction absolute left-2.5 text-gray-400 text-xs pointer-events-none" />
-                  <input
-                    type="text"
-                    value={searchQuery}
-                    onChange={e => setSearchQuery(e.target.value)}
-                    placeholder="Search projects..."
-                    className="w-40 pl-8 pr-2.5 py-1 text-xs border border-gray-300 rounded-lg bg-white focus:outline-none focus:border-indigo-600 focus:ring-1 focus:ring-indigo-600"
-                  />
-                  {searchQuery && (
-                    <button
-                      onClick={() => setSearchQuery('')}
-                      className="absolute right-2 text-gray-400 hover:text-gray-600 text-xs"
-                    >
-                      ×
-                    </button>
-                  )}
-                </div>
-
-                {/* CollabCRM Filter Funnel Button & Popover */}
-                <div className="relative">
-                  <button
-                    onClick={() => setFilterMenuOpen(prev => !prev)}
-                    className={`px-2.5 py-1 text-xs rounded-lg border flex items-center gap-1.5 transition-all shadow-2xs ${
-                      hasActiveFilters
-                        ? 'border-indigo-600 bg-indigo-50 text-indigo-700 font-semibold'
-                        : 'border-gray-300 bg-white text-gray-700 hover:bg-gray-50'
-                    }`}
-                  >
-                    <span className="icon-filter-funnel text-xs" />
-                    <span>Filter</span>
-                    {hasActiveFilters && (
-                      <span className="size-2 rounded-full bg-indigo-600 ml-0.5" />
-                    )}
-                    <span className="icon-chevron-down text-[10px] text-gray-400 ml-0.5" />
-                  </button>
-
-                  {/* Filter Popover */}
-                  {filterMenuOpen && (
-                    <div className="absolute right-0 mt-1.5 w-60 bg-white border border-gray-200 rounded-xl shadow-custom-popup-shadow p-3 z-50 space-y-3">
-                      <div className="flex items-center justify-between pb-1.5 border-b border-gray-100">
-                        <span className="text-xs font-bold text-gray-800">Filter Projects</span>
-                        {hasActiveFilters && (
-                          <button
-                            onClick={() => { setHealthFilter('All'); setManagerFilter('All'); setSearchQuery(''); setFilterMenuOpen(false) }}
-                            className="text-[11px] text-indigo-600 hover:text-indigo-800 font-medium"
-                          >
-                            Reset all
-                          </button>
-                        )}
-                      </div>
-
-                      {/* Health Filter */}
-                      <div>
-                        <label className="block text-[11px] font-semibold text-gray-600 mb-1.5">Project Health</label>
-                        <div className="space-y-1">
-                          {['All', 'On Track', 'At Risk', 'Delayed'].map(h => (
-                            <button
-                              key={h}
-                              onClick={() => { setHealthFilter(h); setFilterMenuOpen(false) }}
-                              className={`w-full flex items-center justify-between px-2.5 py-1 text-xs rounded-md text-left transition-colors ${
-                                healthFilter === h ? 'bg-indigo-50 text-indigo-700 font-semibold' : 'text-gray-700 hover:bg-gray-50'
-                              }`}
-                            >
-                              <div className="flex items-center gap-2">
-                                <span className={`size-2 rounded-full ${
-                                  h === 'On Track' ? 'bg-emerald-500' : h === 'At Risk' ? 'bg-amber-500' : h === 'Delayed' ? 'bg-red-500' : 'bg-gray-400'
-                                }`} />
-                                <span>{h}</span>
-                              </div>
-                              {healthFilter === h && <span className="icon-check text-xs text-indigo-600" />}
-                            </button>
-                          ))}
-                        </div>
-                      </div>
-
-                      {/* Project Manager Filter */}
-                      <div className="pt-2 border-t border-gray-100">
-                        <label className="block text-[11px] font-semibold text-gray-600 mb-1.5">Project Manager</label>
-                        <div className="space-y-1">
-                          {['All', 'Emma Clark', 'Liam Brooks', 'Sofia Reyes'].map(pm => (
-                            <button
-                              key={pm}
-                              onClick={() => { setManagerFilter(pm); setFilterMenuOpen(false) }}
-                              className={`w-full flex items-center justify-between px-2.5 py-1 text-xs rounded-md text-left transition-colors ${
-                                managerFilter === pm ? 'bg-indigo-50 text-indigo-700 font-semibold' : 'text-gray-700 hover:bg-gray-50'
-                              }`}
-                            >
-                              <span>{pm}</span>
-                              {managerFilter === pm && <span className="icon-check text-xs text-indigo-600" />}
-                            </button>
-                          ))}
-                        </div>
-                      </div>
-                    </div>
-                  )}
-                </div>
-
                 {/* Engagement Model Filter */}
                 <div className="flex items-center gap-1.5">
                   <span className="text-xs text-gray-500 font-medium">Model:</span>
