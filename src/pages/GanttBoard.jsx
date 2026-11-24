@@ -88,6 +88,72 @@ function nowTimestamp() {
   return `${fmtDate(now)}, ${String(h12).padStart(2,'0')}:${mins} ${ampm}`
 }
 
+// ─── SVG Smooth Rounded Path & Manhattan Connector Router (Story 5) ───────────
+
+function getRoundedPath(points, radius = 4) {
+  if (points.length < 2) return ''
+  let d = `M ${points[0][0]} ${points[0][1]}`
+  for (let i = 1; i < points.length - 1; i++) {
+    const prev = points[i - 1]
+    const curr = points[i]
+    const next = points[i + 1]
+
+    const dx1 = curr[0] - prev[0]
+    const dy1 = curr[1] - prev[1]
+    const dx2 = next[0] - curr[0]
+    const dy2 = next[1] - curr[1]
+
+    const len1 = Math.hypot(dx1, dy1)
+    const len2 = Math.hypot(dx2, dy2)
+    if (len1 === 0 || len2 === 0) continue
+    const r = Math.min(radius, len1 / 2, len2 / 2)
+
+    const startX = curr[0] - (dx1 / len1) * r
+    const startY = curr[1] - (dy1 / len1) * r
+    const endX = curr[0] + (dx2 / len2) * r
+    const endY = curr[1] + (dy2 / len2) * r
+
+    d += ` L ${startX} ${startY} Q ${curr[0]} ${curr[1]} ${endX} ${endY}`
+  }
+  const last = points[points.length - 1]
+  d += ` L ${last[0]} ${last[1]}`
+  return d
+}
+
+function calculateDependencyPath(x1, y1, x2, y2, rowH = ROW_H) {
+  const isDown = y2 >= y1
+  const rowOffset = 10
+  const corridorH = rowH / 2
+
+  // Case 1: Target starts far enough to the right (Normal forward finish-to-start flow)
+  if (x2 >= x1 + 20) {
+    const midX = (x1 + x2) / 2
+    const pts = [
+      [x1, y1],
+      [midX, y1],
+      [midX, y2],
+      [x2, y2],
+    ]
+    return getRoundedPath(pts, 4)
+  }
+
+  // Case 2: Target starts close to, at, or before Source ends (Consecutive or conflict)
+  // Must loop around via the empty space between rows, NEVER cutting through the target bar!
+  // The path enters the target bar from the left so the arrowhead always points RIGHT (->)
+  const corridorY = isDown ? y1 + corridorH : y1 - corridorH
+  const loopX = Math.max(4, Math.min(x1, x2) - 12)
+
+  const pts = [
+    [x1, y1],
+    [x1 + rowOffset, y1],
+    [x1 + rowOffset, corridorY],
+    [loopX, corridorY],
+    [loopX, y2],
+    [x2, y2],
+  ]
+  return getRoundedPath(pts, 4)
+}
+
 // ─── Gantt calendar config ─────────────────────────────────────────────────────
 
 const ROW_H = 40
@@ -3119,8 +3185,7 @@ export default function GanttBoard() {
                   </defs>
 
                   {dependencyLines.map(l => {
-                    const midX = l.x1 + 12
-                    const path = `M ${l.x1} ${l.y1} L ${midX} ${l.y1} L ${midX} ${l.y2} L ${l.x2} ${l.y2}`
+                    const path = calculateDependencyPath(l.x1, l.y1, l.x2, l.y2, ROW_H)
                     const strokeColor = l.conflict ? '#ef4444' : '#6366f1'
                     const marker = l.conflict ? 'url(#arrow-conf)' : 'url(#arrow-norm)'
 
